@@ -466,7 +466,7 @@ class Component extends DCLogic {
     const activeGoals = enrichedGoals.filter(g => !g.isDone), doneGoals = enrichedGoals.filter(g => g.isDone);
     const shownGoals = goalTab === 'done' ? doneGoals : activeGoals;
 
-    const navItem = k => ({ bg: k === page ? '#f4faf7' : 'transparent', color: k === page ? '#326e52' : '#8f968d' });
+    const navItem = k => ({ bg: k === page ? '#E9F6EF' : 'transparent', color: k === page ? '#1F7A52' : '#6B7684' });
     const seg = on => ({ bg: on ? '#fff' : 'transparent', color: on ? '#2a3228' : '#98a096', shadow: on ? '0 2px 6px rgba(28,48,38,.08)' : 'none' });
     const setD = k => ev => { const v = ev.target.value; this.setState(s => ({ draft: { ...s.draft, [k]: v }, draftError: '' })); };
     const setKind = k => () => this.setState(s => ({ draft: { ...s.draft, kind: k, category: k === 'in' ? IN_CATS[0] : ((data.categories[0] || {}).name || '기타') } }));
@@ -498,6 +498,7 @@ class Component extends DCLogic {
       spentFmt: won(this.cu('spent', spent)), plannedFmt: won(planned), leftFmt: sgn(this.cu('left', left)), count: data.expenses.length,
       leftColor: left < 0 ? '#e26572' : '#16a885',
       leftHint: left < 0 ? '예산을 초과했어요' : day >= days ? '이번 달 마감' : `남은 ${rem}일, 하루 ${won(Math.floor(left / rem))}`,
+      remDays: day >= days ? 0 : rem, dailyFmt: won(left > 0 && day < days ? Math.floor(left / rem) : 0),
       pctLabel: this.cu('pct', pct) + '%', pctW: pc + '%', ring: `conic-gradient(#5DB585 0 ${pc}%, #ffffffb3 ${pc}% 100%)`,
       dayLabel: day ? `${days}일 중 ${day}일째` : '아직 시작 전',
       heroMsg: left < 0 ? '예산 초과! 내역을 확인해요' : avail === 0 && spent === 0 ? '이번 달 지출 계획을 세워 보세요' : pct > (day / days * 100) + 10 ? '조금 빠른 속도예요' : '계획적인 소비 중!',
