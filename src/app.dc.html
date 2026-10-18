@@ -35,7 +35,7 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-.nl-short, .m-fab, .m-list { display: none; }
+.nl-short, .m-fab { display: none; }
 
 /* ---------- Design tokens (Toss-style minimal) ----------
    text  #191F28 / #4E5968 / #8B95A1   line #F2F4F6   bg #F5F7F6
@@ -134,6 +134,8 @@ main {
   box-shadow: 0 10px 24px rgba(43, 155, 104, .35);
   cursor: pointer;
 }
+/* Drive button + avatar live in the right side of the sticky top header instead of their own row */
+.m-topbar { position: fixed; top: 11px; right: clamp(16px, 4vw, 44px); z-index: 13; margin: 0 !important; }
 /* the floating Drive widget would sit under the + button; the header's Drive button does the same job */
 [aria-label="Google Drive 동기화"] { display: none !important; }
 
@@ -161,7 +163,6 @@ main {
 
   /* --- phone-first layout --- */
   .m-hide { display: none !important; }
-  .m-topbar { margin-bottom: 14px !important; justify-content: flex-end !important; }
   .m-titlerow { margin-bottom: 18px !important; gap: 14px !important; }
   .m-titlerow h1 { font-size: 23px !important; margin: 0 !important; }
   .m-titlerow > div:first-child > div:first-child { margin-bottom: 8px !important; }
@@ -186,8 +187,6 @@ main {
   .m-filters { gap: 8px !important; margin-bottom: 8px !important; }
   .m-filters input[type="search"] { order: -1; flex: 1 1 100% !important; max-width: none !important; font-size: 15px !important; padding: 13px 14px !important; }
   .m-filters select { flex: 1 1 0; max-width: none !important; }
-  .m-table { display: none; }
-  .m-list { display: block; }
 
   /* calendar: bigger day numbers; spending shows as the cell tint, not tiny amounts */
   .m-cal { gap: 4px !important; }
@@ -439,6 +438,62 @@ main {
   .h-hero-title { font-size: 22px; }
   .h-leaves { width: 150px; height: 124px; }
   .h-quick .d-head { display: none; }
+}
+
+/* ---------- sub pages: ledger / stats / budget / goals ---------- */
+.p-tabsrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.p-seg { display: inline-flex; gap: 4px; padding: 4px; background: #fff; border-radius: 14px; box-shadow: 0 1px 2px rgba(25, 31, 40, .04); }
+.p-seg button { border: 0; border-radius: 10px; padding: 9px 18px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.p-note { font-size: 13px; color: #8B95A1; }
+.p-grid2 { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+.p-plan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+@media (max-width: 1000px) { .p-grid2, .p-plan { grid-template-columns: minmax(0, 1fr); } }
+
+/* stats bars */
+.p-bars { display: flex; align-items: flex-end; gap: 12px; height: 190px; margin-top: 22px; padding-bottom: 4px; }
+.p-barcol { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.p-baramt { font-size: 12px; color: #8B95A1; white-space: nowrap; }
+.p-bartrack { flex: 1; width: min(36px, 70%); display: flex; align-items: flex-end; }
+.p-bartrack > div { width: 100%; border-radius: 8px 8px 4px 4px; }
+.p-barlbl { font-size: 13px; color: #4E5968; white-space: nowrap; }
+.p-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #F2F4F6; }
+.p-kpis div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.p-kpis span { font-size: 13px; color: #8B95A1; }
+.p-kpis b { font-size: 16px; color: #191F28; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* budget plan */
+.p-budget-input { margin-top: 22px; padding-top: 18px; border-top: 1px solid #F2F4F6; }
+.p-budget-input label { display: block; font-size: 14px; font-weight: 600; color: #4E5968; margin-bottom: 8px; }
+.p-budget-input input, .p-amt { width: 100%; background: #F7F8FA; color: #191F28; border: 1px solid transparent; border-radius: 12px; padding: 13px 14px; font-size: 16px; font-weight: 700; }
+.p-amt { max-width: 180px; padding: 10px 12px; font-size: 15px; }
+.p-kor { min-height: 18px; margin-top: 6px; font-size: 13px; font-weight: 700; color: #2B9B68; }
+.p-name { flex: 0 1 auto; min-width: 0; width: 100%; max-width: 200px; border: 0; background: transparent; padding: 0; font-size: 15px; font-weight: 700; color: #191F28; }
+.p-sum { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 22px; padding-top: 16px; border-top: 1px solid #F2F4F6; font-size: 14px; color: #4E5968; }
+.p-sum b { color: #191F28; margin-left: 6px; }
+
+/* goals */
+.p-goals { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.p-addgoal { min-height: 150px; border: 1.5px dashed #CFE3D7; border-radius: 20px; background: #F7FBF9; color: #2B9B68; font-size: 15px; font-weight: 700; cursor: pointer; }
+.p-addgoal:hover { background: #EEF8F2; }
+.p-btn-soft { padding: 11px; border-radius: 12px; border: 0; background: #E9F6EF; color: #1F7A52; font-size: 14px; font-weight: 700; cursor: pointer; }
+.p-btn-danger { padding: 11px 14px; border-radius: 12px; border: 0; background: #FFF1F1; color: #E5484D; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* ledger: date-grouped list */
+.l-group + .l-group { margin-top: 10px; }
+.l-ghead { display: flex; justify-content: space-between; align-items: center; padding: 12px 4px 8px; font-size: 14px; font-weight: 700; color: #4E5968; border-bottom: 1px solid #F2F4F6; }
+.l-row { display: flex; align-items: center; gap: 14px; padding: 12px 4px; border-radius: 12px; }
+.l-row:hover { background: #F9FAFB; }
+.l-ico { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-weight: 800; font-size: 16px; }
+.l-del { width: 36px; height: 40px; border: 0; background: transparent; color: #C4CAD0; font-size: 15px; cursor: pointer; border-radius: 10px; }
+.l-del:hover { color: #E5484D; background: #FFF1F1; }
+
+@media (max-width: 720px) {
+  .p-seg { width: 100%; }
+  .p-seg button { flex: 1; padding: 10px 8px; }
+  .p-bars { height: 160px; gap: 8px; }
+  .p-baramt { font-size: 11px; }
+  .p-kpis b { font-size: 14px; }
+  .p-cat > div:nth-child(2), .p-cat > div:nth-child(3) { margin-left: 0 !important; }
 }
 </style>
 </helmet>
@@ -718,73 +773,62 @@ main {
     </sc-if>
 
     <sc-if value="{{ isStat }}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
-        <div style="display:flex;background:#fff;border:1px solid #edf0ec;border-radius:11px;padding:4px;gap:2px;">
+      <div class="p-tabsrow">
+        <div class="p-seg">
           <sc-for list="{{ statPeriods }}" as="sp" hint-placeholder-count="3">
-            <button sc-camel-on-click="{{ sp.pick }}" style="border:0;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;background:{{ sp.bg }};color:{{ sp.fg }};">{{ sp.label }}</button>
+            <button sc-camel-on-click="{{ sp.pick }}" style="background:{{ sp.bg }};color:{{ sp.fg }};">{{ sp.label }}</button>
           </sc-for>
         </div>
-        <div style="font-size:12px;color:#8B95A1;font-weight:600;">{{ statRangeLabel }} 기준 분석</div>
+        <span class="p-note">{{ statRangeLabel }} 기준</span>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:22px;">
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:20px 22px;">
-          <div style="font-size:12px;color:#8B95A1;font-weight:700;">기간 총 지출</div>
-          <h2 style="font-size:22px;font-weight:800;margin:10px 0 4px;">-{{ statTotalOut }}</h2>
-          <small style="font-size:11px;color:#8B95A1;">일평균 {{ statDailyAvg }}</small>
-        </article>
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:20px 22px;">
-          <div style="font-size:12px;color:#8B95A1;font-weight:700;">기간 총 수입</div>
-          <h2 style="font-size:22px;font-weight:800;margin:10px 0 4px;color:#2B9B68;">+{{ statTotalIn }}</h2>
-          <small style="font-size:11px;color:#8B95A1;">기본 예산 + 추가 수입</small>
-        </article>
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:20px 22px;">
-          <div style="font-size:12px;color:#8B95A1;font-weight:700;">최다 지출 항목</div>
-          <h2 style="font-size:22px;font-weight:800;margin:10px 0 4px;color:#2B9B68;">{{ statTopCatName }}</h2>
-          <small style="font-size:11px;color:#8B95A1;">{{ statTopCatSub }}</small>
-        </article>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;">
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:25px;">
-          <div style="margin-bottom:20px;"><h3 style="font-size:16px;margin:0 0 6px;font-weight:800;">기간별 지출 추이</h3><p style="font-size:11px;margin:0;color:#8B95A1;">시간 흐름에 따른 지출 변화를 비교해 보세요.</p></div>
-          <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="p-grid2">
+        <article class="d-card">
+          <div style="font-size:15px;color:#4E5968;font-weight:600;">총 지출</div>
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:6px;">
+            <strong style="font-size:32px;letter-spacing:-1px;color:#191F28;">{{ statTotalOut }}</strong>
+            <sc-if value="{{ statIsMonth }}"><sc-if value="{{ trendBadge }}"><span style="font-size:14px;font-weight:700;color:{{ trendBadgeColor }};">{{ trendBadge }}</span></sc-if></sc-if>
+          </div>
+          <sc-if value="{{ statIsMonth }}"><div style="font-size:13px;color:#8B95A1;margin-top:4px;">{{ trendText }}</div></sc-if>
+          <div class="p-bars" role="img" aria-label="기간별 지출 막대 그래프">
             <sc-for list="{{ statTrendRows }}" as="tr" hint-placeholder-count="4">
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px;">
-                  <span style="font-weight:700;color:#4E5968;">{{ tr.label }}</span>
-                  <span style="font-weight:800;color:#191F28;">{{ tr.amtFmt }} <small style="color:#8B95A1;font-weight:600;">({{ tr.count }}건)</small></span>
-                </div>
-                <div style="height:9px;background:#f3f5f2;border-radius:8px;overflow:hidden;">
-                  <div class="mv-bar" style="height:100%;border-radius:8px;width:{{ tr.w }};background:linear-gradient(90deg,#CDEBC0,#7FC79A);"></div>
-                </div>
+              <div class="p-barcol">
+                <span class="p-baramt">{{ tr.amtShort }}</span>
+                <div class="p-bartrack"><div class="h-bar" style="height:{{ tr.h }};background:{{ tr.bg }};"></div></div>
+                <span class="p-barlbl">{{ tr.short }}</span>
               </div>
             </sc-for>
           </div>
+          <div class="p-kpis">
+            <div><span>하루 평균</span><b>{{ statDailyAvg }}</b></div>
+            <div><span>총 수입</span><b style="color:#2B9B68;">+{{ statTotalIn }}</b></div>
+            <div><span>가장 많이 쓴 곳</span><b>{{ statTopCatName }}</b></div>
+          </div>
         </article>
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:25px;">
-          <div style="margin-bottom:18px;"><h3 style="font-size:16px;margin:0 0 6px;font-weight:800;">카테고리별 지출 분포</h3><p style="font-size:11px;margin:0;color:#8B95A1;">선택한 기간의 항목별 비중이에요.</p></div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:22px;">
-            <div style="position:relative;width:165px;height:165px;flex-shrink:0;">
-              <svg width="165" height="165" sc-camel-view-box="0 0 200 200" role="img" aria-label="카테고리별 지출 분포 도넛 차트" style="transform:rotate(-90deg);">
+
+        <article class="d-card">
+          <div class="d-head"><h3>카테고리별 지출</h3><span class="p-note">{{ statTopCatSub }}</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:22px;">
+            <div style="position:relative;width:180px;height:180px;flex-shrink:0;">
+              <svg width="180" height="180" sc-camel-view-box="0 0 200 200" role="img" aria-label="카테고리별 지출 분포 도넛 차트" style="transform:rotate(-90deg);">
                 <defs><linearGradient id="sg-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC9BB"></stop><stop offset="1" stop-color="#F79A84"></stop></linearGradient><linearGradient id="sg-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BFDDFF"></stop><stop offset="1" stop-color="#86B8F0"></stop></linearGradient><linearGradient id="sg-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7A8"></stop><stop offset="1" stop-color="#F6C969"></stop></linearGradient><linearGradient id="sg-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC8DC"></stop><stop offset="1" stop-color="#F09BBC"></stop></linearGradient><linearGradient id="sg-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDEBC0"></stop><stop offset="1" stop-color="#93CF8A"></stop></linearGradient><linearGradient id="sg-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3E7E0"></stop><stop offset="1" stop-color="#BCC4B9"></stop></linearGradient></defs>
-                <circle cx="100" cy="100" r="80" fill="none" stroke="#f3f5f2" stroke-width="30"></circle>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#F2F4F6" stroke-width="34"></circle>
                 <sc-for list="{{ statCatRows }}" as="s" hint-placeholder-count="5">
-                  <circle class="mo-seg" cx="100" cy="100" r="80" fill="none" stroke-width="30" style="stroke:{{ s.grad }};--len:{{ s.len }};stroke-dasharray:{{ s.len }} 503;stroke-dashoffset:{{ s.off }};"></circle>
+                  <circle class="mo-seg" cx="100" cy="100" r="80" fill="none" stroke-width="34" style="stroke:{{ s.grad }};--len:{{ s.len }};stroke-dasharray:{{ s.len }} 503;stroke-dashoffset:{{ s.off }};"></circle>
                 </sc-for>
               </svg>
               <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                <span style="font-size:11px;color:#8B95A1;">총 지출</span>
-                <strong style="font-size:16px;margin-top:3px;">{{ statTotalOut }}</strong>
+                <span style="font-size:12px;color:#8B95A1;">지출</span>
+                <strong style="font-size:17px;margin-top:2px;color:#191F28;">{{ statTotalOut }}</strong>
               </div>
             </div>
-            <div style="flex:1 1 150px;display:flex;flex-direction:column;gap:11px;min-width:0;">
+            <div style="width:100%;display:flex;flex-direction:column;gap:12px;">
               <sc-for list="{{ statCatRows }}" as="s" hint-placeholder-count="5">
-                <div style="display:flex;align-items:center;gap:9px;font-size:12px;">
+                <div style="display:flex;align-items:center;gap:10px;font-size:14px;">
                   <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex-shrink:0;"></span>
-                  <span style="flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
-                  <span style="color:#8B95A1;">{{ s.pct }}</span>
-                  <span style="font-weight:700;white-space:nowrap;">{{ s.amtFmt }}</span>
+                  <span style="flex:1;color:#4E5968;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
+                  <span style="color:#8B95A1;width:42px;text-align:right;">{{ s.pct }}</span>
+                  <span style="font-weight:700;color:#191F28;white-space:nowrap;min-width:84px;text-align:right;">{{ s.amtFmt }}</span>
                 </div>
               </sc-for>
             </div>
@@ -794,79 +838,102 @@ main {
     </sc-if>
 
     <sc-if value="{{ isPlan }}">
-      <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:28px 30px;">
-        <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:center;background:#f9fcfb;border:1px solid #f3f9f6;padding:24px;margin-bottom:26px;border-radius:15px;">
-          <div style="width:52px;height:52px;border-radius:14px;background:#eef6f2;display:grid;place-items:center;color:#2B9B68;"><svg width="25" height="25" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12a2 2 0 0 1 2 2v15l-4-2-4 2-4-2-4 2V5a2 2 0 0 1 2-2Z"></path><path d="M8 8h8m-8 4h6"></path></svg></div>
-          <div style="flex:1 1 200px;"><h3 style="margin:0 0 6px;font-size:15px;">{{ monthShort }} 지출 계획 세우기</h3><p style="margin:0;font-size:11px;color:#8B95A1;">이번 달 전체 지출 예산과 항목별 한도를 정해 보세요. 입력하면 바로 저장돼요.</p></div>
-          <div style="width:230px;">
-            <label style="display:block;font-weight:700;font-size:12px;color:#4E5968;margin-bottom:9px;">이번 달 전체 지출 예산 (원)</label>
-            <input type="number" min="0" step="1000" value="{{ allowance }}" sc-camel-on-change="{{ setAllowance }}" disabled="{{ readOnly }}" style="width:100%;background:#fff;color:#191F28;border:1px solid #ebeeea;border-radius:11px;padding:13px 15px;font-size:13px;">
-            <div aria-live="polite" style="min-height:16px;margin-top:6px;font-size:12px;font-weight:700;color:#2B9B68;">{{ allowanceKor }}</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;">
-          <sc-for list="{{ catRows }}" as="c" hint-placeholder-count="5">
-            <div class="mv-row" style="--i:{{ $index }};">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;">
-                <span style="width:9px;height:9px;border-radius:4px;background:{{ c.color }};flex-shrink:0;"></span>
-                <sc-if value="{{ editable }}"><input value="{{ c.name }}" sc-camel-on-change="{{ c.setName }}" style="flex:1;font-weight:700;font-size:12px;color:#4E5968;border:0;background:transparent;padding:2px 0;"></sc-if>
-                <sc-if value="{{ readOnly }}"><span style="flex:1;font-weight:700;font-size:12px;color:#4E5968;">{{ c.name }}</span></sc-if>
-                <sc-if value="{{ c.hasAlert }}"><span style="font-size:10px;padding:2px 6px;border-radius:6px;background:{{ c.alertBg }};color:{{ c.alertFg }};font-weight:800;">{{ c.alertText }}</span></sc-if>
-                <span style="font-size:11px;color:#8B95A1;">{{ c.share }}</span>
-                <sc-if value="{{ editable }}"><button sc-camel-on-click="{{ c.remove }}" aria-label="삭제" style="border:0;background:transparent;color:#8B95A1;cursor:pointer;font-size:13px;padding:0 2px;" style-hover="color:#dc6771;">✕</button></sc-if>
+      <div class="p-grid2 p-plan">
+        <!-- budget overview -->
+        <article class="d-card">
+          <div class="d-head"><h3>{{ monthShort }} 예산</h3><span class="p-note">{{ dayLabel }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;">
+            <div style="width:170px;height:170px;border-radius:50%;background:{{ planRing }};display:grid;place-items:center;flex-shrink:0;">
+              <div style="width:136px;height:136px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+                <strong style="font-size:20px;letter-spacing:-.5px;color:#191F28;">{{ spentFmt }}</strong>
+                <span style="font-size:12px;color:#8B95A1;margin-top:2px;">/ {{ availFmt }}</span>
+                <span style="font-size:13px;font-weight:700;color:#2B9B68;margin-top:4px;">{{ pctLabel }}</span>
               </div>
-              <input type="number" min="0" step="1000" value="{{ c.amount }}" sc-camel-on-change="{{ c.setAmount }}" disabled="{{ readOnly }}" style="width:100%;background:#fff;color:#191F28;border:1px solid #ebeeea;border-radius:11px;padding:13px 15px;font-size:13px;">
-              <div style="min-height:16px;margin-top:6px;font-size:12px;font-weight:700;color:#2B9B68;">{{ c.amountKor }}</div>
             </div>
-          </sc-for>
-        </div>
-        <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:22px 0 0;margin-top:22px;border-top:1px solid #f2f4f1;">
-          <div><div style="font-size:12px;color:#8B95A1;">항목별 지출 계획 합계</div><strong style="font-size:20px;">{{ plannedFmt }}</strong><div style="font-size:11px;margin-top:6px;color:{{ gapColor }};">{{ gapText }}</div></div>
-          <sc-if value="{{ editable }}"><button sc-camel-on-click="{{ addCat }}" style="padding:12px 17px;border-radius:11px;font-size:12px;font-weight:800;border:0;background:#f6fbf8;color:#2B9B68;cursor:pointer;" style-hover="background:#f0f7f3;">＋ 항목 추가</button></sc-if>
-        </div>
-      </article>
+            <svg width="70" height="92" sc-camel-view-box="0 0 50 66" aria-hidden="true"><path d="M14 64 H36 L33 50 H17 Z" fill="#E9F6EF"></path><path d="M25 50 C25 38 25 30 26 20" fill="none" stroke="#2B9B68" stroke-width="2.6" stroke-linecap="round"></path><path d="M25 32 C10 31 4 18 6 8 C19 8 27 18 25 32Z" fill="#9FDDB8"></path><path d="M26 24 C40 22 46 10 44 1 C31 1 23 11 26 24Z" fill="#2B9B68"></path></svg>
+          </div>
+          <div style="text-align:center;font-size:14px;color:#4E5968;margin-top:14px;">{{ heroMsg }}</div>
+          <div class="p-budget-input">
+            <label for="plan-allowance">이번 달 전체 예산</label>
+            <input id="plan-allowance" type="number" min="0" step="1000" value="{{ allowance }}" sc-camel-on-change="{{ setAllowance }}" disabled="{{ readOnly }}">
+            <div aria-live="polite" class="p-kor">{{ allowanceKor }}</div>
+          </div>
+        </article>
+
+        <!-- category budgets -->
+        <article class="d-card">
+          <div class="d-head"><h3>카테고리 예산</h3><sc-if value="{{ editable }}"><button class="d-link" sc-camel-on-click="{{ addCat }}">＋ 항목 추가</button></sc-if></div>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <sc-for list="{{ catRows }}" as="c" hint-placeholder-count="5">
+              <div class="mv-row p-cat" style="--i:{{ $index }};">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <span class="l-ico" style="background:{{ c.soft }};color:{{ c.color }};font-size:15px;">{{ c.initial }}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <sc-if value="{{ editable }}"><input aria-label="항목 이름" value="{{ c.name }}" sc-camel-on-change="{{ c.setName }}" class="p-name"></sc-if>
+                      <sc-if value="{{ readOnly }}"><span class="p-name">{{ c.name }}</span></sc-if>
+                      <sc-if value="{{ c.hasAlert }}"><span style="font-size:12px;padding:2px 7px;border-radius:7px;background:{{ c.alertBg }};color:{{ c.alertFg }};font-weight:700;">{{ c.alertText }}</span></sc-if>
+                    </div>
+                    <div style="font-size:13px;color:#8B95A1;margin-top:2px;"><b style="color:{{ c.spentColor }};font-weight:700;">{{ c.spentFmt }}</b> / {{ c.amountFmt }}</div>
+                  </div>
+                  <strong style="font-size:14px;color:#191F28;">{{ c.usePct }}</strong>
+                  <sc-if value="{{ editable }}"><button sc-camel-on-click="{{ c.remove }}" aria-label="삭제" class="l-del">✕</button></sc-if>
+                </div>
+                <div style="height:8px;background:#F2F4F6;border-radius:8px;overflow:hidden;margin:10px 0 0 52px;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ c.barW }};background:{{ c.barColor }};"></div></div>
+                <sc-if value="{{ editable }}">
+                  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 0 52px;">
+                    <input aria-label="{{ c.name }} 예산" type="number" min="0" step="1000" value="{{ c.amount }}" sc-camel-on-change="{{ c.setAmount }}" class="p-amt">
+                    <span class="p-kor" style="margin:0;">{{ c.amountKor }}</span>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div class="p-sum">
+            <span>항목별 예산 합계 <b>{{ plannedFmt }}</b></span>
+            <span style="color:{{ gapColor }};">{{ gapText }}</span>
+          </div>
+        </article>
+      </div>
     </sc-if>
 
     <sc-if value="{{ isGoal }}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
-        <div style="display:flex;background:#fff;border:1px solid #edf0ec;border-radius:11px;padding:4px;gap:2px;">
-          <button sc-camel-on-click="{{ setGoalTabActive }}" style="border:0;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;background:{{ goalTabA.bg }};color:{{ goalTabA.fg }};">모으는 중 ({{ activeGoalCount }})</button>
-          <button sc-camel-on-click="{{ setGoalTabDone }}" style="border:0;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;background:{{ goalTabD.bg }};color:{{ goalTabD.fg }};">완료 ({{ doneGoalCount }})</button>
+      <div class="p-tabsrow">
+        <div class="p-seg">
+          <button sc-camel-on-click="{{ setGoalTabActive }}" style="background:{{ goalTabA.bg }};color:{{ goalTabA.fg }};">진행 중 {{ activeGoalCount }}</button>
+          <button sc-camel-on-click="{{ setGoalTabDone }}" style="background:{{ goalTabD.bg }};color:{{ goalTabD.fg }};">완료 {{ doneGoalCount }}</button>
         </div>
-        <sc-if value="{{ editable }}">
-          <button sc-camel-on-click="{{ openGoalModal }}" style="padding:11px 16px;border-radius:11px;font-size:12px;font-weight:800;border:0;background:#43956f;color:#fff;cursor:pointer;box-shadow:0 7px 15px #43946e26;" style-hover="background:#3e8865;">＋ 새 목표 추가</button>
-        </sc-if>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;">
+      <div class="p-goals">
         <sc-for list="{{ goalRows }}" as="g" hint-placeholder-count="2">
-          <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:24px;display:flex;flex-direction:column;gap:14px;">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-              <div>
-                <span style="display:inline-block;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:800;background:{{ g.badgeBg }};color:{{ g.badgeFg }};margin-bottom:8px;">{{ g.ddayLabel }}</span>
-                <h3 style="font-size:17px;margin:0;font-weight:800;">{{ g.title }}</h3>
+          <article class="d-card mv-row" style="--i:{{ $index }};display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <span style="width:52px;height:52px;border-radius:16px;background:#E9F6EF;color:#2B9B68;display:grid;place-items:center;flex-shrink:0;"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle></svg></span>
+              <div style="flex:1;min-width:0;">
+                <h3 style="font-size:17px;margin:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ g.title }}</h3>
+                <div style="font-size:14px;color:#4E5968;margin-top:4px;"><b style="color:#191F28;">{{ g.currentFmt }}</b> / {{ g.targetFmt }}</div>
               </div>
-              <strong style="font-size:20px;font-weight:800;color:#2B9B68;">{{ g.pct }}%</strong>
+              <span style="flex-shrink:0;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;background:{{ g.badgeBg }};color:{{ g.badgeFg }};">{{ g.ddayLabel }}</span>
             </div>
-            <div style="height:8px;background:#f3f5f2;border-radius:8px;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ g.barW }};background:linear-gradient(90deg,#A8DDB8,#5DB585);"></div></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#4E5968;">
-              <span>현재 <b style="color:#191F28;">{{ g.currentFmt }}</b></span>
-              <span>목표 <b>{{ g.targetFmt }}</b> · 기한 {{ g.deadline }}</span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="flex:1;height:8px;background:#F2F4F6;border-radius:8px;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ g.barW }};background:linear-gradient(90deg,#9FDDB8,#2B9B68);"></div></div>
+              <strong style="font-size:14px;color:#2B9B68;">{{ g.pct }}%</strong>
             </div>
+            <div style="font-size:13px;color:#8B95A1;">{{ g.deadline }}까지</div>
             <sc-if value="{{ editable }}">
-              <div style="display:flex;gap:8px;margin-top:4px;">
-                <sc-if value="{{ g.notDone }}">
-                  <button sc-camel-on-click="{{ g.addSavings }}" style="flex:1;padding:10px;border-radius:10px;border:0;background:#e9faf5;color:#2B9B68;font-size:12px;font-weight:800;cursor:pointer;">＋ 1만 원 모으기</button>
-                </sc-if>
-                <button sc-camel-on-click="{{ g.remove }}" style="padding:10px 12px;border-radius:10px;border:0;background:#fff5f5;color:#dc6771;font-size:12px;font-weight:700;cursor:pointer;">삭제</button>
+              <div style="display:flex;gap:8px;">
+                <sc-if value="{{ g.notDone }}"><button sc-camel-on-click="{{ g.addSavings }}" class="p-btn-soft" style="flex:1;">＋ 1만 원 모으기</button></sc-if>
+                <button sc-camel-on-click="{{ g.remove }}" class="p-btn-danger">삭제</button>
               </div>
             </sc-if>
           </article>
         </sc-for>
+        <sc-if value="{{ editable }}">
+          <button class="p-addgoal" sc-camel-on-click="{{ openGoalModal }}">＋ 새로운 목표 추가하기</button>
+        </sc-if>
       </div>
       <sc-if value="{{ noGoals }}">
-        <article style="background:#fff;border:1px solid #f0f3f0;border-radius:18px;box-shadow:0 5px 26px rgba(28,48,38,.035);padding:44px 24px;text-align:center;color:#8B95A1;font-size:13px;">
-          아직 등록된 목표가 없어요. 우측 상단의 <b style="color:#2B9B68;">＋ 새 목표 추가</b> 버튼으로 첫 목표를 만들어 보세요.
-        </article>
+        <p style="text-align:center;color:#8B95A1;font-size:14px;margin:20px 0 0;">아직 목표가 없어요. 모으고 싶은 것을 목표로 만들어 보세요.</p>
       </sc-if>
     </sc-if>
 
@@ -897,47 +964,26 @@ main {
             </div>
           </sc-if>
         </div>
-        <div class="m-table" style="overflow-x:auto;">
-          <sc-raw-table style="width:100%;border-collapse:collapse;min-width:640px;">
-            <sc-raw-thead><sc-raw-tr>
-              <sc-raw-th style="text-align:left;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">날짜</sc-raw-th>
-              <sc-raw-th style="text-align:left;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">내용</sc-raw-th>
-              <sc-raw-th style="text-align:left;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">분류</sc-raw-th>
-              <sc-raw-th style="text-align:right;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">수입</sc-raw-th>
-              <sc-raw-th style="text-align:right;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">지출</sc-raw-th>
-              <sc-raw-th style="text-align:right;padding:0 12px 13px;font-size:10px;color:#8B95A1;font-weight:700;border-bottom:1px solid #f2f4f2;">잔액</sc-raw-th>
-              <sc-if value="{{ editable }}"><sc-raw-th style="border-bottom:1px solid #f2f4f2;"></sc-raw-th></sc-if>
-            </sc-raw-tr></sc-raw-thead>
-            <sc-raw-tbody>
-              <sc-for list="{{ allRows }}" as="e" hint-placeholder-count="8">
-                <sc-raw-tr sc-camel-on-click="{{ e.rowClick }}" class="mv-row" style="--i:{{ $index }};cursor:{{ e.cursor }};">
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;font-size:12px;color:#8B95A1;white-space:nowrap;">{{ e.dateShort }}</sc-raw-td>
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;font-size:12px;font-weight:700;color:#4E5968;">{{ e.title }}</sc-raw-td>
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;"><span style="border-radius:20px;padding:6px 10px;font-size:10px;font-weight:700;white-space:nowrap;background:{{ e.soft }};color:{{ e.color }};">{{ e.category }}</span></sc-raw-td>
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;font-size:12px;font-weight:800;color:#2B9B68;text-align:right;white-space:nowrap;">{{ e.inCol }}</sc-raw-td>
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;font-size:12px;font-weight:800;color:#191F28;text-align:right;white-space:nowrap;">{{ e.outCol }}</sc-raw-td>
-                  <sc-raw-td style="padding:15px 12px;border-bottom:1px solid #f5f6f5;font-size:12px;color:#8B95A1;text-align:right;white-space:nowrap;">{{ e.balanceFmt }}</sc-raw-td>
-                  <sc-if value="{{ editable }}"><sc-raw-td sc-camel-on-click="{{ stopProp }}" style="padding:15px 12px;border-bottom:1px solid #f5f6f5;text-align:right;white-space:nowrap;"><sc-if value="{{ e.canRemove }}"><button sc-camel-on-click="{{ e.edit }}" style="background:#f6fbf8;color:#2B9B68;border:0;border-radius:8px;font-size:11px;padding:7px 10px;cursor:pointer;margin-right:6px;" style-hover="background:#f0f7f3;">수정</button><button sc-camel-on-click="{{ e.remove }}" style="background:#fff5f5;color:#dc6771;border:0;border-radius:8px;font-size:11px;padding:7px 10px;cursor:pointer;" style-hover="background:#ffe9eb;">삭제</button></sc-if></sc-raw-td></sc-if>
-                </sc-raw-tr>
+        <!-- date-grouped list (PC and phone): tap a row to edit -->
+        <div class="l-list">
+          <sc-for list="{{ ledgerGroups }}" as="g" hint-placeholder-count="3">
+            <section class="l-group">
+              <div class="l-ghead"><span>{{ g.label }}</span><span style="color:{{ g.totalColor }};">{{ g.total }}</span></div>
+              <sc-for list="{{ g.rows }}" as="e" hint-placeholder-count="2">
+                <div sc-camel-on-click="{{ e.rowClick }}" class="l-row" style="cursor:{{ e.cursor }};">
+                  <span class="l-ico" style="background:{{ e.soft }};color:{{ e.color }};">{{ e.sign }}</span>
+                  <span style="flex:1;min-width:0;">
+                    <span style="display:block;font-size:15px;font-weight:600;color:#191F28;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ e.title }}</span>
+                    <span style="display:block;font-size:13px;color:#8B95A1;margin-top:2px;">{{ e.category }}</span>
+                  </span>
+                  <span style="text-align:right;flex-shrink:0;">
+                    <span style="display:block;font-size:15px;font-weight:700;color:{{ e.amtColor }};white-space:nowrap;">{{ e.amountFmt }}</span>
+                    <span style="display:block;font-size:12px;color:#B0B8C1;margin-top:2px;white-space:nowrap;">잔액 {{ e.balanceFmt }}</span>
+                  </span>
+                  <sc-if value="{{ editable }}"><sc-if value="{{ e.canRemove }}"><span sc-camel-on-click="{{ stopProp }}"><button class="l-del" sc-camel-on-click="{{ e.remove }}" aria-label="삭제">✕</button></span></sc-if></sc-if>
+                </div>
               </sc-for>
-            </sc-raw-tbody>
-          </sc-raw-table>
-        </div>
-        <!-- phone: card list instead of the wide table (tap a row to edit) -->
-        <div class="m-list">
-          <sc-for list="{{ allRows }}" as="e" hint-placeholder-count="6">
-            <div sc-camel-on-click="{{ e.rowClick }}" class="mv-row" style="--i:{{ $index }};display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid #f3f5f2;cursor:{{ e.cursor }};">
-              <div style="width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex-shrink:0;background:{{ e.soft }};color:{{ e.color }};font-size:16px;font-weight:800;">{{ e.sign }}</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:15px;font-weight:700;color:#191F28;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ e.title }}</div>
-                <div style="font-size:12.5px;color:#8B95A1;margin-top:3px;">{{ e.dateShort }} · {{ e.category }}</div>
-              </div>
-              <div style="text-align:right;flex-shrink:0;">
-                <div style="font-size:15px;font-weight:800;color:{{ e.amtColor }};white-space:nowrap;">{{ e.amountFmt }}</div>
-                <div style="font-size:12px;color:#8B95A1;margin-top:3px;white-space:nowrap;">잔액 {{ e.balanceFmt }}</div>
-              </div>
-              <sc-if value="{{ editable }}"><sc-if value="{{ e.canRemove }}"><span sc-camel-on-click="{{ stopProp }}"><button sc-camel-on-click="{{ e.remove }}" aria-label="삭제" style="width:36px;height:44px;border:0;background:transparent;color:#8B95A1;font-size:15px;cursor:pointer;">✕</button></span></sc-if></sc-if>
-            </div>
+            </section>
           </sc-for>
         </div>
         <sc-if value="{{ noFound }}"><div style="text-align:center;padding:40px 20px;color:#8B95A1;font-size:13px;">조건에 맞는 내역이 없어요.</div></sc-if>
@@ -1579,6 +1625,7 @@ class Component extends DCLogic {
         barColor: over ? 'linear-gradient(90deg,#FFC2C2,#F2868E)' : `linear-gradient(90deg,${GRAD[i % 5][0]},${GRAD[i % 5][1]})`,
         share: allowance > 0 ? Math.round(a / allowance * 100) + '%' : '',
         setName: editField(c.id, 'name'), setAmount: editField(c.id, 'amount', true), amountKor: kor(c.amount),
+        usePct: a > 0 ? Math.round(s / a * 100) + '%' : '-', soft: PALETTE[i % 5][1], initial: String(c.name || '?').slice(0, 1),
         remove: () => this.upd(d => { d.categories = d.categories.filter(x => x.id !== c.id); return d; })
       };
     });
@@ -1671,7 +1718,9 @@ class Component extends DCLogic {
       });
     }
     const maxTrend = Math.max(1, ...statTrendRaw.map(r => r.amt));
-    const statTrendRows = statTrendRaw.map(r => ({ ...r, amtFmt: won(r.amt), w: Math.max(r.amt ? 4 : 0, Math.round(r.amt / maxTrend * 100)) + '%' }));
+    const statTrendRows = statTrendRaw.map(r => ({ ...r, amtFmt: won(r.amt), w: Math.max(r.amt ? 4 : 0, Math.round(r.amt / maxTrend * 100)) + '%',
+      short: String(r.label).split(' ')[0], h: Math.max(4, Math.round(r.amt / maxTrend * 100)) + '%',
+      bg: r.amt && r.amt === maxTrend ? 'linear-gradient(180deg,#5CC08C,#2B9B68)' : '#CFEBD9', amtShort: r.amt ? kor(r.amt).replace('원', '') : '0' }));
     let catAcc = 0;
     const sortedStatCats = Object.entries(statCatMap).filter(([, amt]) => amt > 0).sort((a, b) => b[1] - a[1]);
     const statCatRows = sortedStatCats.map(([name, amt], i) => {
@@ -1772,7 +1821,7 @@ class Component extends DCLogic {
       leftColor: left < 0 ? '#e26572' : '#16a885',
       leftHint: left < 0 ? '예산을 초과했어요' : day >= days ? '이번 달 마감' : `남은 ${rem}일, 하루 ${won(Math.floor(left / rem))}`,
       remDays: day >= days ? 0 : rem, dailyFmt: won(left > 0 && day < days ? Math.floor(left / rem) : 0),
-      pctLabel: this.cu('pct', pct) + '%', pctW: pc + '%', ring: `conic-gradient(#5DB585 0 ${pc}%, #ffffffb3 ${pc}% 100%)`,
+      pctLabel: this.cu('pct', pct) + '%', pctW: pc + '%', ring: `conic-gradient(#5DB585 0 ${pc}%, #ffffffb3 ${pc}% 100%)`, planRing: `conic-gradient(#2B9B68 0 ${pc}%, #EEF1EF ${pc}% 100%)`,
       dayLabel: day ? `${days}일 중 ${day}일째` : '아직 시작 전',
       heroMsg: left < 0 ? '예산 초과! 내역을 확인해요' : avail === 0 && spent === 0 ? '이번 달 지출 계획을 세워 보세요' : pct > (day / days * 100) + 10 ? '조금 빠른 속도예요' : '계획적인 소비 중!',
       gapFmt: sgn(gap), gapColor: gap < 0 ? '#e26c73' : '#347355',
@@ -1793,6 +1842,16 @@ class Component extends DCLogic {
       recentRows: desc.slice(0, 6).map(row), noLedger: !desc.length,
       kinds: [['all', '전체'], ['in', '수입'], ['out', '지출']].map(([k, label]) => ({ label, ...seg(kind === k), pick: () => this.setState({ kind: k }) })),
       allRows: found.map(row), noFound: !found.length, foundCount: found.length,
+      // newest day first; each day shows its net total ("10월 12일 (일)  -₩42,500")
+      ledgerGroups: (() => {
+        const g = {};
+        [...found].reverse().forEach(x => { (g[x.date] = g[x.date] || []).push(x); });
+        return Object.keys(g).sort().reverse().map(d => {
+          const xs = g[d], net = xs.reduce((a, x) => a + (x.k === 'in' ? x.amount : -x.amount), 0);
+          const dt = new Date(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8));
+          return { label: `${+d.slice(5, 7)}월 ${+d.slice(8)}일 (${DOW[dt.getDay()]})`, total: (net < 0 ? '-' : '+') + won(net), totalColor: net < 0 ? '#191F28' : '#2B9B68', rows: xs.map(row) };
+        });
+      })(),
       foundIn: won(found.filter(x => x.k === 'in').reduce((a, x) => a + x.amount, 0)), foundOut: won(found.filter(x => x.k === 'out').reduce((a, x) => a + x.amount, 0)),
       weekdays: [...DOW].map((l, i) => ({ l, color: i === 0 ? '#e36c70' : i === 6 ? '#5b8fd6' : '#b0b6af' })),
       cells, spendDays, noSpend, selTitle: `${+mo}월 ${selDay}일 ${DOW[sdow]}요일`,
@@ -1801,16 +1860,16 @@ class Component extends DCLogic {
       goToday: () => { const tm = TODAY.slice(0, 7); if (this.state.store.months[tm]) this.setState({ month: tm, selDay: +TODAY.slice(8) }); else this.setState({ selDay: 1 }); },
       addOnDay: () => this.openWith('out', data.month + '-' + String(selDay).padStart(2, '0')),
       addInOnDay: () => this.openWith('in', data.month + '-' + String(selDay).padStart(2, '0')),
-      statPeriods: [['month', '월간'], ['quarter', '분기'], ['year', '연간']].map(([k, label]) => ({ label, bg: statPeriod === k ? '#f4faf7' : 'transparent', fg: statPeriod === k ? '#326e52' : '#8f968d', pick: () => this.setState({ statPeriod: k }) })),
+      statPeriods: [['month', '월간'], ['quarter', '분기'], ['year', '연간']].map(([k, label]) => ({ label, bg: statPeriod === k ? '#2B9B68' : 'transparent', fg: statPeriod === k ? '#fff' : '#6B7684', pick: () => this.setState({ statPeriod: k }) })),
       statRangeLabel: statPeriod === 'month' ? `${y}년 ${+mo}월` : statPeriod === 'quarter' ? `${statMonths[0]} ~ ${statMonths[2]}` : `${y}년 전체`,
       statTotalOut: won(statOutSum), statTotalIn: won(statInSum), statDailyAvg: won(Math.round(statOutSum / statDaysDenom)),
       statTopCatName: topCat ? topCat[0] : '내역 없음',
       statTopCatSub: topCat && statOutSum > 0 ? `${won(topCat[1])} (${Math.round(topCat[1] / statOutSum * 100)}%)` : '지출을 기록해 보세요',
-      statTrendRows, statCatRows,
+      statTrendRows, statCatRows, statIsMonth: statPeriod === 'month',
       ...homeVals,
       activeGoalCount: activeGoals.length, doneGoalCount: doneGoals.length,
-      goalTabA: { bg: goalTab === 'active' ? '#f4faf7' : 'transparent', fg: goalTab === 'active' ? '#326e52' : '#8f968d' },
-      goalTabD: { bg: goalTab === 'done' ? '#f4faf7' : 'transparent', fg: goalTab === 'done' ? '#326e52' : '#8f968d' },
+      goalTabA: { bg: goalTab === 'active' ? '#2B9B68' : 'transparent', fg: goalTab === 'active' ? '#fff' : '#6B7684' },
+      goalTabD: { bg: goalTab === 'done' ? '#2B9B68' : 'transparent', fg: goalTab === 'done' ? '#fff' : '#6B7684' },
       setGoalTabActive: () => this.setState({ goalTab: 'active' }), setGoalTabDone: () => this.setState({ goalTab: 'done' }),
       goalRows: shownGoals, noGoals: !shownGoals.length,
       goalModalOpen, goalDraft,

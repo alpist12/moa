@@ -347,6 +347,7 @@ class Component extends DCLogic {
         barColor: over ? 'linear-gradient(90deg,#FFC2C2,#F2868E)' : `linear-gradient(90deg,${GRAD[i % 5][0]},${GRAD[i % 5][1]})`,
         share: allowance > 0 ? Math.round(a / allowance * 100) + '%' : '',
         setName: editField(c.id, 'name'), setAmount: editField(c.id, 'amount', true), amountKor: kor(c.amount),
+        usePct: a > 0 ? Math.round(s / a * 100) + '%' : '-', soft: PALETTE[i % 5][1], initial: String(c.name || '?').slice(0, 1),
         remove: () => this.upd(d => { d.categories = d.categories.filter(x => x.id !== c.id); return d; })
       };
     });
@@ -439,7 +440,9 @@ class Component extends DCLogic {
       });
     }
     const maxTrend = Math.max(1, ...statTrendRaw.map(r => r.amt));
-    const statTrendRows = statTrendRaw.map(r => ({ ...r, amtFmt: won(r.amt), w: Math.max(r.amt ? 4 : 0, Math.round(r.amt / maxTrend * 100)) + '%' }));
+    const statTrendRows = statTrendRaw.map(r => ({ ...r, amtFmt: won(r.amt), w: Math.max(r.amt ? 4 : 0, Math.round(r.amt / maxTrend * 100)) + '%',
+      short: String(r.label).split(' ')[0], h: Math.max(4, Math.round(r.amt / maxTrend * 100)) + '%',
+      bg: r.amt && r.amt === maxTrend ? 'linear-gradient(180deg,#5CC08C,#2B9B68)' : '#CFEBD9', amtShort: r.amt ? kor(r.amt).replace('원', '') : '0' }));
     let catAcc = 0;
     const sortedStatCats = Object.entries(statCatMap).filter(([, amt]) => amt > 0).sort((a, b) => b[1] - a[1]);
     const statCatRows = sortedStatCats.map(([name, amt], i) => {
@@ -540,7 +543,7 @@ class Component extends DCLogic {
       leftColor: left < 0 ? '#e26572' : '#16a885',
       leftHint: left < 0 ? '예산을 초과했어요' : day >= days ? '이번 달 마감' : `남은 ${rem}일, 하루 ${won(Math.floor(left / rem))}`,
       remDays: day >= days ? 0 : rem, dailyFmt: won(left > 0 && day < days ? Math.floor(left / rem) : 0),
-      pctLabel: this.cu('pct', pct) + '%', pctW: pc + '%', ring: `conic-gradient(#5DB585 0 ${pc}%, #ffffffb3 ${pc}% 100%)`,
+      pctLabel: this.cu('pct', pct) + '%', pctW: pc + '%', ring: `conic-gradient(#5DB585 0 ${pc}%, #ffffffb3 ${pc}% 100%)`, planRing: `conic-gradient(#2B9B68 0 ${pc}%, #EEF1EF ${pc}% 100%)`,
       dayLabel: day ? `${days}일 중 ${day}일째` : '아직 시작 전',
       heroMsg: left < 0 ? '예산 초과! 내역을 확인해요' : avail === 0 && spent === 0 ? '이번 달 지출 계획을 세워 보세요' : pct > (day / days * 100) + 10 ? '조금 빠른 속도예요' : '계획적인 소비 중!',
       gapFmt: sgn(gap), gapColor: gap < 0 ? '#e26c73' : '#347355',
@@ -561,6 +564,16 @@ class Component extends DCLogic {
       recentRows: desc.slice(0, 6).map(row), noLedger: !desc.length,
       kinds: [['all', '전체'], ['in', '수입'], ['out', '지출']].map(([k, label]) => ({ label, ...seg(kind === k), pick: () => this.setState({ kind: k }) })),
       allRows: found.map(row), noFound: !found.length, foundCount: found.length,
+      // newest day first; each day shows its net total ("10월 12일 (일)  -₩42,500")
+      ledgerGroups: (() => {
+        const g = {};
+        [...found].reverse().forEach(x => { (g[x.date] = g[x.date] || []).push(x); });
+        return Object.keys(g).sort().reverse().map(d => {
+          const xs = g[d], net = xs.reduce((a, x) => a + (x.k === 'in' ? x.amount : -x.amount), 0);
+          const dt = new Date(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8));
+          return { label: `${+d.slice(5, 7)}월 ${+d.slice(8)}일 (${DOW[dt.getDay()]})`, total: (net < 0 ? '-' : '+') + won(net), totalColor: net < 0 ? '#191F28' : '#2B9B68', rows: xs.map(row) };
+        });
+      })(),
       foundIn: won(found.filter(x => x.k === 'in').reduce((a, x) => a + x.amount, 0)), foundOut: won(found.filter(x => x.k === 'out').reduce((a, x) => a + x.amount, 0)),
       weekdays: [...DOW].map((l, i) => ({ l, color: i === 0 ? '#e36c70' : i === 6 ? '#5b8fd6' : '#b0b6af' })),
       cells, spendDays, noSpend, selTitle: `${+mo}월 ${selDay}일 ${DOW[sdow]}요일`,
@@ -569,16 +582,16 @@ class Component extends DCLogic {
       goToday: () => { const tm = TODAY.slice(0, 7); if (this.state.store.months[tm]) this.setState({ month: tm, selDay: +TODAY.slice(8) }); else this.setState({ selDay: 1 }); },
       addOnDay: () => this.openWith('out', data.month + '-' + String(selDay).padStart(2, '0')),
       addInOnDay: () => this.openWith('in', data.month + '-' + String(selDay).padStart(2, '0')),
-      statPeriods: [['month', '월간'], ['quarter', '분기'], ['year', '연간']].map(([k, label]) => ({ label, bg: statPeriod === k ? '#f4faf7' : 'transparent', fg: statPeriod === k ? '#326e52' : '#8f968d', pick: () => this.setState({ statPeriod: k }) })),
+      statPeriods: [['month', '월간'], ['quarter', '분기'], ['year', '연간']].map(([k, label]) => ({ label, bg: statPeriod === k ? '#2B9B68' : 'transparent', fg: statPeriod === k ? '#fff' : '#6B7684', pick: () => this.setState({ statPeriod: k }) })),
       statRangeLabel: statPeriod === 'month' ? `${y}년 ${+mo}월` : statPeriod === 'quarter' ? `${statMonths[0]} ~ ${statMonths[2]}` : `${y}년 전체`,
       statTotalOut: won(statOutSum), statTotalIn: won(statInSum), statDailyAvg: won(Math.round(statOutSum / statDaysDenom)),
       statTopCatName: topCat ? topCat[0] : '내역 없음',
       statTopCatSub: topCat && statOutSum > 0 ? `${won(topCat[1])} (${Math.round(topCat[1] / statOutSum * 100)}%)` : '지출을 기록해 보세요',
-      statTrendRows, statCatRows,
+      statTrendRows, statCatRows, statIsMonth: statPeriod === 'month',
       ...homeVals,
       activeGoalCount: activeGoals.length, doneGoalCount: doneGoals.length,
-      goalTabA: { bg: goalTab === 'active' ? '#f4faf7' : 'transparent', fg: goalTab === 'active' ? '#326e52' : '#8f968d' },
-      goalTabD: { bg: goalTab === 'done' ? '#f4faf7' : 'transparent', fg: goalTab === 'done' ? '#326e52' : '#8f968d' },
+      goalTabA: { bg: goalTab === 'active' ? '#2B9B68' : 'transparent', fg: goalTab === 'active' ? '#fff' : '#6B7684' },
+      goalTabD: { bg: goalTab === 'done' ? '#2B9B68' : 'transparent', fg: goalTab === 'done' ? '#fff' : '#6B7684' },
       setGoalTabActive: () => this.setState({ goalTab: 'active' }), setGoalTabDone: () => this.setState({ goalTab: 'done' }),
       goalRows: shownGoals, noGoals: !shownGoals.length,
       goalModalOpen, goalDraft,

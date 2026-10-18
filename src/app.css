@@ -26,7 +26,7 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-.nl-short, .m-fab, .m-list { display: none; }
+.nl-short, .m-fab { display: none; }
 
 /* ---------- Design tokens (Toss-style minimal) ----------
    text  #191F28 / #4E5968 / #8B95A1   line #F2F4F6   bg #F5F7F6
@@ -125,6 +125,8 @@ main {
   box-shadow: 0 10px 24px rgba(43, 155, 104, .35);
   cursor: pointer;
 }
+/* Drive button + avatar live in the right side of the sticky top header instead of their own row */
+.m-topbar { position: fixed; top: 11px; right: clamp(16px, 4vw, 44px); z-index: 13; margin: 0 !important; }
 /* the floating Drive widget would sit under the + button; the header's Drive button does the same job */
 [aria-label="Google Drive 동기화"] { display: none !important; }
 
@@ -152,7 +154,6 @@ main {
 
   /* --- phone-first layout --- */
   .m-hide { display: none !important; }
-  .m-topbar { margin-bottom: 14px !important; justify-content: flex-end !important; }
   .m-titlerow { margin-bottom: 18px !important; gap: 14px !important; }
   .m-titlerow h1 { font-size: 23px !important; margin: 0 !important; }
   .m-titlerow > div:first-child > div:first-child { margin-bottom: 8px !important; }
@@ -177,8 +178,6 @@ main {
   .m-filters { gap: 8px !important; margin-bottom: 8px !important; }
   .m-filters input[type="search"] { order: -1; flex: 1 1 100% !important; max-width: none !important; font-size: 15px !important; padding: 13px 14px !important; }
   .m-filters select { flex: 1 1 0; max-width: none !important; }
-  .m-table { display: none; }
-  .m-list { display: block; }
 
   /* calendar: bigger day numbers; spending shows as the cell tint, not tiny amounts */
   .m-cal { gap: 4px !important; }
@@ -430,4 +429,60 @@ main {
   .h-hero-title { font-size: 22px; }
   .h-leaves { width: 150px; height: 124px; }
   .h-quick .d-head { display: none; }
+}
+
+/* ---------- sub pages: ledger / stats / budget / goals ---------- */
+.p-tabsrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.p-seg { display: inline-flex; gap: 4px; padding: 4px; background: #fff; border-radius: 14px; box-shadow: 0 1px 2px rgba(25, 31, 40, .04); }
+.p-seg button { border: 0; border-radius: 10px; padding: 9px 18px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.p-note { font-size: 13px; color: #8B95A1; }
+.p-grid2 { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+.p-plan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+@media (max-width: 1000px) { .p-grid2, .p-plan { grid-template-columns: minmax(0, 1fr); } }
+
+/* stats bars */
+.p-bars { display: flex; align-items: flex-end; gap: 12px; height: 190px; margin-top: 22px; padding-bottom: 4px; }
+.p-barcol { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.p-baramt { font-size: 12px; color: #8B95A1; white-space: nowrap; }
+.p-bartrack { flex: 1; width: min(36px, 70%); display: flex; align-items: flex-end; }
+.p-bartrack > div { width: 100%; border-radius: 8px 8px 4px 4px; }
+.p-barlbl { font-size: 13px; color: #4E5968; white-space: nowrap; }
+.p-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #F2F4F6; }
+.p-kpis div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.p-kpis span { font-size: 13px; color: #8B95A1; }
+.p-kpis b { font-size: 16px; color: #191F28; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* budget plan */
+.p-budget-input { margin-top: 22px; padding-top: 18px; border-top: 1px solid #F2F4F6; }
+.p-budget-input label { display: block; font-size: 14px; font-weight: 600; color: #4E5968; margin-bottom: 8px; }
+.p-budget-input input, .p-amt { width: 100%; background: #F7F8FA; color: #191F28; border: 1px solid transparent; border-radius: 12px; padding: 13px 14px; font-size: 16px; font-weight: 700; }
+.p-amt { max-width: 180px; padding: 10px 12px; font-size: 15px; }
+.p-kor { min-height: 18px; margin-top: 6px; font-size: 13px; font-weight: 700; color: #2B9B68; }
+.p-name { flex: 0 1 auto; min-width: 0; width: 100%; max-width: 200px; border: 0; background: transparent; padding: 0; font-size: 15px; font-weight: 700; color: #191F28; }
+.p-sum { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 22px; padding-top: 16px; border-top: 1px solid #F2F4F6; font-size: 14px; color: #4E5968; }
+.p-sum b { color: #191F28; margin-left: 6px; }
+
+/* goals */
+.p-goals { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.p-addgoal { min-height: 150px; border: 1.5px dashed #CFE3D7; border-radius: 20px; background: #F7FBF9; color: #2B9B68; font-size: 15px; font-weight: 700; cursor: pointer; }
+.p-addgoal:hover { background: #EEF8F2; }
+.p-btn-soft { padding: 11px; border-radius: 12px; border: 0; background: #E9F6EF; color: #1F7A52; font-size: 14px; font-weight: 700; cursor: pointer; }
+.p-btn-danger { padding: 11px 14px; border-radius: 12px; border: 0; background: #FFF1F1; color: #E5484D; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* ledger: date-grouped list */
+.l-group + .l-group { margin-top: 10px; }
+.l-ghead { display: flex; justify-content: space-between; align-items: center; padding: 12px 4px 8px; font-size: 14px; font-weight: 700; color: #4E5968; border-bottom: 1px solid #F2F4F6; }
+.l-row { display: flex; align-items: center; gap: 14px; padding: 12px 4px; border-radius: 12px; }
+.l-row:hover { background: #F9FAFB; }
+.l-ico { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-weight: 800; font-size: 16px; }
+.l-del { width: 36px; height: 40px; border: 0; background: transparent; color: #C4CAD0; font-size: 15px; cursor: pointer; border-radius: 10px; }
+.l-del:hover { color: #E5484D; background: #FFF1F1; }
+
+@media (max-width: 720px) {
+  .p-seg { width: 100%; }
+  .p-seg button { flex: 1; padding: 10px 8px; }
+  .p-bars { height: 160px; gap: 8px; }
+  .p-baramt { font-size: 11px; }
+  .p-kpis b { font-size: 14px; }
+  .p-cat > div:nth-child(2), .p-cat > div:nth-child(3) { margin-left: 0 !important; }
 }
