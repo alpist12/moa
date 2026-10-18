@@ -1,0 +1,341 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f9faf9;
+  font-variant-numeric: tabular-nums;
+}
+button, input, select {
+  font: inherit;
+}
+a {
+  color: #43956f;
+  text-decoration: none;
+}
+a:hover {
+  color: #397e5e;
+}
+input:focus, select:focus {
+  border-color: #4aa47a !important;
+  box-shadow: 0 0 0 4px #479e7513;
+  outline: none;
+}
+button:focus-visible {
+  outline: 3px solid #F5C762;
+  outline-offset: 2px;
+}
+
+.nl-short, .m-fab, .m-list { display: none; }
+
+/* Phone: compact sticky header, bottom tab bar, floating add button */
+@media (max-width: 720px) {
+  body { min-width: 0; overflow-x: hidden; }
+  aside {
+    flex: 1 1 100% !important;
+    width: 100%;
+    height: auto !important;
+    position: sticky !important;
+    top: 0;
+    z-index: 12;
+    flex-direction: row !important;
+    align-items: center;
+    padding: 10px 16px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #edf0ec !important;
+    /* no backdrop-filter here: it would make the aside the containing block of the fixed tab bar */
+    background: #fffffff7 !important;
+  }
+  aside > div:first-child { margin: 0 !important; gap: 8px !important; }
+  aside > div:first-child img { width: 34px; height: 34px; }
+  aside > div:first-child div > div { display: none; }
+  aside > div:nth-child(2), aside > div:last-child { display: none !important; }
+  aside nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 20;
+    flex-direction: row !important;
+    gap: 0 !important;
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom)) !important;
+    background: #ffffffef;
+    backdrop-filter: blur(12px);
+    border-top: 1px solid #edf0ec;
+    box-shadow: 0 -6px 20px rgba(28, 48, 38, .05);
+  }
+  aside nav > * { flex: 1 1 0; min-width: 0; }
+  aside nav button {
+    width: 100% !important;
+    min-height: 54px;
+    flex-direction: column !important;
+    justify-content: center;
+    gap: 4px !important;
+    padding: 6px 0 !important;
+    font-size: 10.5px !important;
+    text-align: center !important;
+    white-space: nowrap;
+    border-radius: 12px !important;
+    background: transparent !important;
+  }
+  aside nav button svg { width: 21px; height: 21px; }
+  .nl-full { display: none; }
+  .nl-short { display: inline; }
+  main { flex: 1 1 100% !important; width: 100%; padding: 18px 16px 128px !important; }
+  main h1 { font-size: 25px !important; }
+  .m-fab {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    right: 18px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    z-index: 21;
+    width: 56px; height: 56px;
+    border: 0; border-radius: 50%;
+    background: linear-gradient(135deg, #7FC79A, #3E8C64);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(62, 140, 100, .35);
+    cursor: pointer;
+  }
+  /* floating Drive widget covers content on phones; the header's Drive button does the same job */
+  [aria-label="Google Drive 동기화"] { display: none !important; }
+
+  /* --- phone-first layout --- */
+  .m-hide { display: none !important; }
+  .m-topbar { margin-bottom: 14px !important; justify-content: flex-end !important; }
+  .m-titlerow { margin-bottom: 18px !important; gap: 14px !important; }
+  .m-titlerow h1 { font-size: 23px !important; margin: 0 !important; }
+  .m-titlerow > div:first-child > div:first-child { margin-bottom: 8px !important; }
+  .m-ctrl { width: 100%; }
+  .m-month { flex: 1; justify-content: space-between; padding: 6px !important; }
+  .m-month button { width: 44px !important; height: 40px !important; }
+  .m-month span { font-size: 15px !important; }
+
+  main article, .mv-card { border-radius: 16px !important; }
+  main article { padding: 18px 16px !important; }
+  .mv-card { padding: 20px 18px !important; gap: 16px !important; }
+  .mv-card > div:last-child { border-left: 0 !important; padding-left: 0 !important; }
+  main h3 { font-size: 16px !important; }
+  /* KPI numbers fit two per row */
+  main article h2 { font-size: 20px !important; }
+
+  /* ledger: one row of compact totals, big search, card list */
+  .m-sum { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
+  .m-sum > div { padding: 12px 10px !important; border-radius: 13px !important; }
+  .m-sum > div > div:nth-child(2) { font-size: 14.5px !important; letter-spacing: -.4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-sum > div > div:nth-child(3) { display: none; }
+  .m-filters { gap: 8px !important; margin-bottom: 8px !important; }
+  .m-filters input[type="search"] { order: -1; flex: 1 1 100% !important; max-width: none !important; font-size: 15px !important; padding: 13px 14px !important; }
+  .m-filters select { flex: 1 1 0; max-width: none !important; }
+  .m-table { display: none; }
+  .m-list { display: block; }
+
+  /* calendar: bigger day numbers; spending shows as the cell tint, not tiny amounts */
+  .m-cal { gap: 4px !important; }
+  .m-cal button { min-height: 50px !important; padding: 7px 6px !important; border-radius: 10px !important; }
+  .m-cal button > div:last-child { display: none; }
+  .m-cal button { height: 52px; }
+  .m-cal button span { font-size: 14px !important; }
+  .m-cal button > div:first-child span + span { display: none; }
+
+  /* entry/goal modals become bottom sheets */
+  .m-backdrop { align-items: flex-end !important; padding: 0 !important; }
+  .m-sheet { width: 100% !important; max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0 !important; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)) !important; }
+  .m-sheet input, .m-sheet select { font-size: 16px !important; }
+
+  /* nothing smaller than ~12px on a phone */
+  main [style*="font-size: 10px"], main [style*="font-size:10px"], main [style*="font-size: 11px"], main [style*="font-size:11px"] { font-size: 12px !important; }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: no-preference) {
+  .m-sheet { animation: m-sheet-up .34s cubic-bezier(.2,.9,.3,1) backwards; }
+  @keyframes m-sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+}
+
+/* Onboarding & Chart Motion */
+.mo-up { animation: mo-up .6s cubic-bezier(.2,.8,.2,1) both; }
+.mo-pin { animation: mo-pin .7s cubic-bezier(.3,1.4,.5,1) both; }
+.mo-grow { animation: mo-grow .9s cubic-bezier(.2,.8,.2,1) both; transform-origin: 0 50%; }
+.mo-tilt { animation: mo-tilt .7s cubic-bezier(.2,.9,.3,1.2) both; }
+.mo-seg { animation: mo-seg .9s cubic-bezier(.4,0,.2,1) both; }
+.mo-spin { animation: mo-spin 2.4s linear infinite; }
+.mo-bob { animation: mo-bob 2.6s ease-in-out infinite; }
+.mo-sprout { animation: mo-pin .7s cubic-bezier(.3,1.4,.5,1) both; transform-origin: 50% 100%; }
+.mo-coin { animation: mo-drop .55s cubic-bezier(.5,0,.6,1.5) both; }
+
+@keyframes mo-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes mo-pin { 0% { opacity: 0; transform: scale(.4); } 70% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: none; } }
+@keyframes mo-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes mo-tilt { from { opacity: 0; transform: translateX(60px) rotate(var(--r)); } to { opacity: 1; transform: rotate(var(--r)); } }
+@keyframes mo-seg { from { stroke-dasharray: 0 503; } to { stroke-dasharray: var(--len) 503; } }
+@keyframes mo-spin { to { transform: rotate(360deg); } }
+@keyframes mo-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes mo-drop { from { opacity: 0; transform: translateY(-90px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mo-up, .mo-pin, .mo-grow, .mo-tilt, .mo-seg, .mo-spin, .mo-bob, .mo-sprout, .mo-coin {
+    animation: none !important;
+  }
+}
+
+/* Intro: tablet = centered card, PC = two-column card */
+@media (min-width: 600px) {
+  .ob-root {
+    margin: auto;
+    border-radius: 32px;
+    background: #fff !important;
+    box-shadow: 0 30px 80px rgba(28,48,38,.12);
+  }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .ob-root {
+    width: min(560px, 92vw) !important;
+    height: min(860px, 92vh) !important;
+    padding: 24px 44px 40px !important;
+  }
+  .ob-step h2 { font-size: 31px !important; }
+  .ob-step p { font-size: 15px !important; }
+}
+@media (min-width: 900px) {
+  .ob-root {
+    width: min(1040px, 92vw) !important;
+    height: auto !important;
+    min-height: min(600px, 86vh);
+    padding: 28px 60px 48px !important;
+  }
+  .ob-step {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 390px;
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: 64px;
+    align-items: start !important;
+    text-align: left !important;
+  }
+  .ob-step > * { grid-column: 1; }
+  .ob-step > .ob-art {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    width: 390px;
+    min-height: 420px;
+    flex: none !important;
+  }
+  .ob-step h2 { font-size: 38px !important; }
+  .ob-step p { font-size: 16px !important; }
+  .ob-dots { justify-content: flex-start !important; margin: 12px 0 22px !important; }
+  .ob-actions { width: 340px; }
+  .sp-stage { transform: scale(1.38); margin: 18px 0; }
+}
+
+/* 04 스플래시 — "모으기" (0.0s ~ 2.5s)
+   0.0-0.5s : 흩어진 파스텔 점(작은 기록들)이 화면 곳곳에서 톡톡 등장
+   0.5-1.2s : 점들이 가운데로 빨려 들어가며 작아짐
+   0.9-1.5s : 가운데에서 앱 아이콘이 눌렸다 튀어 오르고(squash & stretch) 물결 링이 퍼짐
+   1.1-1.65s: 아이콘이 왼쪽으로 비켜서며 그 뒤에서 M·O·A가 옆으로 미끄러져 나와 늘었다 자리잡음
+   1.6-2.0s : 밑줄이 그어지고 문구가 단어 단위로 톡톡 등장
+   2.5s     : 페이드 + 살짝 확대되며 다음 화면으로 */
+.sp-blob { animation: sp-pop .9s cubic-bezier(.2,.8,.2,1) backwards; }
+.sg-dot { position: absolute; opacity: 0; animation: sg-gather 1.1s cubic-bezier(.5,0,.3,1) var(--d) both; }
+.sg-icon-wrap { animation: sg-slide .55s cubic-bezier(.65,0,.25,1.15) 1.1s both; }
+.sg-icon { animation: sg-pop .62s cubic-bezier(.3,1.5,.5,1) .9s backwards; }
+.sg-ring { position: absolute; inset: -6px; border-radius: 50%; border: 3px solid #9ED08F; opacity: 0; animation: sg-ring .75s ease-out 1s; }
+.sg-letter { transform-box: fill-box; transform-origin: 0 50%; animation: sg-letter .56s cubic-bezier(.2,.85,.25,1) var(--d) backwards; }
+.sg-uline { stroke-dasharray: 260; stroke-dashoffset: 260; animation: sg-uline .4s cubic-bezier(.4,0,.2,1) 1.62s forwards; }
+.sg-word { display: inline-block; animation: sg-word .5s cubic-bezier(.3,1.4,.5,1) var(--d) backwards; }
+/* exit: fade + slight zoom instead of a hard cut */
+.intro-leave { animation: intro-leave .38s cubic-bezier(.4,0,.2,1) forwards; }
+
+@keyframes sp-pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+@keyframes sg-gather {
+  0% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0); }
+  30% { opacity: 1; transform: translate(var(--x), var(--y)) scale(1); }
+  45% { transform: translate(calc(var(--x) * 1.06), calc(var(--y) * 1.06)) scale(1); }
+  85% { opacity: 1; transform: translate(0, 0) scale(.45); }
+  100% { opacity: 0; transform: translate(0, 0) scale(0); }
+}
+@keyframes sg-slide { from { transform: translateX(112px); } to { transform: none; } }
+@keyframes sg-pop {
+  0% { opacity: 0; transform: scale(0) rotate(-12deg); }
+  60% { opacity: 1; transform: scale(1.15, .9) rotate(4deg); }
+  80% { transform: scale(.95, 1.05) rotate(0); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes sg-ring { 0% { opacity: .9; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes sg-letter {
+  0% { opacity: 0; transform: translateX(var(--dx)) scaleX(.6); }
+  45% { opacity: 1; transform: translateX(calc(var(--dx) * -.04)) scaleX(1.03); }
+  75% { transform: translateX(calc(var(--dx) * .01)) scaleX(.995); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes sg-uline { to { stroke-dashoffset: 0; } }
+@keyframes sg-word { 0% { opacity: 0; transform: translateY(12px) scale(.8); } 100% { opacity: 1; transform: none; } }
+@keyframes intro-leave { to { opacity: 0; transform: scale(1.03); } }
+
+/* Page titles: letter animation */
+.tp-ch {
+  display: inline-block;
+  white-space: pre;
+  animation-duration: .5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: backwards;
+}
+@keyframes tp-letter-0 {
+  0% { opacity: 0; transform: translateX(var(--dx)) scaleX(.6); }
+  40% { opacity: 1; transform: translateX(calc(var(--dx) * -.065)) scaleX(1.026); }
+  70% { transform: translateX(calc(var(--dx) * .01)) scaleX(1.004); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes tp-letter-1 {
+  0% { opacity: 0; transform: translateX(var(--dx)) scaleX(.6); }
+  40% { opacity: 1; transform: translateX(calc(var(--dx) * -.065)) scaleX(1.026); }
+  70% { transform: translateX(calc(var(--dx) * .01)) scaleX(1.004); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sg-dot, .sg-ring { display: none !important; }
+  .sp-blob, .sg-icon-wrap, .sg-icon, .sg-letter, .sg-uline, .sg-word, .tp-ch {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* MOA In-App Motion */
+@media (prefers-reduced-motion: no-preference) {
+  main article, .mv-card {
+    animation: mv-up .55s cubic-bezier(.2,.8,.2,1) backwards;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  main article:nth-child(2) { animation-delay: .06s; }
+  main article:nth-child(3) { animation-delay: .12s; }
+  main article:nth-child(4) { animation-delay: .18s; }
+  .mv-card { animation-delay: .2s; }
+  main article:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(28,48,38,.08) !important;
+  }
+  .mv-row {
+    animation: mv-up .45s cubic-bezier(.2,.8,.2,1) backwards;
+    animation-delay: calc(.15s + var(--i,0) * 45ms);
+  }
+  .mv-pop {
+    animation: mv-pop .4s cubic-bezier(.3,1.4,.5,1) backwards;
+    animation-delay: calc(var(--i,0) * 12ms);
+  }
+  .mv-bar {
+    animation: mv-grow .9s cubic-bezier(.2,.8,.2,1) .25s backwards;
+    transform-origin: 0 50%;
+    transition: width .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .mv-fade { animation: mv-fade .2s ease backwards; }
+  .mv-sheet { animation: mv-sheet .38s cubic-bezier(.2,.9,.3,1.1) backwards; }
+  .mv-toast { animation: mv-toast .35s cubic-bezier(.2,.9,.3,1.2) backwards; }
+  button { transition: transform .12s ease, background-color .2s ease, box-shadow .2s ease; }
+  button:active { transform: scale(.96); }
+}
+
+@keyframes mv-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes mv-pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes mv-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes mv-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mv-sheet { from { opacity: 0; transform: translateY(40px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes mv-toast { from { opacity: 0; transform: translate(-50%, 18px); } to { opacity: 1; transform: translate(-50%, 0); } }

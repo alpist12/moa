@@ -5,7 +5,7 @@
   const FILE_NAME = 'moa-data.json';
   const SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
 
-  const validMonth = value => value && typeof value.allowance === 'number' && Array.isArray(value.categories) && Array.isArray(value.expenses);
+  const validMonth = value => value && typeof value.allowance === 'number' && !Number.isNaN(value.allowance) && Array.isArray(value.categories) && Array.isArray(value.expenses);
   const validStore = value => value && value.months && typeof value.months === 'object' && Object.values(value.months).every(validMonth);
   const envelope = (data, updatedAt = new Date().toISOString()) => ({ version: 1, updatedAt, data });
   const decodeRemote = raw => {
@@ -23,15 +23,45 @@
   let fileId = '';
   let saveTimer;
   let ignoreLocalWrite = false;
+  let currentStatus = '연결하면 앱 전용 공간에 안전하게 백업해요.';
   const nativeSetItem = Storage.prototype.setItem;
+
+  const fallbackStoreRaw = () => {
+    const now = new Date();
+    const ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    const st = {
+      current: ym,
+      months: {
+        [ym]: {
+          month: ym,
+          allowance: 0,
+          categories: [
+            { id: 'c1', name: '식비', amount: 0 },
+            { id: 'c2', name: '교통', amount: 0 },
+            { id: 'c3', name: '카페·간식', amount: 0 },
+            { id: 'c4', name: '쇼핑', amount: 0 },
+            { id: 'c5', name: '기타', amount: 0 }
+          ],
+          incomes: [],
+          expenses: []
+        }
+      }
+    };
+    const raw = JSON.stringify(st);
+    try { nativeSetItem.call(localStorage, KEY, raw); } catch (e) {}
+    return raw;
+  };
 
   const ui = document.createElement('section');
   ui.setAttribute('aria-label', 'Google Drive 동기화');
-  ui.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9998;font-family:Pretendard,"Noto Sans KR",sans-serif;max-width:calc(100vw - 36px)';
-  ui.innerHTML = '<button type="button" data-drive-connect style="border:0;border-radius:13px;background:#fff;color:#4b556b;padding:12px 15px;box-shadow:0 8px 30px #302c6b28;font-size:12px;font-weight:800;cursor:pointer">Google Drive 연결</button><div data-drive-panel hidden style="margin-top:8px;width:300px;max-width:100%;padding:15px;border:1px solid #e7e8f1;border-radius:14px;background:#fff;box-shadow:0 12px 36px #302c6b24"><strong style="display:block;font-size:13px;margin-bottom:6px">Google Drive 동기화</strong><p data-drive-status style="margin:0;color:#777f93;font-size:12px;line-height:1.55">연결하면 앱 전용 공간에 안전하게 백업해요.</p><div data-drive-actions style="display:none;gap:7px;margin-top:12px"><button type="button" data-drive-load style="flex:1;border:0;border-radius:9px;background:#f0edff;color:#6254dd;padding:9px;font-size:11px;font-weight:800;cursor:pointer">Drive에서 불러오기</button><button type="button" data-drive-save style="flex:1;border:0;border-radius:9px;background:#6b5cf5;color:#fff;padding:9px;font-size:11px;font-weight:800;cursor:pointer">현재 내용 저장</button></div></div>';
+  ui.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9998;font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",sans-serif;max-width:calc(100vw - 36px)';
+  ui.innerHTML = '<button type="button" data-drive-connect style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e2efe8;border-radius:13px;background:#fff;color:#33684F;padding:12px 16px;box-shadow:0 8px 26px rgba(28,48,38,.12);font-size:12px;font-weight:800;cursor:pointer"><span style="width:8px;height:8px;border-radius:50%;background:#43956f" data-drive-dot></span><span data-drive-btn-text>Google Drive 연결</span></button><div data-drive-panel hidden style="margin-top:8px;width:300px;max-width:100%;padding:16px;border:1px solid #e2efe8;border-radius:16px;background:#fff;box-shadow:0 14px 36px rgba(28,48,38,.14)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><strong style="font-size:13px;color:#1F3A2E">Google Drive 동기화</strong><button type="button" data-drive-close style="border:0;background:transparent;color:#969d94;cursor:pointer;font-size:13px;padding:2px 4px">✕</button></div><p data-drive-status style="margin:0;color:#6E7A72;font-size:12px;line-height:1.55">연결하면 앱 전용 공간에 안전하게 백업해요.</p><div data-drive-actions style="display:none;gap:7px;margin-top:12px"><button type="button" data-drive-load style="flex:1;border:0;border-radius:9px;background:#e9faf5;color:#159d7b;padding:9px;font-size:11px;font-weight:800;cursor:pointer">Drive에서 불러오기</button><button type="button" data-drive-save style="flex:1;border:0;border-radius:9px;background:#43956f;color:#fff;padding:9px;font-size:11px;font-weight:800;cursor:pointer">현재 내용 저장</button></div></div>';
   document.body.appendChild(ui);
 
   const connectButton = ui.querySelector('[data-drive-connect]');
+  const btnText = ui.querySelector('[data-drive-btn-text]');
+  const dotEl = ui.querySelector('[data-drive-dot]');
+  const closeButton = ui.querySelector('[data-drive-close]');
   const panel = ui.querySelector('[data-drive-panel]');
   const status = ui.querySelector('[data-drive-status]');
   const actions = ui.querySelector('[data-drive-actions]');
@@ -39,11 +69,22 @@
   const saveButton = ui.querySelector('[data-drive-save]');
   let pendingRemote = null;
 
+  const notify = (message, connected) => {
+    try {
+      root.dispatchEvent(new CustomEvent('moa-drive-change', { detail: { message, connected: !!connected, clientId: CLIENT_ID } }));
+    } catch (e) {}
+  };
+
   const setStatus = (message, connected = false) => {
+    currentStatus = message;
     status.textContent = message;
-    connectButton.textContent = connected ? 'Drive 연결됨' : 'Google Drive 연결';
+    btnText.textContent = connected ? 'Drive 연결됨' : 'Google Drive 연결';
+    if (dotEl) dotEl.style.background = connected ? '#159d7b' : '#b5bab4';
+    notify(message, connected);
   };
   const showPanel = () => { panel.hidden = false; };
+  if (closeButton) closeButton.addEventListener('click', () => { panel.hidden = true; });
+
   const api = async (url, options = {}) => {
     const response = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
     if (!response.ok) {
@@ -84,7 +125,7 @@
   };
   const reconcile = async () => {
     showPanel();
-    setStatus('Drive 데이터를 확인하고 있어요…');
+    setStatus('Drive 데이터를 확인하고 있어요…', true);
     const remoteFile = await findFile();
     const localRaw = localStorage.getItem(KEY);
     if (!remoteFile) {
@@ -136,12 +177,25 @@
     location.reload();
   });
   saveButton.addEventListener('click', () => {
-    const raw = localStorage.getItem(KEY);
-    if (raw) writeRemote(raw).catch(error => setStatus(error.message));
+    const raw = localStorage.getItem(KEY) || fallbackStoreRaw();
+    writeRemote(raw).catch(error => setStatus(error.message));
   });
   Storage.prototype.setItem = function (key, value) {
     nativeSetItem.call(this, key, value);
     if (this === localStorage && key === KEY && token && !ignoreLocalWrite) queueSave(value);
+  };
+
+  root.moaDrive = {
+    clientId: CLIENT_ID,
+    connect: () => token ? showPanel() : connect('consent'),
+    saveNow: () => {
+      if (!token) return connect('consent');
+      const raw = localStorage.getItem(KEY) || fallbackStoreRaw();
+      showPanel();
+      writeRemote(raw).catch(error => setStatus(error.message));
+    },
+    isConnected: () => !!token,
+    getStatus: () => currentStatus
   };
 
   const readyTimer = setInterval(() => {
