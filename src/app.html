@@ -54,6 +54,7 @@
     <div class="m-titlerow" style="display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:24px;flex-wrap:wrap;">
       <div style="flex:1 1 320px;min-width:0;">
         <h1 aria-label="{{ title }}" style="font-size:28px;letter-spacing:-1px;line-height:1.3;margin:0;font-weight:800;color:#191F28;"><sc-for list="{{ titleChars }}" as="c" hint-placeholder-count="8"><span class="tp-ch" aria-hidden="true" style="{{ c.st }}">{{ c.ch }}</span></sc-for></h1>
+        <sc-if value="{{ isDash }}"><p class="h-sub">오늘도 차근차근 모아봐요.</p></sc-if>
       </div>
       <div class="m-ctrl" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
         <div class="m-month" style="display:flex;align-items:center;gap:2px;background:#fff;border:1px solid #edf0ec;border-radius:11px;padding:4px;">
@@ -68,108 +69,137 @@
     </div>
 
     <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
-      <div class="d-grid d-top">
-        <!-- balance hero -->
-        <article class="d-hero mv-card">
-          <div style="position:relative;z-index:1;max-width:520px;">
-            <div style="font-size:15px;font-weight:600;color:#4E5968;">{{ monthShort }} 남은 돈</div>
-            <div class="d-big" style="font-size:40px;font-weight:800;letter-spacing:-1.6px;line-height:1.2;margin:8px 0 18px;color:{{ leftColor }};white-space:nowrap;">{{ leftFmt }}</div>
-            <div style="height:8px;border-radius:8px;background:#ffffffcc;overflow:hidden;max-width:420px;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ pctW }};background:linear-gradient(90deg,#9FDDB8,#2B9B68);"></div></div>
-            <div style="font-size:13px;color:#4E5968;margin-top:9px;">총 {{ availFmt }} 중 <b style="color:#191F28;">{{ pctLabel }}</b> 사용</div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;">
-              <span class="d-chip"><span style="color:#2B9B68;">수입</span> +{{ incomeFmt }}</span>
-              <span class="d-chip"><span style="color:#F2665E;">지출</span> -{{ spentFmt }}</span>
-              <span class="d-chip"><span style="color:#8B95A1;">예산</span> {{ allowanceFmt }}</span>
+      <div class="h-grid">
+        <!-- hero -->
+        <article class="h-hero mv-card">
+          <svg class="h-leaves" sc-camel-view-box="0 0 220 180" aria-hidden="true"><path d="M150 180 C150 120 160 80 190 40" fill="none" stroke="#ffffff33" stroke-width="3" stroke-linecap="round"></path><path d="M170 100 C130 95 110 60 118 30 C150 32 172 60 170 100 Z" fill="#ffffff22"></path><path d="M182 70 C200 40 230 30 250 38 C244 70 214 84 182 70 Z" fill="#ffffff1a"></path><path d="M158 140 C120 150 92 132 84 108 C112 98 146 108 158 140 Z" fill="#ffffff14"></path></svg>
+          <div style="position:relative;">
+            <div class="h-hero-title">{{ heroTitle }}</div>
+            <p class="h-hero-sub">{{ heroSub1 }}<br>{{ heroSub2 }}</p>
+            <div style="display:flex;align-items:center;gap:12px;max-width:440px;">
+              <div style="flex:1;height:8px;border-radius:8px;background:#ffffff33;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ pctW }};background:linear-gradient(90deg,#BFF0D2,#ffffff);"></div></div>
+              <strong style="font-size:14px;">{{ pctLabel }}</strong>
             </div>
+            <button class="h-hero-btn" sc-camel-on-click="{{ goExp }}">이번 달 지출 보기 →</button>
           </div>
-          <img class="d-hero-art" src="/moa-icon.png" alt="">
+        </article>
+
+        <!-- goal -->
+        <article class="d-card h-goal">
+          <div class="d-head"><h3>이번 달 목표</h3><button class="d-link" sc-camel-on-click="{{ goGoal }}">전체 ›</button></div>
+          <sc-if value="{{ hasGoal }}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+              <div style="min-width:0;">
+                <div style="font-size:15px;font-weight:600;color:#4E5968;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ goalTitle }}</div>
+                <div style="font-size:20px;font-weight:800;margin-top:8px;color:#191F28;">{{ goalCur }} <span style="font-size:13px;font-weight:500;color:#8B95A1;">/ {{ goalTgt }}</span></div>
+              </div>
+              <span style="flex-shrink:0;width:52px;height:52px;border-radius:16px;background:#E9F6EF;color:#2B9B68;display:grid;place-items:center;"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle></svg></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:20px;">
+              <div style="flex:1;height:8px;border-radius:8px;background:#F2F4F6;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:8px;width:{{ goalW }};background:linear-gradient(90deg,#9FDDB8,#2B9B68);"></div></div>
+              <strong style="font-size:14px;color:#2B9B68;">{{ goalPct }}</strong>
+            </div>
+            <div style="font-size:13px;color:#8B95A1;margin-top:8px;">{{ goalDday }}</div>
+          </sc-if>
+          <sc-if value="{{ noGoal }}">
+            <p style="margin:0 0 16px;font-size:14px;color:#8B95A1;line-height:1.6;">모으고 싶은 목표를 정하면<br>여기서 진행률을 보여드려요.</p>
+            <button class="h-ghost" sc-camel-on-click="{{ goGoal }}">＋ 목표 만들기</button>
+          </sc-if>
+        </article>
+
+        <!-- quick actions -->
+        <article class="d-card h-quick">
+          <div class="d-head"><h3>자주 쓰는 기능</h3></div>
+          <div class="h-quick-row">
+            <button sc-camel-on-click="{{ openModal }}"><span><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M12 8v8M8 12h8"></path></svg></span>가계부 작성</button>
+            <button sc-camel-on-click="{{ goPlan }}"><span><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7z"></path><path d="M9 7a3 3 0 0 1 6 0"></path></svg></span>예산 설정</button>
+            <button sc-camel-on-click="{{ goGoal }}"><span><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4.5"></circle></svg></span>목표 관리</button>
+            <button sc-camel-on-click="{{ goStat }}"><span><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 20V11M12 20V5M18 20v-6"></path></svg></span>분석 보기</button>
+          </div>
+        </article>
+
+        <!-- spending trend -->
+        <article class="d-card h-trend">
+          <div class="d-head"><h3>지출 현황</h3><button class="d-link" sc-camel-on-click="{{ goStat }}">자세히 ›</button></div>
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+            <strong style="font-size:26px;letter-spacing:-.8px;color:#191F28;">{{ spentFmt }}</strong>
+            <sc-if value="{{ trendBadge }}"><span style="font-size:13px;font-weight:700;color:{{ trendBadgeColor }};">{{ trendBadge }}</span></sc-if>
+          </div>
+          <div style="font-size:13px;color:#8B95A1;margin-top:4px;">{{ trendText }}</div>
+          <svg width="100%" height="100" sc-camel-view-box="0 0 300 90" sc-camel-preserve-aspect-ratio="none" role="img" aria-label="이번 달 누적 지출 추이" style="display:block;margin-top:14px;overflow:visible;">
+            <defs><linearGradient id="h-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B9B68" stop-opacity=".22"></stop><stop offset="1" stop-color="#2B9B68" stop-opacity="0"></stop></linearGradient></defs>
+            <path d="{{ trendArea }}" fill="url(#h-area)"></path>
+            <path class="h-line" d="{{ trendLine }}" fill="none" stroke="#2B9B68" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+            <circle cx="{{ trendEndX }}" cy="{{ trendEndY }}" r="4" fill="#fff" stroke="#2B9B68" stroke-width="2.5" vector-effect="non-scaling-stroke"></circle>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#8B95A1;margin-top:6px;"><span>{{ monthStartLabel }}</span><span>{{ monthNowLabel }}</span></div>
         </article>
 
         <!-- category donut -->
-        <article class="d-card">
-          <div class="d-head"><h3>카테고리별 지출</h3><button class="d-link" sc-camel-on-click="{{ goStat }}">통계 ›</button></div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px;">
-            <div style="position:relative;width:150px;height:150px;flex-shrink:0;margin:0 auto;">
-              <svg width="150" height="150" sc-camel-view-box="0 0 200 200" role="img" aria-label="카테고리별 지출 도넛 차트" style="transform:rotate(-90deg);"><defs><linearGradient id="mg-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC9BB"></stop><stop offset="1" stop-color="#F79A84"></stop></linearGradient><linearGradient id="mg-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BFDDFF"></stop><stop offset="1" stop-color="#86B8F0"></stop></linearGradient><linearGradient id="mg-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7A8"></stop><stop offset="1" stop-color="#F6C969"></stop></linearGradient><linearGradient id="mg-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC8DC"></stop><stop offset="1" stop-color="#F09BBC"></stop></linearGradient><linearGradient id="mg-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDEBC0"></stop><stop offset="1" stop-color="#93CF8A"></stop></linearGradient><linearGradient id="mg-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3E7E0"></stop><stop offset="1" stop-color="#BCC4B9"></stop></linearGradient></defs>
-                <circle cx="100" cy="100" r="78" fill="none" stroke="#F2F4F6" stroke-width="34"></circle>
+        <article class="d-card h-donut">
+          <div class="d-head"><h3>카테고리별 지출</h3><button class="d-link" sc-camel-on-click="{{ goStat }}">전체 ›</button></div>
+          <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+            <div style="position:relative;width:128px;height:128px;flex-shrink:0;margin:0 auto;">
+              <svg width="128" height="128" sc-camel-view-box="0 0 200 200" role="img" aria-label="카테고리별 지출 도넛 차트" style="transform:rotate(-90deg);"><defs><linearGradient id="mg-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC9BB"></stop><stop offset="1" stop-color="#F79A84"></stop></linearGradient><linearGradient id="mg-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BFDDFF"></stop><stop offset="1" stop-color="#86B8F0"></stop></linearGradient><linearGradient id="mg-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7A8"></stop><stop offset="1" stop-color="#F6C969"></stop></linearGradient><linearGradient id="mg-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC8DC"></stop><stop offset="1" stop-color="#F09BBC"></stop></linearGradient><linearGradient id="mg-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDEBC0"></stop><stop offset="1" stop-color="#93CF8A"></stop></linearGradient><linearGradient id="mg-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3E7E0"></stop><stop offset="1" stop-color="#BCC4B9"></stop></linearGradient></defs>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#F2F4F6" stroke-width="34"></circle>
                 <sc-for list="{{ dashSegs }}" as="s" hint-placeholder-count="5">
                   <circle class="mo-seg" cx="100" cy="100" r="80" fill="none" stroke-width="34" style="stroke:{{ s.grad }};--len:{{ s.len }};stroke-dasharray:{{ s.len }} 503;stroke-dashoffset:{{ s.off }};animation-delay:{{ s.d }};"></circle>
                 </sc-for>
               </svg>
-              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                <span style="font-size:12px;color:#8B95A1;">지출</span>
-                <strong style="font-size:16px;letter-spacing:-.5px;margin-top:2px;color:#191F28;">{{ spentFmt }}</strong>
-              </div>
+              <div style="position:absolute;inset:0;display:grid;place-items:center;"><strong style="font-size:14px;color:#191F28;">{{ spentFmt }}</strong></div>
             </div>
-            <div style="flex:1 1 160px;display:flex;flex-direction:column;gap:12px;min-width:0;">
+            <div style="flex:1 1 120px;display:flex;flex-direction:column;gap:9px;min-width:0;">
               <sc-for list="{{ dashSegs }}" as="s" hint-placeholder-count="5">
-                <div style="display:flex;align-items:center;gap:10px;font-size:14px;">
-                  <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex-shrink:0;"></span>
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                  <span style="width:8px;height:8px;border-radius:50%;background:{{ s.dot }};flex-shrink:0;"></span>
                   <span style="flex:1;color:#4E5968;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
                   <span style="color:#191F28;font-weight:700;">{{ s.pct }}</span>
                 </div>
               </sc-for>
-              <sc-if value="{{ noSpend0 }}"><div style="color:#8B95A1;font-size:14px;">아직 지출이 없어요.</div></sc-if>
+              <sc-if value="{{ noSpend0 }}"><div style="color:#8B95A1;font-size:13px;">아직 지출이 없어요.</div></sc-if>
             </div>
           </div>
         </article>
-      </div>
 
-      <div class="d-grid d-bottom">
-        <!-- recent transactions -->
-        <article class="d-card">
-          <div class="d-head"><h3>최근 거래</h3><button class="d-link" sc-camel-on-click="{{ goExp }}">더보기 ›</button></div>
+        <!-- recent -->
+        <article class="d-card h-recent">
+          <div class="d-head"><h3>최근 거래내역</h3><button class="d-link" sc-camel-on-click="{{ goExp }}">전체 ›</button></div>
           <div style="display:flex;flex-direction:column;">
             <sc-for list="{{ recentRows }}" as="e" hint-placeholder-count="5">
-              <div sc-camel-on-click="{{ e.rowClick }}" class="mv-row d-tx" style="--i:{{ $index }};cursor:{{ e.cursor }};">
-                <span class="d-tx-date">{{ e.dateShort }}</span>
-                <span style="width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:{{ e.soft }};color:{{ e.color }};font-weight:800;font-size:16px;">{{ e.sign }}</span>
-                <span style="flex:1;min-width:0;">
-                  <span style="display:block;font-size:15px;font-weight:600;color:#191F28;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ e.title }}</span>
-                  <span style="display:block;font-size:13px;color:#8B95A1;margin-top:2px;">{{ e.category }}</span>
+              <div sc-camel-on-click="{{ e.rowClick }}" class="mv-row d-tx" style="--i:{{ $index }};cursor:{{ e.cursor }};padding:8px 0;gap:12px;">
+                <span style="width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:{{ e.soft }};color:{{ e.color }};font-weight:800;font-size:14px;">{{ e.sign }}</span>
+                <span style="flex:1;min-width:0;font-size:14px;font-weight:600;color:#191F28;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ e.title }}</span>
+                <span style="text-align:right;flex-shrink:0;">
+                  <span style="display:block;font-size:14px;font-weight:700;color:{{ e.amtColor }};white-space:nowrap;">{{ e.amountFmt }}</span>
+                  <span style="display:block;font-size:12px;color:#8B95A1;">{{ e.dateShort }}</span>
                 </span>
-                <span style="font-size:15px;font-weight:700;color:{{ e.amtColor }};white-space:nowrap;">{{ e.amountFmt }}</span>
               </div>
             </sc-for>
           </div>
-          <sc-if value="{{ noLedger }}"><div style="text-align:center;padding:30px 10px;color:#8B95A1;font-size:14px;">아직 기록이 없어요.</div></sc-if>
-          <sc-if value="{{ editable }}">
-            <div class="d-actions">
-              <button sc-camel-on-click="{{ openIncome }}" style="background:#E9F6EF;color:#2B9B68;">＋ 수입</button>
-              <button sc-camel-on-click="{{ openModal }}" style="background:#2B9B68;color:#fff;">＋ 지출</button>
-            </div>
-          </sc-if>
+          <sc-if value="{{ noLedger }}"><div style="text-align:center;padding:24px 10px;color:#8B95A1;font-size:14px;">아직 기록이 없어요.</div></sc-if>
         </article>
 
-        <div style="display:flex;flex-direction:column;gap:20px;min-width:0;">
-          <!-- budget -->
-          <article class="d-card">
-            <div class="d-head"><h3>이번 달 예산</h3><button class="d-link" sc-camel-on-click="{{ goPlan }}">설정 ›</button></div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="flex:1;height:10px;border-radius:10px;background:#F2F4F6;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:10px;width:{{ pctW }};background:linear-gradient(90deg,#9FDDB8,#2B9B68);"></div></div>
-              <strong style="font-size:16px;color:#191F28;">{{ pctLabel }}</strong>
+        <!-- this week -->
+        <article class="d-card h-week">
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:14px;flex:1 1 240px;min-width:0;">
+              <span style="width:48px;height:48px;border-radius:16px;background:#E9F6EF;display:grid;place-items:center;flex-shrink:0;"><svg width="28" height="34" sc-camel-view-box="0 0 50 60" aria-hidden="true"><path d="M25 58 C25 44 25 34 26 24" fill="none" stroke="#2B9B68" stroke-width="3" stroke-linecap="round"></path><path d="M25 34 C10 33 4 20 6 10 C19 10 27 20 25 34Z" fill="#9FDDB8"></path><path d="M26 26 C40 24 46 12 44 3 C31 3 23 13 26 26Z" fill="#2B9B68"></path></svg></span>
+              <div style="min-width:0;">
+                <h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">이번 주 요약</h3>
+                <div style="font-size:14px;color:#4E5968;">{{ weekMsg }}</div>
+                <div style="font-size:13px;color:#8B95A1;margin-top:2px;">{{ weekSub }}</div>
+              </div>
             </div>
-            <div style="font-size:13px;color:#8B95A1;margin-top:8px;">{{ availFmt }} 중 {{ spentFmt }} 사용</div>
-            <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px;">
-              <sc-for list="{{ catRows }}" as="c" hint-placeholder-count="4">
-                <div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;font-size:14px;">
-                    <span style="color:#4E5968;">{{ c.name }}</span>
-                    <span style="color:#8B95A1;font-size:13px;white-space:nowrap;"><b style="color:{{ c.spentColor }};font-weight:700;">{{ c.spentFmt }}</b> / {{ c.amountFmt }}</span>
-                  </div>
-                  <div style="height:6px;background:#F2F4F6;border-radius:6px;overflow:hidden;"><div class="mv-bar" style="height:100%;border-radius:6px;width:{{ c.barW }};background:{{ c.barColor }};"></div></div>
+            <div class="h-week-bars">
+              <sc-for list="{{ weekBars }}" as="b" hint-placeholder-count="7">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+                  <div style="height:56px;width:14px;display:flex;align-items:flex-end;"><div class="h-bar" style="width:100%;height:{{ b.h }};border-radius:6px;background:{{ b.bg }};"></div></div>
+                  <span style="font-size:12px;color:#8B95A1;">{{ b.l }}</span>
                 </div>
               </sc-for>
             </div>
-          </article>
-
-          <!-- daily allowance -->
-          <article class="d-card" style="background:linear-gradient(135deg,#EEF8F2,#E2F3E9) !important;">
-            <div style="font-size:15px;font-weight:600;color:#4E5968;">오늘 쓸 수 있는 돈</div>
-            <div style="font-size:30px;font-weight:800;letter-spacing:-1px;color:#2B9B68;margin:6px 0 4px;">{{ dailyFmt }}</div>
-            <div style="font-size:13px;color:#4E5968;">남은 {{ remDays }}일 · {{ heroMsg }}</div>
-          </article>
-        </div>
+          </div>
+        </article>
       </div>
     </sc-if>
 

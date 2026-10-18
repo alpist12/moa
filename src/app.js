@@ -466,6 +466,47 @@ class Component extends DCLogic {
     const activeGoals = enrichedGoals.filter(g => !g.isDone), doneGoals = enrichedGoals.filter(g => g.isDone);
     const shownGoals = goalTab === 'done' ? doneGoals : activeGoals;
 
+    // --- home dashboard extras ---
+    const hr = new Date().getHours();
+    const greet = hr < 11 ? '좋은 아침이에요!' : hr < 18 ? '좋은 하루예요!' : '좋은 저녁이에요!';
+    const prevD = new Date(+y, +mo - 2, 1), prevKey = prevD.getFullYear() + '-' + String(prevD.getMonth() + 1).padStart(2, '0');
+    const prevM = store.months[prevKey];
+    const prevSpent = prevM ? prevM.expenses.reduce((a, x) => a + (Number(x.amount) || 0), 0) : 0;
+    const chg = prevSpent > 0 ? Math.round((spent - prevSpent) / prevSpent * 100) : null;
+    // cumulative spending line through the days that have passed (viewBox 0 0 300 90)
+    const lastDay = Math.max(1, day || days);
+    let cum = 0; const cumPts = [];
+    for (let d = 1; d <= lastDay; d++) { cum += outT[d] || 0; cumPts.push(cum); }
+    const maxCum = Math.max(1, cum);
+    const px = i => (lastDay > 1 ? i / (lastDay - 1) * 300 : 150).toFixed(1), py = v => (84 - v / maxCum * 72).toFixed(1);
+    const trendLine = cumPts.map((v, i) => (i ? 'L' : 'M') + px(i) + ' ' + py(v)).join(' ');
+    // this week (Mon-Sun) across all stored months
+    const byDate = {};
+    Object.values(store.months).forEach(m => (m.expenses || []).forEach(x => { byDate[x.date] = (byDate[x.date] || 0) + (Number(x.amount) || 0); }));
+    const anchor = thisMonth ? new Date(TODAY) : new Date(+y, +mo - 1, Math.max(1, day || days));
+    const mon = new Date(anchor); mon.setDate(anchor.getDate() - (anchor.getDay() + 6) % 7);
+    const iso = dt => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+    const weekAmts = [0, 1, 2, 3, 4, 5, 6].map(i => { const dt = new Date(mon); dt.setDate(mon.getDate() + i); return byDate[iso(dt)] || 0; });
+    const weekMax = Math.max(...weekAmts), weekTop = weekAmts.indexOf(weekMax), weekSum = weekAmts.reduce((a, b) => a + b, 0);
+    const topGoal = activeGoals[0] || null;
+    const homeVals = {
+      greet,
+      heroTitle: left < 0 ? '예산을 조금 넘었어요.' : avail > 0 && pct > (day / days * 100) + 10 ? '조금 빠르게 쓰고 있어요.' : '이번 달도 잘하고 있어요.',
+      heroSub1: `지금까지 ${won(spent)}을 기록했어요.`,
+      heroSub2: left >= 0 ? `예산까지 ${won(left)} 남았어요.` : `예산보다 ${won(-left)} 더 썼어요.`,
+      trendLine, trendArea: trendLine ? trendLine + ` L${px(cumPts.length - 1)} 90 L${px(0)} 90 Z` : '',
+      trendEndX: px(cumPts.length - 1), trendEndY: py(cum),
+      trendText: chg === null ? '지난달 기록이 없어요' : chg <= 0 ? `지난달보다 ${-chg}% 줄었어요` : `지난달보다 ${chg}% 늘었어요`,
+      trendBadge: chg === null ? '' : (chg <= 0 ? '↓ ' : '↑ ') + Math.abs(chg) + '%', trendBadgeColor: chg !== null && chg > 0 ? '#F2665E' : '#2B9B68',
+      monthStartLabel: `${+mo}월 1일`, monthNowLabel: `${+mo}월 ${lastDay}일`,
+      weekBars: '월화수목금토일'.split('').map((l, i) => ({ l, h: (weekMax ? Math.max(6, Math.round(weekAmts[i] / weekMax * 100)) : 6) + '%', bg: weekMax && i === weekTop ? '#2B9B68' : '#CFEBD9' })),
+      weekMsg: weekMax ? `이번 주는 ${'월화수목금토일'[weekTop]}요일에 가장 많이 썼어요.` : '이번 주는 아직 지출이 없어요.',
+      weekSub: `이번 주 지출 ${won(weekSum)}`,
+      hasGoal: !!topGoal, noGoal: !topGoal,
+      goalTitle: topGoal ? topGoal.title : '', goalCur: topGoal ? topGoal.currentFmt : '', goalTgt: topGoal ? topGoal.targetFmt : '',
+      goalPct: topGoal ? topGoal.pct + '%' : '0%', goalW: topGoal ? topGoal.barW : '0%', goalDday: topGoal ? topGoal.ddayLabel : ''
+    };
+
     const navItem = k => ({ bg: k === page ? '#E9F6EF' : 'transparent', color: k === page ? '#1F7A52' : '#6B7684' });
     const seg = on => ({ bg: on ? '#fff' : 'transparent', color: on ? '#2a3228' : '#98a096', shadow: on ? '0 2px 6px rgba(28,48,38,.08)' : 'none' });
     const setD = k => ev => { const v = ev.target.value; this.setState(s => ({ draft: { ...s.draft, [k]: v }, draftError: '' })); };
@@ -490,7 +531,7 @@ class Component extends DCLogic {
       nav: { dash: navItem('dash'), cal: navItem('cal'), stat: navItem('stat'), plan: navItem('plan'), goal: navItem('goal'), exp: navItem('exp'), share: navItem('share') },
       crumb: P[0], modeLabel: readOnly ? '읽기 전용으로 보는 중' : '내 기록 편집 중', dotColor: readOnly ? '#3e8966' : '#4acdad',
       isDash: page === 'dash', isCal: page === 'cal', isStat: page === 'stat', isPlan: page === 'plan', isGoal: page === 'goal', isExp: page === 'exp', isShare: page === 'share',
-      eyebrow: `${y}년 ${+mo}월의 기록`, monthShort: `${+mo}월`, monthLabel: `${y}년 ${+mo}월`, title: P[1], titleChars: [...P[1]].map((ch, i) => ({ ch, st: `animation-name:tp-letter-${(this._tn || 0) % 2};animation-delay:${i * 35}ms;--dx:${i % 2 ? -22 : 24}px` })), desc: P[2], showShareCta: !readOnly && page !== 'share',
+      eyebrow: `${y}년 ${+mo}월의 기록`, monthShort: `${+mo}월`, monthLabel: `${y}년 ${+mo}월`, title: page === 'dash' ? homeVals.greet : P[1], titleChars: [...(page === 'dash' ? homeVals.greet : P[1])].map((ch, i) => ({ ch, st: `animation-name:tp-letter-${(this._tn || 0) % 2};animation-delay:${i * 35}ms;--dx:${i % 2 ? -22 : 24}px` })), desc: P[2], showShareCta: !readOnly && page !== 'share',
       prevMonth: this.shiftMonth(-1), nextMonth: this.shiftMonth(1),
       prevOp: readOnly && mi <= 0 ? 0.3 : 1, nextOp: readOnly && mi >= mkeys.length - 1 ? 0.3 : 1,
       planLink: readOnly ? '자세히 보기 →' : '계획 수정 →',
@@ -534,6 +575,7 @@ class Component extends DCLogic {
       statTopCatName: topCat ? topCat[0] : '내역 없음',
       statTopCatSub: topCat && statOutSum > 0 ? `${won(topCat[1])} (${Math.round(topCat[1] / statOutSum * 100)}%)` : '지출을 기록해 보세요',
       statTrendRows, statCatRows,
+      ...homeVals,
       activeGoalCount: activeGoals.length, doneGoalCount: doneGoals.length,
       goalTabA: { bg: goalTab === 'active' ? '#f4faf7' : 'transparent', fg: goalTab === 'active' ? '#326e52' : '#8f968d' },
       goalTabD: { bg: goalTab === 'done' ? '#f4faf7' : 'transparent', fg: goalTab === 'done' ? '#326e52' : '#8f968d' },
