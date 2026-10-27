@@ -85,7 +85,7 @@ class Component extends DCLogic {
     const init = this.resolveInitialState();
     this.state = {
       ...init,
-      q: '', filter: '', methodFilter: '', kind: 'all', sortOrder: 'dateDesc', viewMode: 'table', selectedKeys: [],
+      q: '', filter: '', methodFilter: '', kind: 'all', sortOrder: 'dateDesc', viewMode: (typeof window !== 'undefined' && window.innerWidth <= 720) ? 'list' : 'table', selectedKeys: [],
       statPeriod: 'month', goalTab: 'active',
       quick: this.blank(init.store.months[init.month], 'out'), quickExtras: [], quickError: '',
       modalOpen: false, draft: this.blank(init.store.months[init.month], 'out'), batchDrafts: [], draftError: '',
@@ -929,7 +929,7 @@ class Component extends DCLogic {
       goalPct: topGoal ? topGoal.pct + '%' : '0%', goalW: topGoal ? topGoal.barW : '0%', goalDday: topGoal ? topGoal.ddayLabel : ''
     };
 
-    const navItem = k => ({ bg: k === page ? '#e8f8f0' : 'transparent', color: k === page ? '#0f9d6a' : '#6c6880' });
+    const navItem = k => ({ bg: k === page ? '#e8f8f0' : 'transparent', color: k === page ? '#2B9B68' : '#6c6880' });
     const seg = on => ({ bg: on ? '#fff' : 'transparent', color: on ? '#17161d' : '#6c6880', shadow: on ? '0 2px 6px rgba(28,48,38,.08)' : 'none' });
     const setD = k => ev => { const v = ev.target.value; this.setState(s => ({ draft: { ...s.draft, [k]: v }, draftError: '' })); };
     const setKind = k => () => this.setState(s => ({ draft: { ...s.draft, kind: k, method: k === 'in' ? IN_METHODS[0] : OUT_METHODS[0], category: k === 'in' ? IN_CATS[0] : ((data.categories[0] || {}).name || '기타') } }));

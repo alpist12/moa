@@ -648,6 +648,152 @@ main {
   .nv-qrow > *:nth-child(6) { grid-column: 1 / span 1; }
   .nv-qrow > *:nth-child(7) { grid-column: 2 / span 1; }
 }
+
+/* ---------- Mobile UX & Responsive Polish (<= 720px) ---------- */
+@media (max-width: 720px) {
+  /* Splash & Onboarding */
+  .sp-stage { transform: scale(.85); transform-origin: center center; }
+  .ob-root { padding: 10px 20px 28px !important; }
+  .ob-art > div { width: min(100%, 290px) !important; }
+
+  /* Sticky Top Header & Right Action Pill */
+  aside {
+    height: 56px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  aside > div:first-child img { width: 34px !important; height: 34px !important; }
+  aside > div:first-child svg { width: 74px !important; height: 25px !important; }
+  aside > div:first-child > div > div { display: none !important; }
+  .m-topbar {
+    top: 10px !important;
+    right: 14px !important;
+  }
+  .m-topbar button {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+  .m-topbar > div > div:last-child {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  /* Bottom Navigation Bar (7 tabs) */
+  aside nav {
+    padding: 4px 6px calc(4px + env(safe-area-inset-bottom)) !important;
+    background: rgba(255, 255, 255, .96) !important;
+  }
+  aside nav button {
+    min-height: 50px !important;
+    padding: 5px 2px !important;
+    gap: 3px !important;
+    font-size: 11px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 10px !important;
+  }
+  aside nav button svg {
+    width: 19px !important;
+    height: 19px !important;
+    flex-shrink: 0;
+  }
+
+  /* Ledger Quick Entry Box (.nv-qbox / .nv-qrow) */
+  .nv-qbox { padding: 14px !important; }
+  .nv-qhead > div:first-child > span:last-child { display: none; }
+  .nv-qrow {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .nv-qrow > *:nth-child(1) {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    width: 100% !important;
+  }
+  .nv-qrow > *:nth-child(1) > button {
+    flex: 1 1 0 !important;
+    text-align: center !important;
+  }
+  .nv-qrow > *:nth-child(2) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(3) {
+    grid-column: 1 / span 1 !important;
+  }
+  .nv-qrow > *:nth-child(4) {
+    grid-column: 2 / span 1 !important;
+  }
+  .nv-qrow > *:nth-child(5) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(6) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(7) {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .nv-qrow > *:nth-child(7) > button {
+    flex: 1 1 auto !important;
+  }
+
+  /* Ledger Filter Row */
+  .m-filters > div:first-of-type {
+    flex: 1 1 auto;
+    display: flex !important;
+  }
+  .m-filters > div:first-of-type > button {
+    flex: 1 1 0;
+    padding: 8px 10px !important;
+  }
+  .m-filters select {
+    flex: 1 1 calc(50% - 6px) !important;
+    min-width: 120px !important;
+  }
+
+  /* Calendar Mobile Cells */
+  .m-cal-empty {
+    min-height: 50px !important;
+    height: 52px !important;
+    border-radius: 10px !important;
+  }
+  .m-cal-dot {
+    display: inline-block !important;
+  }
+
+  /* Recording Modal & Batch Rows on Mobile */
+  .m-modal-grid3 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .m-modal-grid3 > label:last-child {
+    grid-column: 1 / -1 !important;
+  }
+  .m-batch-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  .m-batch-row > div:first-child,
+  .m-batch-row > input[type="date"],
+  .m-batch-row > input[type="text"] {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+  .m-batch-row > input[type="number"] {
+    width: 100% !important;
+  }
+
+  /* Share Page Grid */
+  .m-share-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh;font-family:'Pretendard Variable',Pretendard,'Noto Sans KR','Malgun Gothic',sans-serif;color:#191F28;background:#F5F7F6;word-break:keep-all;">
@@ -888,6 +1034,7 @@ main {
                   <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
                     <span style="font-size:12px;font-weight:800;color:{{ c.numColor }};">{{ c.day }}</span>
                     <sc-if value="{{ c.todayMark }}"><span style="font-size:9px;font-weight:800;color:{{ c.amtColor }};">{{ c.todayMark }}</span></sc-if>
+                    <sc-if value="{{ c.hasDot }}"><span class="m-cal-dot" style="display:none;width:6px;height:6px;border-radius:50%;background:{{ c.dotColor }};"></span></sc-if>
                   </div>
                   <div style="width:100%;text-align:right;line-height:1.25;">
                     <sc-if value="{{ c.inAmt }}"><div style="font-size:10px;font-weight:800;color:{{ c.inColor }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.inAmt }}</div></sc-if>
@@ -897,7 +1044,7 @@ main {
                 </button>
               </sc-if>
               <sc-if value="{{ !c.isDay }}">
-                <div style="min-height:78px;border-radius:12px;background:#f6f7fb;"></div>
+                <div class="m-cal-empty" style="min-height:78px;border-radius:12px;background:#f6f7fb;"></div>
               </sc-if>
             </sc-for>
           </div>
@@ -1256,7 +1403,7 @@ main {
             <button sc-camel-on-click="{{ setViewTable }}" style="border:0;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;background:{{ vTable.bg }};color:{{ vTable.color }};box-shadow:{{ vTable.shadow }};">표 보기</button>
             <button sc-camel-on-click="{{ setViewList }}" style="border:0;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;background:{{ vList.bg }};color:{{ vList.color }};box-shadow:{{ vList.shadow }};">일별 보기</button>
           </div>
-          <button sc-camel-on-click="{{ downloadCsv }}" style="padding:10px 12px;border-radius:11px;font-size:12px;font-weight:800;border:1px solid #f0eff5;background:#fff;color:#34313f;cursor:pointer;white-space:nowrap;" style-hover="background:#f6f7fb;">↓ CSV 저장</button>
+          <button class="m-hide" sc-camel-on-click="{{ downloadCsv }}" style="padding:10px 12px;border-radius:11px;font-size:12px;font-weight:800;border:1px solid #f0eff5;background:#fff;color:#34313f;cursor:pointer;white-space:nowrap;" style-hover="background:#f6f7fb;">↓ CSV 저장</button>
         </div>
 
         <!-- 체크박스 다중 선택 시 나타나는 일괄 작업 바 -->
@@ -1442,22 +1589,22 @@ main {
 
         <article class="d-card">
           <div class="d-head"><h3>{{ monthLabel }} 공유 요약 & 데이터 관리</h3><span class="p-note">내보내기 · 샘플 체험</span></div>
-          <div style="background:#17161d;color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:14px;">
-            <div style="font-size:12px;color:rgba(255,255,255,.65);font-weight:700;">{{ monthLabel }} 정산 미리보기</div>
+          <div style="background:linear-gradient(135deg,#2F8A5F 0%,#1F6A49 100%);color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:14px;">
+            <div style="font-size:12px;color:rgba(255,255,255,.78);font-weight:700;">{{ monthLabel }} 정산 미리보기</div>
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;">
-              <div><span style="font-size:11px;color:rgba(255,255,255,.6);display:block;">총 수입·예산</span><strong style="font-size:16px;color:#34d399;display:block;margin-top:3px;">+{{ inTotalFmt }}</strong></div>
-              <div><span style="font-size:11px;color:rgba(255,255,255,.6);display:block;">총 지출 ({{ count }}건)</span><strong style="font-size:16px;color:#fda4af;display:block;margin-top:3px;">-{{ spentFmt }}</strong></div>
-              <div><span style="font-size:11px;color:rgba(255,255,255,.6);display:block;">현재 잔액</span><strong style="font-size:16px;color:#fff;display:block;margin-top:3px;">{{ leftFmt }}</strong></div>
+              <div><span style="font-size:11px;color:rgba(255,255,255,.75);display:block;">총 수입·예산</span><strong style="font-size:15px;color:#BFF0D2;display:block;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">+{{ inTotalFmt }}</strong></div>
+              <div><span style="font-size:11px;color:rgba(255,255,255,.75);display:block;">총 지출 ({{ count }}건)</span><strong style="font-size:15px;color:#FFE2E5;display:block;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-{{ spentFmt }}</strong></div>
+              <div><span style="font-size:11px;color:rgba(255,255,255,.75);display:block;">현재 잔액</span><strong style="font-size:15px;color:#fff;display:block;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ leftFmt }}</strong></div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div class="m-share-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px;margin-bottom:14px;">
             <button sc-camel-on-click="{{ downloadTemplate }}" style="padding:13px 14px;border-radius:12px;font-size:12.5px;font-weight:800;border:1px solid #d7eee3;background:#f4fbf7;color:#17161d;cursor:pointer;text-align:left;">
               <strong style="display:block;color:#0f9d6a;margin-bottom:3px;">📄 엑셀 양식 다운로드</strong>
               <span style="font-size:11px;color:#6c6880;font-weight:600;">일괄 등록용 표준 CSV 양식</span>
             </button>
-            <button sc-camel-on-click="{{ openExcelModal }}" style="padding:13px 14px;border-radius:12px;font-size:12.5px;font-weight:800;border:1px solid #17161d;background:#17161d;color:#fff;cursor:pointer;text-align:left;">
-              <strong style="display:block;color:#34d399;margin-bottom:3px;">📂 엑셀 업로드 일괄등록</strong>
-              <span style="font-size:11px;color:rgba(255,255,255,.72);font-weight:600;">작성한 파일 한 번에 불러오기</span>
+            <button sc-camel-on-click="{{ openExcelModal }}" style="padding:13px 14px;border-radius:12px;font-size:12.5px;font-weight:800;border:1px solid #2B9B68;background:#2B9B68;color:#fff;cursor:pointer;text-align:left;">
+              <strong style="display:block;color:#fff;margin-bottom:3px;">📂 엑셀 업로드 일괄등록</strong>
+              <span style="font-size:11px;color:rgba(255,255,255,.85);font-weight:600;">작성한 파일 한 번에 불러오기</span>
             </button>
             <button sc-camel-on-click="{{ downloadCsv }}" style="padding:13px 14px;border-radius:12px;font-size:12.5px;font-weight:800;border:1px solid #e2ebe6;background:#f8faf9;color:#17161d;cursor:pointer;text-align:left;">
               <strong style="display:block;color:#0f9d6a;margin-bottom:3px;">↓ 현재 가계부 내보내기</strong>
@@ -1511,7 +1658,7 @@ main {
               <button sc-camel-on-click="{{ addAmt50k }}" style="padding:6px 10px;border-radius:8px;border:1px solid #f0eff5;background:#e8f8f0;color:#0f9d6a;font-size:11px;font-weight:800;cursor:pointer;">+5만</button>
             </div>
           </label>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div class="m-modal-grid3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
             <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:12px;color:#34313f;">결제수단<sc-raw-select value="{{ draft.method }}" sc-camel-on-change="{{ setMethod }}" style="font-weight:400;background:#fff;color:#17161d;border:1px solid #f0eff5;border-radius:11px;padding:12px 11px;font-size:13px;"><sc-for list="{{ draftMethods }}" as="m"><option value="{{ m }}">{{ m }}</option></sc-for></sc-raw-select></label>
             <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:12px;color:#34313f;">분류<sc-raw-select value="{{ draft.category }}" sc-camel-on-change="{{ setCategory }}" style="font-weight:400;background:#fff;color:#17161d;border:1px solid #f0eff5;border-radius:11px;padding:12px 11px;font-size:13px;"><sc-for list="{{ draftCats }}" as="n"><option value="{{ n }}">{{ n }}</option></sc-for></sc-raw-select></label>
             <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:12px;color:#34313f;">날짜<input type="date" value="{{ draft.date }}" sc-camel-on-change="{{ setDate }}" style="font-weight:400;background:#fff;color:#17161d;border:1px solid #f0eff5;border-radius:11px;padding:11px 10px;font-size:13px;"></label>
@@ -1524,7 +1671,7 @@ main {
               <sc-if value="{{ hasBatchDrafts }}">
                 <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
                   <sc-for list="{{ batchDraftRows }}" as="br" hint-placeholder-count="2">
-                    <div style="background:#f8faf9;border:1px solid #d7eee3;border-radius:11px;padding:8px 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <div class="m-batch-row" style="background:#f8faf9;border:1px solid #d7eee3;border-radius:11px;padding:8px 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
                       <div style="display:inline-flex;background:#e9ecf2;border-radius:8px;padding:2px;gap:2px;">
                         <button sc-camel-on-click="{{ br.setOut }}" style="border:0;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:800;cursor:pointer;background:{{ br.bOut.bg }};color:{{ br.bOut.color }};">지출</button>
                         <button sc-camel-on-click="{{ br.setIn }}" style="border:0;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:800;cursor:pointer;background:{{ br.bIn.bg }};color:{{ br.bIn.color }};">수입</button>
@@ -1607,7 +1754,7 @@ main {
             <div style="font-size:11.5px;font-weight:800;color:#4f7bff;margin-bottom:4px;">STEP 2 · 작성한 파일 업로드</div>
             <strong style="font-size:14px;display:block;color:#17161d;">작성한 엑셀(CSV) 파일 불러오기</strong>
             <p style="font-size:12px;color:#6c6880;line-height:1.55;margin:6px 0 12px;">엑셀에서 저장한 CSV 파일(UTF-8·ANSI 모두 자동 호환)을 선택하면 아래에서 내역을 미리 확인해요.</p>
-            <button sc-camel-on-click="{{ triggerExcelUpload }}" style="width:100%;padding:10px 14px;border-radius:10px;border:0;background:#17161d;color:#fff;font-size:12.5px;font-weight:850;cursor:pointer;">📂 내 PC에서 엑셀(CSV) 파일 선택</button>
+            <button sc-camel-on-click="{{ triggerExcelUpload }}" style="width:100%;padding:10px 14px;border-radius:10px;border:0;background:#2B9B68;color:#fff;font-size:12.5px;font-weight:850;cursor:pointer;">📂 내 PC에서 엑셀(CSV) 파일 선택</button>
           </div>
         </div>
 
@@ -1627,7 +1774,7 @@ main {
         <!-- 미리보기 영역 -->
         <sc-if value="{{ hasExcelPreview }}">
           <div style="border:1px solid #d7eee3;border-radius:14px;overflow:hidden;margin-bottom:16px;">
-            <div style="background:#17161d;color:#fff;padding:11px 15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:12.5px;">
+            <div style="background:#1F3A2E;color:#fff;padding:11px 15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:12.5px;">
               <div>
                 <strong style="color:#34d399;">총 {{ excelPreviewCount }}건 인식됨</strong>
                 <sc-if value="{{ hasExcelFileName }}"><span style="color:rgba(255,255,255,.65);margin-left:6px;">({{ excelFileName }})</span></sc-if>
@@ -1877,7 +2024,7 @@ main {
 지금 바로 가계부를 시작해 보세요.</p>
       <div class="ob-art" style="flex: 1; display: flex; align-items: center; justify-content: center">
         <div class="mo-pin" style="width: 290px; padding: 34px 24px; border-radius: 26px; background: #F4FAF6; border: 1px solid #E2EFE7; display: flex; flex-direction: column; align-items: center; gap: 18px; animation-delay: .18s">
-          <img src="/moa-icon.png" alt="MOA 심볼" width="76" height="76" style="display: block">
+          <img src="./moa-icon.png" alt="MOA 심볼" width="76" height="76" style="display: block">
           <svg width="150" height="50" sc-camel-view-box="0 0 510 165" role="img" aria-label="MOA">
             <path d="M29 134 V30 L92 88 L155 30 V134" fill="none" stroke="#206050" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"></path>
             <circle cx="262" cy="82" r="57.5" fill="none" stroke="#206050" stroke-width="35"></circle>
@@ -1996,7 +2143,7 @@ class Component extends DCLogic {
     const init = this.resolveInitialState();
     this.state = {
       ...init,
-      q: '', filter: '', methodFilter: '', kind: 'all', sortOrder: 'dateDesc', viewMode: 'table', selectedKeys: [],
+      q: '', filter: '', methodFilter: '', kind: 'all', sortOrder: 'dateDesc', viewMode: (typeof window !== 'undefined' && window.innerWidth <= 720) ? 'list' : 'table', selectedKeys: [],
       statPeriod: 'month', goalTab: 'active',
       quick: this.blank(init.store.months[init.month], 'out'), quickExtras: [], quickError: '',
       modalOpen: false, draft: this.blank(init.store.months[init.month], 'out'), batchDrafts: [], draftError: '',
@@ -2840,7 +2987,7 @@ class Component extends DCLogic {
       goalPct: topGoal ? topGoal.pct + '%' : '0%', goalW: topGoal ? topGoal.barW : '0%', goalDday: topGoal ? topGoal.ddayLabel : ''
     };
 
-    const navItem = k => ({ bg: k === page ? '#e8f8f0' : 'transparent', color: k === page ? '#0f9d6a' : '#6c6880' });
+    const navItem = k => ({ bg: k === page ? '#e8f8f0' : 'transparent', color: k === page ? '#2B9B68' : '#6c6880' });
     const seg = on => ({ bg: on ? '#fff' : 'transparent', color: on ? '#17161d' : '#6c6880', shadow: on ? '0 2px 6px rgba(28,48,38,.08)' : 'none' });
     const setD = k => ev => { const v = ev.target.value; this.setState(s => ({ draft: { ...s.draft, [k]: v }, draftError: '' })); };
     const setKind = k => () => this.setState(s => ({ draft: { ...s.draft, kind: k, method: k === 'in' ? IN_METHODS[0] : OUT_METHODS[0], category: k === 'in' ? IN_CATS[0] : ((data.categories[0] || {}).name || '기타') } }));

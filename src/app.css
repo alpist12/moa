@@ -639,3 +639,149 @@ main {
   .nv-qrow > *:nth-child(6) { grid-column: 1 / span 1; }
   .nv-qrow > *:nth-child(7) { grid-column: 2 / span 1; }
 }
+
+/* ---------- Mobile UX & Responsive Polish (<= 720px) ---------- */
+@media (max-width: 720px) {
+  /* Splash & Onboarding */
+  .sp-stage { transform: scale(.85); transform-origin: center center; }
+  .ob-root { padding: 10px 20px 28px !important; }
+  .ob-art > div { width: min(100%, 290px) !important; }
+
+  /* Sticky Top Header & Right Action Pill */
+  aside {
+    height: 56px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  aside > div:first-child img { width: 34px !important; height: 34px !important; }
+  aside > div:first-child svg { width: 74px !important; height: 25px !important; }
+  aside > div:first-child > div > div { display: none !important; }
+  .m-topbar {
+    top: 10px !important;
+    right: 14px !important;
+  }
+  .m-topbar button {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+  .m-topbar > div > div:last-child {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  /* Bottom Navigation Bar (7 tabs) */
+  aside nav {
+    padding: 4px 6px calc(4px + env(safe-area-inset-bottom)) !important;
+    background: rgba(255, 255, 255, .96) !important;
+  }
+  aside nav button {
+    min-height: 50px !important;
+    padding: 5px 2px !important;
+    gap: 3px !important;
+    font-size: 11px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 10px !important;
+  }
+  aside nav button svg {
+    width: 19px !important;
+    height: 19px !important;
+    flex-shrink: 0;
+  }
+
+  /* Ledger Quick Entry Box (.nv-qbox / .nv-qrow) */
+  .nv-qbox { padding: 14px !important; }
+  .nv-qhead > div:first-child > span:last-child { display: none; }
+  .nv-qrow {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .nv-qrow > *:nth-child(1) {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    width: 100% !important;
+  }
+  .nv-qrow > *:nth-child(1) > button {
+    flex: 1 1 0 !important;
+    text-align: center !important;
+  }
+  .nv-qrow > *:nth-child(2) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(3) {
+    grid-column: 1 / span 1 !important;
+  }
+  .nv-qrow > *:nth-child(4) {
+    grid-column: 2 / span 1 !important;
+  }
+  .nv-qrow > *:nth-child(5) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(6) {
+    grid-column: 1 / -1 !important;
+  }
+  .nv-qrow > *:nth-child(7) {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .nv-qrow > *:nth-child(7) > button {
+    flex: 1 1 auto !important;
+  }
+
+  /* Ledger Filter Row */
+  .m-filters > div:first-of-type {
+    flex: 1 1 auto;
+    display: flex !important;
+  }
+  .m-filters > div:first-of-type > button {
+    flex: 1 1 0;
+    padding: 8px 10px !important;
+  }
+  .m-filters select {
+    flex: 1 1 calc(50% - 6px) !important;
+    min-width: 120px !important;
+  }
+
+  /* Calendar Mobile Cells */
+  .m-cal-empty {
+    min-height: 50px !important;
+    height: 52px !important;
+    border-radius: 10px !important;
+  }
+  .m-cal-dot {
+    display: inline-block !important;
+  }
+
+  /* Recording Modal & Batch Rows on Mobile */
+  .m-modal-grid3 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .m-modal-grid3 > label:last-child {
+    grid-column: 1 / -1 !important;
+  }
+  .m-batch-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  .m-batch-row > div:first-child,
+  .m-batch-row > input[type="date"],
+  .m-batch-row > input[type="text"] {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+  .m-batch-row > input[type="number"] {
+    width: 100% !important;
+  }
+
+  /* Share Page Grid */
+  .m-share-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
