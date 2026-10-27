@@ -33,7 +33,7 @@ const RUNTIME = 'd5e950e9-a745-434d-9219-2db4ba13d30b';
 
 const assembled = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>MOA · 내 용돈 관리</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" href="/moa-icon.png">
+<link rel="icon" href="./moa-icon.png">
 <script src="${RUNTIME}"></script>
 </head><body>
 <x-dc>
@@ -83,6 +83,15 @@ let out = html.slice(0, bodyStart) + lead + packed + tail + html.slice(end);
 out = out.replace(/background:\s*#(?:6b5cf5|F7F9F8)/gi, 'background: #FAF6EE');
 out = out.replace(/<div id="__bundler_thumbnail">[\s\S]*?<\/svg><\/div>/, '<div id="__bundler_thumbnail"></div>');
 out = out.replace('<div id="__bundler_loading">Unpacking...</div>', '');
+// Cloud sync: Firebase (Google sign-in + Firestore) replaces the Drive backup script.
+const DRIVE_TAGS = `<script src="https://accounts.google.com/gsi/client" async><\${'/'}script><script src="/google-drive-sync.js" defer><\${'/'}script>`;
+const LEGACY_FB_TAG = `<script type="module" src="/firebase-sync.js"><\${'/'}script>`;
+const FIREBASE_TAG = `<script type="module" src="./firebase-sync.js"><\${'/'}script>`;
+if (out.includes(DRIVE_TAGS)) out = out.replace(DRIVE_TAGS, FIREBASE_TAG);
+if (out.includes(LEGACY_FB_TAG)) out = out.replace(LEGACY_FB_TAG, FIREBASE_TAG);
+if (!out.includes(FIREBASE_TAG)) throw new Error('firebase-sync.js script tag not found in loader');
+out = out.replace(/href="\/moa-icon\.png"/g, 'href="./moa-icon.png"');
+fs.copyFileSync(path.join(root, 'src', 'firebase-sync.js'), path.join(root, 'dist', 'firebase-sync.js'));
 out = out.replace(/<style>\s*@media \(max-width: 720px\)[\s\S]*?<\/style>/, '');
 fs.writeFileSync(distFile, out);
 
