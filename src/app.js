@@ -22,10 +22,10 @@ const toStore = o => { if (!o) return null; if (o.months && typeof o.months === 
 const persist = st => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
 const _n = new Date();
 const TODAY = _n.getFullYear() + '-' + String(_n.getMonth() + 1).padStart(2, '0') + '-' + String(_n.getDate()).padStart(2, '0');
-const PALETTE = [['#f0466e', '#fff0f4'], ['#4f7bff', '#e7eeff'], ['#f59e0b', '#fff6e5'], ['#8b5cf6', '#f3e9ff'], ['#0f9d6a', '#e8f8f0'], ['#8b87a0', '#f0eff5']];
-const GREEN = ['#0f9d6a', '#e8f8f0'];
+const PALETTE = [['#e0705b', '#fdece7'], ['#3f7fc4', '#eaf3fc'], ['#c08a1e', '#fdf3dc'], ['#d2618a', '#fdedf3'], ['#4e9a5b', '#ebf5ec'], ['#7d867b', '#f1f3ef']];
+const GREEN = ['#159d7b', '#e9faf5'];
 // chart gradients (light -> deep), same order as PALETTE
-const GRAD = [['#f0466e', '#f0466e'], ['#4f7bff', '#4f7bff'], ['#f59e0b', '#f59e0b'], ['#8b5cf6', '#8b5cf6'], ['#0f9d6a', '#0f9d6a'], ['#8b87a0', '#8b87a0']];
+const GRAD = [['#FFC9BB', '#F79A84'], ['#BFDDFF', '#86B8F0'], ['#FFE7A8', '#F6C969'], ['#FFC8DC', '#F09BBC'], ['#CDEBC0', '#93CF8A'], ['#E3E7E0', '#BCC4B9']];
 const IN_CATS = ['아르바이트', '선물·세뱃돈', '기타 수입'];
 const OUT_METHODS = ['카드', '현금', '계좌·페이'];
 const IN_METHODS = ['계좌·페이', '현금', '기타'];
