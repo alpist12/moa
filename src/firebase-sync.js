@@ -16,13 +16,64 @@ const firebaseConfig = {
   measurementId: 'G-H94WTS4BGE'
 };
 
-const KEY = 'allowance-plan-v3';
+const KEY = 'moa_editorial_v4';
+const LEGACY_KEY = 'allowance-plan-v3';
 const GOAL_KEY = 'moa-goals-v1';
-const SYNCED = [KEY, GOAL_KEY];
+const SYNCED = [KEY, LEGACY_KEY, GOAL_KEY];
 
-const validMonth = m => m && typeof m.allowance === 'number' && Array.isArray(m.categories) && Array.isArray(m.expenses);
-const validStore = s => s && s.months && typeof s.months === 'object' && Object.values(s.months).every(validMonth);
-const parse = raw => { try { return JSON.parse(raw); } catch (e) { return null; } };
+const parse = raw => { try { return typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (e) { return null; } };
+
+const validStore = s => {
+  if (!s) return false;
+  if (Array.isArray(s.accounts) && Array.isArray(s.transactions)) return true;
+  if (s.months && typeof s.months === 'object') return true;
+  return false;
+};
+
+const normalizeToV4 = raw => {
+  try {
+    const s = parse(raw);
+    if (!s) return null;
+    if (Array.isArray(s.accounts) && Array.isArray(s.transactions)) {
+      return typeof raw === 'string' ? raw : JSON.stringify(s);
+    }
+    if (s.months && typeof s.months === 'object') {
+      const txs = [];
+      let totalBudget = 500000;
+      Object.entries(s.months).forEach(([monthKey, m]) => {
+        if (m && typeof m.allowance === 'number') totalBudget = m.allowance;
+        if (m && Array.isArray(m.expenses)) {
+          m.expenses.forEach((ex, idx) => {
+            txs.push({
+              id: ex.id || (Date.now() - idx * 1000),
+              type: 'expense',
+              date: ex.date || (monthKey + '-01'),
+              name: ex.desc || ex.title || ex.memo || '지출',
+              category: ex.category || '기타',
+              account: 'toss',
+              amount: Number(ex.amount) || 0
+            });
+          });
+        }
+      });
+      const v4State = {
+        accounts: [
+          { id: 'toss', name: '토스뱅크', sub: '입출금 통장', balance: 1420000, type: 'toss' },
+          { id: 'kakao', name: '카카오뱅크', sub: '저축 통장', balance: 2850000, type: 'kakao' },
+          { id: 'cash', name: '현금', sub: '지갑', balance: 80000, type: 'cash' }
+        ],
+        transactions: txs.length > 0 ? txs : [
+          { id: 1, type: 'expense', date: '2026-10-31', name: '오후의 커피', category: '카페', account: 'toss', amount: 5900 }
+        ],
+        budget: totalBudget
+      };
+      return JSON.stringify(v4State);
+    }
+    return null;
+  } catch(e) {
+    return null;
+  }
+};
 
 if (!location.hash.startsWith('#view=')) {
   const app = initializeApp(firebaseConfig);
@@ -37,7 +88,10 @@ if (!location.hash.startsWith('#view=')) {
     window.dispatchEvent(new CustomEvent('moa-drive-change', { detail: { message, connected, name: user ? (user.displayName || user.email || '') : '' } }));
   };
   const userDoc = () => doc(db, 'users', user.uid);
-  const localData = () => ({ store: localStorage.getItem(KEY) || '', goals: localStorage.getItem(GOAL_KEY) || '' });
+  const localData = () => ({
+    store: localStorage.getItem(KEY) || localStorage.getItem(LEGACY_KEY) || '',
+    goals: localStorage.getItem(GOAL_KEY) || ''
+  });
 
   const upload = async () => {
     if (!user) return;
@@ -48,7 +102,10 @@ if (!location.hash.startsWith('#view=')) {
   };
   const applyRemote = r => {
     applying = true;
-    if (r.store) nativeSetItem.call(localStorage, KEY, r.store);
+    if (r.store) {
+      const v4 = normalizeToV4(r.store);
+      nativeSetItem.call(localStorage, KEY, v4 || r.store);
+    }
     if (r.goals) nativeSetItem.call(localStorage, GOAL_KEY, r.goals);
     location.reload();
   };
