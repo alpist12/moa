@@ -94,7 +94,12 @@ class Component extends DCLogic {
       settleModalOpen: false, settleDraft: { id: null, title: '', category: '식비', method: '카드', date: TODAY, totalAmt: 0, people: 2, roundMode: 'none', myAmt: '0', tag: '1/2 N빵' },
       toast: '', shareUrls: { plan: '', ledger: '' },
       driveConnected: !!(window.moaDrive && window.moaDrive.isConnected && window.moaDrive.isConnected()),
-      driveStatus: (window.moaDrive && window.moaDrive.getStatus && window.moaDrive.getStatus()) || 'Google로 로그인하면 어느 기기에서든 같은 기록을 볼 수 있어요.'
+      driveStatus: (window.moaDrive && window.moaDrive.getStatus && window.moaDrive.getStatus()) || 'Google로 로그인하면 어느 기기에서든 같은 기록을 볼 수 있어요.',
+      appVersion: CURRENT_VERSION,
+      updateModalOpen: false,
+      updateInfo: null,
+      hasNewUpdate: false,
+      notifEnabled: typeof Notification !== 'undefined' && Notification.permission === 'granted'
     };
     let seen = false; try { seen = localStorage.getItem(INTRO_KEY) === '1'; } catch (e) {}
     this.state.intro = init.readOnly ? '' : 'splash'; this.state.obSeen = seen; this.state.obStep = 0;
@@ -153,6 +158,8 @@ class Component extends DCLogic {
       const next = this.resolveInitialState();
       this.setState({ ...next, q: '', filter: '', modalOpen: false });
     });
+    this.initPWAAndNotifications();
+    setTimeout(() => this.checkForUpdates(false), 2000);
     if (this.state.intro === 'splash') {
       const wait = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 400 : 2500;
       this._it = setTimeout(this.leaveIntro, wait);
@@ -166,6 +173,88 @@ class Component extends DCLogic {
     window.removeEventListener('moa-drive-change', this._dc);
     window.removeEventListener('hashchange', this._hc);
   }
+  initPWAAndNotifications = () => {
+    if (typeof window === 'undefined') return;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+    this.checkDailyExpenseReminder();
+  };
+
+  sendLocalNotification = (title, body, url = './index.html') => {
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, body, icon: './moa-icon.png', url });
+      } else {
+        new Notification(title, { body, icon: './moa-icon.png' });
+      }
+    } catch (e) {}
+  };
+
+  requestNotificationPermission = async () => {
+    if (typeof Notification === 'undefined') {
+      this.say('이 브라우저/기기는 알림 기능을 지원하지 않아요.');
+      return;
+    }
+    try {
+      const perm = await Notification.requestPermission();
+      const granted = perm === 'granted';
+      this.setState({ notifEnabled: granted });
+      if (granted) {
+        this.say('🔔 알림이 켜졌어요! 매일 저녁 지출 리마인더와 업데이트를 알려드려요.');
+        this.sendLocalNotification('MOA 알림 활성화', '매일 저녁 용돈 기록 알림과 새 버전 업데이트를 보내드려요!');
+      } else {
+        this.say('알림 권한이 허용되지 않았어요. 브라우저 설정에서 허용할 수 있어요.');
+      }
+    } catch (e) {
+      this.say('알림 권한 요청 중 오류가 발생했어요.');
+    }
+  };
+
+  checkDailyExpenseReminder = () => {
+    try {
+      const now = new Date();
+      const hour = now.getHours();
+      const todayKey = 'moa-remind-' + TODAY;
+      if (hour >= 20 && !localStorage.getItem(todayKey)) {
+        const currentData = this.state.store.months[this.state.month];
+        const todayExpenses = (currentData && currentData.expenses || []).filter(x => x.date === TODAY);
+        if (todayExpenses.length === 0) {
+          localStorage.setItem(todayKey, '1');
+          this.sendLocalNotification('오늘 쓴 용돈 기록하기 📝', '오늘 쓴 지출을 아직 기록하지 않았어요. 차근차근 모아봐요!');
+        }
+      }
+    } catch (e) {}
+  };
+
+  checkForUpdates = async (manual = false) => {
+    try {
+      const res = await fetch('./version.json?t=' + Date.now());
+      if (!res.ok) throw new Error('버전 정보를 가져올 수 없어요.');
+      const data = await res.json();
+      const hasUpdate = isNewerVersion(data.version, CURRENT_VERSION);
+      this.setState({
+        hasNewUpdate: hasUpdate,
+        updateInfo: { ...data, hasUpdate, currentVersion: CURRENT_VERSION }
+      });
+      if (hasUpdate) {
+        if (manual) {
+          this.setState({ updateModalOpen: true });
+        } else {
+          this.sendLocalNotification('MOA 새 업데이트 출시! 🚀', '새로운 v' + data.version + ' 버전이 나왔어요. 탭하여 확인해 보세요!');
+        }
+      } else if (manual) {
+        this.setState({ updateModalOpen: true });
+        this.say('🎉 현재 최신 버전(v' + CURRENT_VERSION + ')을 사용하고 있어요!');
+      }
+    } catch (e) {
+      if (manual) this.say('업데이트 정보를 확인하지 못했어요: ' + e.message);
+    }
+  };
+
+  closeUpdateModal = () => this.setState({ updateModalOpen: false });
+
   finishIntro = () => { try { localStorage.setItem(INTRO_KEY, '1'); } catch (e) {} this.setState({ obSeen: true }); this.leaveIntro(); };
   // fade the current intro screen out (~0.38s), then show the next one (onboarding or the app)
   leaveIntro = () => {
@@ -1614,6 +1703,26 @@ class Component extends DCLogic {
       },
       replaySplash: () => { clearTimeout(this._it); this.setState({ intro: 'splash' }); this._it = setTimeout(() => this.setState({ intro: '' }), 2200); },
       replayOnboarding: () => { clearTimeout(this._it); this.setState({ intro: 'ob', obStep: 0 }); },
+      appVersion: CURRENT_VERSION,
+      hasNewUpdate: this.state.hasNewUpdate,
+      updateModalOpen: this.state.updateModalOpen,
+      updateInfo: this.state.updateInfo || { version: CURRENT_VERSION, notes: '최신 버전입니다.', apkUrl: '#', downloadUrl: '#' },
+      notifEnabled: this.state.notifEnabled,
+      checkUpdate: () => this.checkForUpdates(true),
+      closeUpdateModal: this.closeUpdateModal,
+      toggleNotif: this.requestNotificationPermission,
+      downloadApk: () => {
+        const info = this.state.updateInfo;
+        const url = (info && info.apkUrl) || (info && info.downloadUrl) || 'https://github.com/alpist12/moa/releases';
+        window.open(url, '_blank');
+      },
+      applyWebUpdate: () => {
+        if (typeof window !== 'undefined' && 'caches' in window) {
+          caches.keys().then(ks => Promise.all(ks.map(k => caches.delete(k)))).then(() => location.reload(true));
+        } else {
+          location.reload(true);
+        }
+      },
       ...this.introVals(),
       _x: 0
     };

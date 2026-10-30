@@ -60,105 +60,240 @@ aside { border-right-color: #EEF1EF !important; }
 .d-tx:hover { background: #F9FAFB; }
 .d-tx-date { width: 56px; flex-shrink: 0; font-size: 13px; color: #8B95A1; }
 
-/* App shell on every screen size (same structure as the phone app):
-   sticky top header, bottom tab bar, floating add button. Wide screens get a
-   centered floating tab bar and a wider content column. */
-body { min-width: 0; overflow-x: hidden; }
+/* ---------- Modern Responsive Shell (PC: Side Nav / Mobile: Bottom Tabs) ---------- */
+body { min-width: 0; overflow-x: hidden; background: #F5F7F6; color: #191F28; }
+.moa-app-root { display: flex; flex-direction: row; min-height: 100vh; width: 100%; }
+
+/* PC Desktop (Default >= 801px) */
 aside {
-  flex: 1 1 100% !important;
-  width: 100%;
-  height: auto !important;
-  position: sticky !important;
+  flex: 0 0 240px;
+  width: 240px;
+  height: 100vh;
+  position: sticky;
   top: 0;
-  z-index: 12;
-  flex-direction: row !important;
+  align-self: flex-start;
+  background: #ffffff;
+  border-right: 1px solid #EEF1EF;
+  padding: 30px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 10;
+}
+aside > div:first-child {
+  display: flex;
   align-items: center;
-  padding: 12px clamp(16px, 4vw, 44px) !important;
-  border-right: 0 !important;
-  border-bottom: 1px solid #EEF1EF !important;
-  /* no backdrop-filter here: it would make the aside the containing block of the fixed tab bar */
-  background: #fffffff7 !important;
+  gap: 10px;
+  margin: 0 8px 34px;
 }
-aside > div:first-child { margin: 0 !important; gap: 8px !important; }
-aside > div:first-child img { width: 34px; height: 34px; }
-aside > div:first-child div > div { display: none; }
-aside > div:nth-child(2), aside > div:last-child { display: none !important; }
+aside > div:first-child img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+aside > div:first-child div > div {
+  font-size: 10px;
+  color: #8B95A1;
+  margin-top: 4px;
+  letter-spacing: .06em;
+}
+aside > div:nth-child(2) {
+  font-size: 10px;
+  letter-spacing: .15em;
+  font-weight: 800;
+  color: #8B95A1;
+  padding: 0 14px;
+  margin-bottom: 12px;
+}
 aside nav {
-  position: fixed;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  width: min(720px, calc(100% - 32px));
-  z-index: 20;
-  flex-direction: row !important;
-  gap: 2px !important;
-  padding: 6px !important;
-  background: #ffffffef;
-  backdrop-filter: blur(12px);
-  border: 1px solid #EEF1EF;
-  border-radius: 22px;
-  box-shadow: 0 12px 32px rgba(25, 31, 40, .10);
-}
-aside nav > * { flex: 1 1 0; min-width: 0; }
-aside nav button {
-  width: 100% !important;
-  min-height: 56px;
-  flex-direction: column !important;
-  justify-content: center;
-  gap: 4px !important;
-  padding: 6px 0 !important;
-  font-size: 12px !important;
-  text-align: center !important;
-  white-space: nowrap;
-  border-radius: 16px !important;
-}
-aside nav button svg { width: 21px; height: 21px; }
-main {
-  flex: 1 1 100% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   width: 100%;
-  max-width: 1240px !important;
-  margin: 0 auto;
-  padding: 28px clamp(16px, 4vw, 44px) 130px !important;
 }
-.m-fab {
-  display: grid;
-  place-items: center;
-  position: fixed;
-  right: max(24px, calc(50% - 600px));
-  bottom: 100px;
-  z-index: 21;
-  width: 56px; height: 56px;
-  border: 0; border-radius: 50%;
-  background: linear-gradient(135deg, #7FC79A, #2B9B68);
-  color: #fff;
-  box-shadow: 0 10px 24px rgba(43, 155, 104, .35);
+aside nav > * {
+  width: 100%;
+}
+aside nav button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  text-align: left;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 700;
+  font-size: 13.5px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
-/* Drive button + avatar live in the right side of the sticky top header instead of their own row */
-.m-topbar { position: fixed; top: 11px; right: clamp(16px, 4vw, 44px); z-index: 13; margin: 0 !important; }
-/* the floating Drive widget would sit under the + button; the header's Drive button does the same job */
+aside nav button:hover {
+  background: #F4FAF6;
+  color: #1F7A52;
+}
+aside nav button svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+aside > div:last-child {
+  margin-top: auto;
+  background: #F8FCFA;
+  border: 1px solid #EBF5F0;
+  border-radius: 16px;
+  padding: 16px 14px;
+}
+
+main {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px clamp(20px, 3.5vw, 44px) 60px;
+}
+
+/* PC Topbar: 헤더 우측 상단 단정한 배치 */
+.m-topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+.m-topbar button {
+  transition: all 0.15s ease;
+}
+.m-topbar button:hover {
+  filter: brightness(0.97);
+  transform: translateY(-1px);
+}
+
+.pc-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 0;
+  background: #2B9B68;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(43, 155, 104, 0.22);
+  transition: all 0.15s ease;
+}
+.pc-add-btn:hover {
+  background: #238256;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(43, 155, 104, 0.28);
+}
+.m-fab { display: none; }
 [aria-label="Google Drive 동기화"] { display: none !important; }
 
-/* Phone: full-width tab bar docked to the bottom, short labels */
-@media (max-width: 720px) {
-  aside { padding: 10px 16px !important; }
-  aside nav {
-    left: 0; right: 0; bottom: 0;
-    transform: none;
-    width: auto;
-    gap: 0 !important;
-    padding: 4px 4px calc(4px + env(safe-area-inset-bottom)) !important;
-    border: 0;
-    border-top: 1px solid #edf0ec;
-    border-radius: 0;
-    box-shadow: 0 -6px 20px rgba(28, 48, 38, .05);
+/* Phone & Tablet (<= 800px): Bottom Tabs & App Header */
+@media (max-width: 800px) {
+  .moa-app-root { flex-direction: column !important; }
+  aside {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    height: 56px !important;
+    position: sticky !important;
+    top: 0;
+    z-index: 40;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #EEF1EF !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
   }
-  aside nav button { min-height: 54px; font-size: 10.5px !important; border-radius: 12px !important; background: transparent !important; }
-  .nl-full { display: none; }
-  .nl-short { display: inline; }
-  main { padding: 18px 16px 128px !important; }
-  main h1 { font-size: 25px !important; }
-  .m-fab { right: 18px; bottom: calc(78px + env(safe-area-inset-bottom)); }
+  aside > div:first-child {
+    margin: 0 !important;
+    gap: 8px !important;
+  }
+  aside > div:first-child img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  aside > div:first-child div > div {
+    display: none !important;
+  }
+  aside > div:nth-child(2), aside > div:last-child {
+    display: none !important;
+  }
+  aside nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    z-index: 50 !important;
+    flex-direction: row !important;
+    gap: 0 !important;
+    padding: 4px 6px calc(6px + env(safe-area-inset-bottom)) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(14px);
+    border: 0 !important;
+    border-top: 1px solid #EEF1EF !important;
+    border-radius: 0 !important;
+    box-shadow: 0 -4px 18px rgba(25, 31, 40, .06) !important;
+  }
+  aside nav > * {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+  aside nav button {
+    width: 100% !important;
+    min-height: 52px !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 4px 0 !important;
+    font-size: 10.5px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+  }
+  aside nav button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .nl-full { display: none !important; }
+  .nl-short { display: inline !important; }
+
+  main {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    padding: 16px 16px calc(88px + env(safe-area-inset-bottom)) !important;
+  }
+  main h1 { font-size: 24px !important; }
+  .pc-add-btn { display: none !important; }
+  .m-fab {
+    display: grid !important;
+    place-items: center;
+    position: fixed;
+    right: 18px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    z-index: 45;
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7FC79A, #2B9B68);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(43, 155, 104, .38);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .m-fab:active {
+    transform: scale(0.92);
+  }
 
 
   /* --- phone-first layout --- */
@@ -796,7 +931,7 @@ main {
 }
 </style>
 </helmet>
-<div style="display:flex;flex-wrap:wrap;min-height:100vh;font-family:'Pretendard Variable',Pretendard,'Noto Sans KR','Malgun Gothic',sans-serif;color:#191F28;background:#F5F7F6;word-break:keep-all;">
+<div class="moa-app-root" style="min-height:100vh;font-family:'Pretendard Variable',Pretendard,'Noto Sans KR','Malgun Gothic',sans-serif;color:#191F28;background:#F5F7F6;word-break:keep-all;">
 
   <aside style="flex:0 0 232px;background:#fff;border-right:1px solid #f0f3f0;padding:34px 18px 23px;display:flex;flex-direction:column;position:sticky;top:0;align-self:flex-start;height:100vh;">
     <div style="display:flex;align-items:center;gap:11px;margin:0 10px 44px;">
@@ -822,16 +957,42 @@ main {
       <sc-if value="{{ showGoal }}" hint-placeholder-val="{{ true }}"><button sc-camel-on-click="{{ goGoal }}" style="width:100%;display:flex;align-items:center;gap:13px;border:0;text-align:left;border-radius:12px;padding:14px 16px;font-weight:700;font-size:13px;cursor:pointer;background:{{ nav.goal.bg }};color:{{ nav.goal.color }};" style-hover="background:#f9fcfb;color:#2B9B68;"><svg width="19" height="19" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle></svg>목표</button></sc-if>
       <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}"><button sc-camel-on-click="{{ goShare }}" style="width:100%;display:flex;align-items:center;gap:13px;border:0;text-align:left;border-radius:12px;padding:14px 16px;font-weight:700;font-size:13px;cursor:pointer;background:{{ nav.share.bg }};color:{{ nav.share.color }};" style-hover="background:#f9fcfb;color:#2B9B68;"><svg width="19" height="19" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="nl-full">공유 링크</span><span class="nl-short">공유</span></button></sc-if>
     </nav>
-    <div style="margin-top:auto;background:#f8fcfa;border:1px solid #f4f9f6;border-radius:16px;padding:19px 15px 17px;">
-      <div style="font-size:11px;color:#2B9B68;font-weight:800;margin-bottom:9px;">SMALL STEPS, BIG HABITS</div>
-      <strong style="display:block;font-size:13px;line-height:1.65;letter-spacing:-.4px;">작은 기록이 모여<br>좋은 소비 습관이 돼요.</strong>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;">
+      <div style="background:#f8fcfa;border:1px solid #f0f7f3;border-radius:16px;padding:14px 14px 12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:#2B9B68;font-weight:800;">MOA APP v{{ appVersion }}</span>
+          <sc-if value="{{ hasNewUpdate }}">
+            <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:#ef4444;color:#fff;font-weight:800;">NEW</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button sc-camel-on-click="{{ checkUpdate }}" style="flex:1;border:1px solid #e1eee7;background:#fff;color:#1F7A52;padding:7px 8px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;" style-hover="background:#eaf6f0;">
+            <svg width="12" height="12" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            업데이트 확인
+          </button>
+          <button sc-camel-on-click="{{ toggleNotif }}" title="가계부 리마인더 & 업데이트 푸시 알림" style="border:1px solid #e1eee7;background:#fff;color:{{ notifEnabled ? '#1F7A52' : '#8B95A1' }};padding:7px 9px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;" style-hover="background:#f4f6f8;">
+            🔔
+          </button>
+        </div>
+      </div>
+      <div class="m-hide" style="background:#f8fcfa;border:1px solid #f4f9f6;border-radius:16px;padding:14px 14px;">
+        <div style="font-size:10px;color:#2B9B68;font-weight:800;margin-bottom:6px;">SMALL STEPS, BIG HABITS</div>
+        <strong style="display:block;font-size:12px;line-height:1.55;letter-spacing:-.3px;color:#4E5968;">작은 기록이 모여<br>좋은 소비 습관이 돼요.</strong>
+      </div>
     </div>
   </aside>
   <sc-if value="{{ editable }}"><button class="m-fab" sc-camel-on-click="{{ openModal }}" aria-label="지출 기록하기"><svg width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></sc-if>
 
   <main style="flex:1 1 600px;min-width:0;max-width:1300px;padding:35px 44px 70px;">
-    <div class="m-topbar" style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px;gap:12px;flex-wrap:wrap;">
-      <div style="display:flex;gap:10px;align-items:center;">
+    <div class="m-topbar" style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+      <button sc-camel-on-click="{{ checkUpdate }}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;border:1px solid #e1eee7;background:#fff;color:#1F7A52;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;" style-hover="background:#f0f8f4;">
+        <svg width="12" height="12" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        <span>업데이트 확인</span>
+        <sc-if value="{{ hasNewUpdate }}">
+          <span style="width:6px;height:6px;border-radius:50%;background:#ef4444;"></span>
+        </sc-if>
+      </button>
+      <div style="display:flex;gap:8px;align-items:center;">
         <sc-if value="{{ editable }}">
           <button sc-camel-on-click="{{ connectDrive }}" style="display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:20px;border:1px solid {{ drivePillBd }};background:{{ drivePillBg }};color:{{ drivePillFg }};font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;" style-hover="background:#f0f8f4;">
             <span style="width:7px;height:7px;border-radius:50%;background:{{ driveDotColor }};"></span>
@@ -862,6 +1023,12 @@ main {
         </div>
         <sc-if value="{{ showShareCta }}">
           <button class="m-hide" sc-camel-on-click="{{ goShare }}" style="display:inline-flex;align-items:center;gap:9px;white-space:nowrap;padding:12px 17px;border-radius:11px;font-size:12px;font-weight:800;border:0;background:#43956f;color:#fff;box-shadow:0 7px 15px #43946e26;cursor:pointer;" style-hover="background:#3e8865;"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V3m0 0L7 8m5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"></path></svg>공유하기</button>
+        </sc-if>
+        <sc-if value="{{ editable }}">
+          <button class="pc-add-btn" sc-camel-on-click="{{ openModal }}" aria-label="지출 기록하기">
+            <svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg>
+            지출 기록
+          </button>
         </sc-if>
       </div>
     </div>
@@ -1898,6 +2065,53 @@ main {
     </div>
   </sc-if>
 
+  <!-- 🚀 새 업데이트 확인 & 다운로드 링크 모달 -->
+  <sc-if value="{{ updateModalOpen }}">
+    <div class="mv-fade m-backdrop" sc-camel-on-click="{{ closeUpdateModal }}" style="position:fixed;inset:0;background:rgba(22,34,28,.48);backdrop-filter:blur(3px);display:flex;justify-content:center;align-items:center;z-index:9999;padding:20px;">
+      <div class="mv-sheet m-sheet" sc-camel-on-click="{{ stopProp }}" style="background:#fff;border-radius:24px;width:min(100%,460px);max-height:90vh;overflow-y:auto;padding:28px 28px 26px;box-shadow:0 30px 80px rgba(25,31,40,0.25);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:22px;">{{ hasNewUpdate ? '🚀' : '🎉' }}</span>
+            <h3 style="font-size:18px;letter-spacing:-.5px;margin:0;font-weight:800;color:#191F28;">
+              {{ hasNewUpdate ? '새로운 버전이 출시되었어요!' : '최신 버전을 사용 중이에요' }}
+            </h3>
+          </div>
+          <button sc-camel-on-click="{{ closeUpdateModal }}" aria-label="닫기" style="border:0;background:#f6f7fb;width:32px;height:32px;border-radius:8px;color:#6c6880;cursor:pointer;">✕</button>
+        </div>
+
+        <div style="background:#F7FBF9;border:1px solid #E1EEE7;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#1F7A52;margin-bottom:6px;">
+            <span>현재 버전: v{{ appVersion }}</span>
+            <span>최신 버전: v{{ updateInfo.version }}</span>
+          </div>
+          <div style="font-size:11.5px;color:#8B95A1;">배포일: {{ updateInfo.releaseDate }}</div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div style="font-size:13px;font-weight:800;color:#333;margin-bottom:8px;">업데이트 주요 변경사항</div>
+          <div style="background:#F9FAFB;border-radius:12px;padding:14px;font-size:12.5px;color:#4E5968;line-height:1.7;white-space:pre-wrap;max-height:180px;overflow-y:auto;">{{ updateInfo.notes }}</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-if value="{{ hasNewUpdate }}">
+            <button sc-camel-on-click="{{ downloadApk }}" style="width:100%;border:0;border-radius:12px;padding:13px;background:#2B9B68;color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 16px rgba(43,155,104,0.25);" style-hover="background:#238256;">
+              <svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+              최신 APK 다운로드 (안드로이드)
+            </button>
+            <button sc-camel-on-click="{{ applyWebUpdate }}" style="width:100%;border:1px solid #D7EEE3;border-radius:12px;padding:11px;background:#EAF6F0;color:#1F7A52;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:#dff1e7;">
+              웹앱 캐시 새로고침하여 즉시 적용
+            </button>
+          </sc-if>
+          <sc-if value="{{ !hasNewUpdate }}">
+            <button sc-camel-on-click="{{ closeUpdateModal }}" style="width:100%;border:0;border-radius:12px;padding:13px;background:#2B9B68;color:#fff;font-size:14px;font-weight:800;cursor:pointer;">
+              확인
+            </button>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ false }}">
     <style>[aria-label="Google Drive 동기화"]{display:none !important}body{overflow:hidden}</style>
     <div role="dialog" aria-modal="true" aria-label="MOA 시작하기" class="{{ introDlgClass }}" style="position:fixed;inset:0;z-index:50;background:#f6f7fb;display:flex;align-items:center;justify-content:center;overflow:hidden;">
@@ -2152,7 +2366,12 @@ class Component extends DCLogic {
       settleModalOpen: false, settleDraft: { id: null, title: '', category: '식비', method: '카드', date: TODAY, totalAmt: 0, people: 2, roundMode: 'none', myAmt: '0', tag: '1/2 N빵' },
       toast: '', shareUrls: { plan: '', ledger: '' },
       driveConnected: !!(window.moaDrive && window.moaDrive.isConnected && window.moaDrive.isConnected()),
-      driveStatus: (window.moaDrive && window.moaDrive.getStatus && window.moaDrive.getStatus()) || 'Google로 로그인하면 어느 기기에서든 같은 기록을 볼 수 있어요.'
+      driveStatus: (window.moaDrive && window.moaDrive.getStatus && window.moaDrive.getStatus()) || 'Google로 로그인하면 어느 기기에서든 같은 기록을 볼 수 있어요.',
+      appVersion: CURRENT_VERSION,
+      updateModalOpen: false,
+      updateInfo: null,
+      hasNewUpdate: false,
+      notifEnabled: typeof Notification !== 'undefined' && Notification.permission === 'granted'
     };
     let seen = false; try { seen = localStorage.getItem(INTRO_KEY) === '1'; } catch (e) {}
     this.state.intro = init.readOnly ? '' : 'splash'; this.state.obSeen = seen; this.state.obStep = 0;
@@ -2211,6 +2430,8 @@ class Component extends DCLogic {
       const next = this.resolveInitialState();
       this.setState({ ...next, q: '', filter: '', modalOpen: false });
     });
+    this.initPWAAndNotifications();
+    setTimeout(() => this.checkForUpdates(false), 2000);
     if (this.state.intro === 'splash') {
       const wait = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 400 : 2500;
       this._it = setTimeout(this.leaveIntro, wait);
@@ -2224,6 +2445,88 @@ class Component extends DCLogic {
     window.removeEventListener('moa-drive-change', this._dc);
     window.removeEventListener('hashchange', this._hc);
   }
+  initPWAAndNotifications = () => {
+    if (typeof window === 'undefined') return;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+    this.checkDailyExpenseReminder();
+  };
+
+  sendLocalNotification = (title, body, url = './index.html') => {
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, body, icon: './moa-icon.png', url });
+      } else {
+        new Notification(title, { body, icon: './moa-icon.png' });
+      }
+    } catch (e) {}
+  };
+
+  requestNotificationPermission = async () => {
+    if (typeof Notification === 'undefined') {
+      this.say('이 브라우저/기기는 알림 기능을 지원하지 않아요.');
+      return;
+    }
+    try {
+      const perm = await Notification.requestPermission();
+      const granted = perm === 'granted';
+      this.setState({ notifEnabled: granted });
+      if (granted) {
+        this.say('🔔 알림이 켜졌어요! 매일 저녁 지출 리마인더와 업데이트를 알려드려요.');
+        this.sendLocalNotification('MOA 알림 활성화', '매일 저녁 용돈 기록 알림과 새 버전 업데이트를 보내드려요!');
+      } else {
+        this.say('알림 권한이 허용되지 않았어요. 브라우저 설정에서 허용할 수 있어요.');
+      }
+    } catch (e) {
+      this.say('알림 권한 요청 중 오류가 발생했어요.');
+    }
+  };
+
+  checkDailyExpenseReminder = () => {
+    try {
+      const now = new Date();
+      const hour = now.getHours();
+      const todayKey = 'moa-remind-' + TODAY;
+      if (hour >= 20 && !localStorage.getItem(todayKey)) {
+        const currentData = this.state.store.months[this.state.month];
+        const todayExpenses = (currentData && currentData.expenses || []).filter(x => x.date === TODAY);
+        if (todayExpenses.length === 0) {
+          localStorage.setItem(todayKey, '1');
+          this.sendLocalNotification('오늘 쓴 용돈 기록하기 📝', '오늘 쓴 지출을 아직 기록하지 않았어요. 차근차근 모아봐요!');
+        }
+      }
+    } catch (e) {}
+  };
+
+  checkForUpdates = async (manual = false) => {
+    try {
+      const res = await fetch('./version.json?t=' + Date.now());
+      if (!res.ok) throw new Error('버전 정보를 가져올 수 없어요.');
+      const data = await res.json();
+      const hasUpdate = isNewerVersion(data.version, CURRENT_VERSION);
+      this.setState({
+        hasNewUpdate: hasUpdate,
+        updateInfo: { ...data, hasUpdate, currentVersion: CURRENT_VERSION }
+      });
+      if (hasUpdate) {
+        if (manual) {
+          this.setState({ updateModalOpen: true });
+        } else {
+          this.sendLocalNotification('MOA 새 업데이트 출시! 🚀', '새로운 v' + data.version + ' 버전이 나왔어요. 탭하여 확인해 보세요!');
+        }
+      } else if (manual) {
+        this.setState({ updateModalOpen: true });
+        this.say('🎉 현재 최신 버전(v' + CURRENT_VERSION + ')을 사용하고 있어요!');
+      }
+    } catch (e) {
+      if (manual) this.say('업데이트 정보를 확인하지 못했어요: ' + e.message);
+    }
+  };
+
+  closeUpdateModal = () => this.setState({ updateModalOpen: false });
+
   finishIntro = () => { try { localStorage.setItem(INTRO_KEY, '1'); } catch (e) {} this.setState({ obSeen: true }); this.leaveIntro(); };
   // fade the current intro screen out (~0.38s), then show the next one (onboarding or the app)
   leaveIntro = () => {
@@ -3672,6 +3975,26 @@ class Component extends DCLogic {
       },
       replaySplash: () => { clearTimeout(this._it); this.setState({ intro: 'splash' }); this._it = setTimeout(() => this.setState({ intro: '' }), 2200); },
       replayOnboarding: () => { clearTimeout(this._it); this.setState({ intro: 'ob', obStep: 0 }); },
+      appVersion: CURRENT_VERSION,
+      hasNewUpdate: this.state.hasNewUpdate,
+      updateModalOpen: this.state.updateModalOpen,
+      updateInfo: this.state.updateInfo || { version: CURRENT_VERSION, notes: '최신 버전입니다.', apkUrl: '#', downloadUrl: '#' },
+      notifEnabled: this.state.notifEnabled,
+      checkUpdate: () => this.checkForUpdates(true),
+      closeUpdateModal: this.closeUpdateModal,
+      toggleNotif: this.requestNotificationPermission,
+      downloadApk: () => {
+        const info = this.state.updateInfo;
+        const url = (info && info.apkUrl) || (info && info.downloadUrl) || 'https://github.com/alpist12/moa/releases';
+        window.open(url, '_blank');
+      },
+      applyWebUpdate: () => {
+        if (typeof window !== 'undefined' && 'caches' in window) {
+          caches.keys().then(ks => Promise.all(ks.map(k => caches.delete(k)))).then(() => location.reload(true));
+        } else {
+          location.reload(true);
+        }
+      },
       ...this.introVals(),
       _x: 0
     };

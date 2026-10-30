@@ -1,0 +1,13 @@
+{
+  "name": "moa-allowance",
+  "version": "1.0.0",
+  "description": "MOA · 내 용돈 관리 앱",
+  "main": "dist/index.html",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node tests/drive-sync.test.cjs"
+  },
+  "keywords": ["pwa", "allowance", "finance", "money-planner"],
+  "author": "",
+  "license": "MIT"
+}

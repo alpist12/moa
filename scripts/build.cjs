@@ -91,7 +91,18 @@ if (out.includes(DRIVE_TAGS)) out = out.replace(DRIVE_TAGS, FIREBASE_TAG);
 if (out.includes(LEGACY_FB_TAG)) out = out.replace(LEGACY_FB_TAG, FIREBASE_TAG);
 if (!out.includes(FIREBASE_TAG)) throw new Error('firebase-sync.js script tag not found in loader');
 out = out.replace(/href="\/moa-icon\.png"/g, 'href="./moa-icon.png"');
+if (!out.includes('manifest.webmanifest')) {
+  out = out.replace('<link rel="icon" href="./moa-icon.png">', '<link rel="icon" href="./moa-icon.png">\n  <link rel="manifest" href="./manifest.webmanifest">\n  <meta name="theme-color" content="#2B9B68">');
+}
 fs.copyFileSync(path.join(root, 'src', 'firebase-sync.js'), path.join(root, 'dist', 'firebase-sync.js'));
+
+// PWA & In-app updater assets
+['manifest.webmanifest', 'version.json', 'sw.js'].forEach(file => {
+  const srcP = path.join(root, 'src', file);
+  const dstP = path.join(root, 'dist', file);
+  if (fs.existsSync(srcP)) fs.copyFileSync(srcP, dstP);
+});
+
 out = out.replace(/<style>\s*@media \(max-width: 720px\)[\s\S]*?<\/style>/, '');
 fs.writeFileSync(distFile, out);
 
