@@ -1,0 +1,19 @@
+{
+  "name": "MOA · 내 용돈 관리",
+  "short_name": "MOA",
+  "start_url": "./index.html",
+  "id": "moa-allowance-app",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F7F6",
+  "theme_color": "#2B9B68",
+  "description": "작은 기록이 모여 좋은 소비 습관이 돼요. 똑똑한 내 용돈 관리 MOA",
+  "icons": [
+    {
+      "src": "./moa-icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
