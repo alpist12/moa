@@ -2,207 +2,1344 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f9fb">
-<title>moa. — 보다 선명한 가계부</title>
-<link rel="icon" href="./moa-icon.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f2f4f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>MOA · 내 손안의 토스형 가계부</title>
 <link rel="manifest" href="./manifest.webmanifest">
-<script type="module" src="./firebase-sync.js"></script>
+<link rel="icon" type="image/png" href="./moa-icon.png">
+<link rel="apple-touch-icon" href="./moa-icon.png">
 <style>
-
-:root { --ink:#15181e; --sub:#7c8491; --muted:#a5acb7; --blue:#2879ff; --line:#eef0f3; --bg:#f8f9fb; --light:#f5f7fa; --good:#0c9d75; --bad:#f15c5c; --radius:19px }
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:'DM Sans','Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);font-size:14px;letter-spacing:-.035em;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer;border:0;color:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #90b9ff;outline-offset:3px}svg{display:block}a{color:inherit;text-decoration:none}.icon{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}.topbar{height:78px;background:rgba(255,255,255,.91);border-bottom:1px solid #eef0f3;position:sticky;top:0;z-index:30;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}.top-inner{max-width:1192px;height:100%;margin:auto;display:flex;align-items:center;gap:62px;padding:0 26px}.logo{display:flex;align-items:baseline;letter-spacing:-.095em;font-size:29px;font-weight:900;white-space:nowrap}.logo-dot{color:var(--blue);font-size:35px;margin-left:1px}.desktop-nav{display:flex;align-items:center;gap:35px;height:100%}.nav-item{height:100%;position:relative;background:transparent;font-size:14px;font-weight:600;color:#8b919d;padding:0 1px;transition:.15s}.nav-item:hover{color:var(--ink)}.nav-item.active{color:var(--ink);font-weight:800}.nav-item.active:after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;background:var(--ink)}.header-right{margin-left:auto;display:flex;align-items:center;gap:13px}.header-add{height:39px;padding:0 17px;display:flex;align-items:center;gap:6px;background:var(--ink);border-radius:11px;color:#fff;font-size:13px;font-weight:700;transition:.2s}.header-add:hover,.btn-primary:hover{background:#303642;transform:translateY(-1px)}.roundbtn{width:39px;height:39px;display:grid;place-items:center;border-radius:12px;background:#f4f5f7}.roundbtn:hover{background:#e9edf3}.shell{max-width:1192px;margin:0 auto;padding:52px 26px 110px}.eyebrow{font-size:11px;letter-spacing:.16em;font-weight:800;color:#9ba2af}.section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}.section-title{font-size:22px;letter-spacing:-.065em;font-weight:800;margin:0}.link-btn{color:var(--sub);font-size:13px;font-weight:700;background:transparent;display:flex;align-items:center;gap:5px}.link-btn:hover{color:var(--blue)}.link-btn .icon{width:15px;height:15px}.page-kicker{display:flex;align-items:center;justify-content:space-between;color:var(--sub);margin-bottom:30px;font-size:12px;font-weight:600}.signal{display:flex;align-items:center;gap:8px}.signal:before{content:'';width:7px;height:7px;border-radius:50%;background:#44cba1}.overview-hero{background:#fff;border-radius:27px;min-height:342px;padding:45px 46px 30px;display:grid;grid-template-columns:1.05fr .95fr;gap:30px;overflow:hidden;position:relative}.hero-left{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}.hero-eyebrow{font-size:15px;color:#747b88;font-weight:650;margin:0 0 17px}.balance-number{font-family:'DM Sans','Noto Sans KR',sans-serif;font-weight:800;font-size:clamp(42px,4.2vw,66px);line-height:1.13;letter-spacing:-.075em;white-space:nowrap;margin:0}.balance-number small{font-family:'Noto Sans KR',sans-serif;font-size:.56em;font-weight:700;margin-left:5px;letter-spacing:-.06em}.delta{display:flex;align-items:center;gap:8px;color:#647080;margin-top:17px;font-size:12px;font-weight:550}.delta b{font-size:12px;color:#128b6b;font-weight:800}.action-row{display:flex;gap:9px;margin-top:32px}.btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:750;border-radius:12px;height:45px;padding:0 20px;transition:.18s}.btn-primary{background:var(--ink);color:#fff}.btn-secondary{background:#f1f3f6;color:#3f4855}.btn-secondary:hover{background:#e7ebf1}.btn-primary .icon,.btn-secondary .icon{width:18px;height:18px}.hero-chart-area{padding:5px 2px 1px 12px;display:flex;flex-direction:column;min-width:0}.chart-head{display:flex;justify-content:space-between;align-items:center}.chart-title{font-weight:750;color:#343c48;font-size:13px}.time-filter{display:flex;gap:3px;background:#f5f6f8;padding:4px;border-radius:11px}.time-filter button{padding:6px 10px;border-radius:8px;background:transparent;color:#9ca3ae;font-size:11px;font-weight:800}.time-filter button.chosen{background:#fff;color:var(--ink);box-shadow:0 1px 5px rgba(0,0,0,.06)}.chart-visual{width:100%;flex:1;min-height:200px;position:relative;padding-top:23px}.chart-visual svg{width:100%;height:185px;overflow:visible}.chart-foot{display:flex;justify-content:space-between;color:#9ca2ae;font-size:11px;padding:0 3px}.trend-bubble{position:absolute;right:17%;top:33px;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:-.04em;background:#eff5ff;padding:8px 11px;border-radius:9px}.section-space{height:42px}.grid-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(325px,.85fr);gap:28px}.surface{background:#fff;border-radius:26px;padding:29px 30px 22px}.surface .section-heading{margin-bottom:18px}.account-row,.tx-row{display:flex;align-items:center;gap:16px;min-height:76px;border-top:1px solid #f1f2f4}.account-row:first-of-type,.tx-row:first-of-type{border-top:0}.bank-symbol,.tx-symbol{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none;position:relative;overflow:hidden;font-weight:800}.bank-symbol.toss{background:#eaf2ff;color:#2781ff;font-size:23px;letter-spacing:-.1em}.bank-symbol.kakao{background:#fff4c9;color:#26221a;font-size:20px;letter-spacing:-.11em}.bank-symbol.cash{background:#eaf9f0;color:#1f996a;font-size:19px}.bank-symbol.new{background:#f2eefc;color:#9373cc}.bank-symbol.cash .icon{width:22px;height:22px}.bank-copy,.tx-copy{min-width:0;flex:1}.row-main{font-weight:750;font-size:14px;letter-spacing:-.045em}.row-sub{font-size:11px;color:#9da4af;margin-top:5px}.row-value{text-align:right;font-family:'DM Sans','Noto Sans KR';font-size:17px;font-weight:800;letter-spacing:-.055em;white-space:nowrap}.row-value small{font-size:12px}.row-push{background:transparent;margin-left:6px;color:#a7aeb7;padding:4px}.row-push:hover{color:var(--blue)}.row-push .icon{width:18px;height:18px}.spend-wrap{padding:8px 0 9px}.spend-overline{font-weight:700;color:var(--sub);font-size:12px}.spend-num{font-family:'DM Sans','Noto Sans KR';font-size:44px;line-height:1.17;font-weight:850;letter-spacing:-.075em;margin:9px 0 11px}.spend-num small{font-size:22px;font-family:'Noto Sans KR'}.spend-compare{font-size:12px;color:#8f97a3;display:flex;align-items:center;gap:6px}.spend-compare b{font-weight:800;color:var(--good)}.budget-head{margin-top:29px;display:flex;justify-content:space-between;color:#787f8b;font-size:12px;font-weight:650}.budget-head strong{font-weight:800;color:#343b47}.progress{height:9px;background:#f0f2f5;border-radius:20px;overflow:hidden;margin:12px 0 21px}.progress>span{display:block;height:100%;width:0;background:#347dfa;border-radius:20px;transition:.3s}.categories{display:flex;gap:3px;height:53px;align-items:flex-end;margin:17px 0 5px}.catbar{border-radius:7px 7px 5px 5px;background:#dae5f6;min-width:14px;transition:height .3s;position:relative}.catbar:nth-child(1){background:#2879ff}.catbar:nth-child(2){background:#95b9f4}.catbar:nth-child(3){background:#b5d2f6}.catbar:nth-child(4){background:#d5e2f2}.catbar:nth-child(5){background:#eff3f8}.catlegend{display:flex;justify-content:space-between;color:#a0a7b3;font-size:11px;margin-top:10px}.overview-bottom{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(325px,.85fr);gap:28px;margin-top:28px}.transaction-list{margin-top:9px}.tx-row{min-height:78px}.tx-symbol{background:#f3f5f8;color:#3c526a;width:42px;height:42px;border-radius:14px}.tx-symbol .icon{width:20px;height:20px;stroke-width:1.8}.tx-symbol.income{background:#e7f8f2;color:#15a077}.tx-symbol.transfer{background:#eaf1ff;color:#427cf0}.tx-amount{font-weight:800;letter-spacing:-.04em;font-size:15px;white-space:nowrap}.tx-amount.income{color:#079869}.tx-amount.transfer{color:#8895a9}.tx-date{color:#adb3bd;font-size:11px;font-weight:550;margin-top:4px;text-align:right}.bottom-aside{background:#f0f4fb;position:relative;overflow:hidden;min-height:310px;display:flex;flex-direction:column;justify-content:space-between}.bottom-aside:after{content:'';position:absolute;width:245px;height:245px;border:39px solid rgba(255,255,255,.54);border-radius:50%;right:-120px;bottom:-100px;pointer-events:none}.note-mark{width:39px;height:39px;border-radius:14px;background:#fff;color:#4281ea;display:grid;place-items:center}.note-mark .icon{width:21px}.note-title{font-size:23px;font-weight:800;line-height:1.45;letter-spacing:-.055em;margin:23px 0 12px;max-width:260px}.note-copy{font-size:12px;color:#7e8fa7;line-height:1.8;max-width:265px;position:relative;z-index:1}.note-action{display:flex;align-items:center;gap:7px;align-self:flex-start;background:transparent;padding:0;color:#316ee3;font-size:12px;font-weight:800;position:relative;z-index:1}.note-action .icon{width:15px;height:15px}.subpage-intro{margin-bottom:32px}.subpage-intro h1{font-weight:850;font-size:36px;letter-spacing:-.072em;line-height:1.15;margin:7px 0 9px}.subpage-intro p{color:#9aa2af;margin:0;font-size:13px;line-height:1.7}.subpage-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:26px}.subpage-layout .surface{min-height:460px}.field-search{display:flex;align-items:center;background:#f3f5f8;border-radius:13px;padding:0 14px;gap:9px;height:43px}.field-search .icon{color:#8f98a7;width:18px}.field-search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:13px;color:var(--ink)}.field-search input::placeholder{color:#a9b1bb}.minitabs{display:flex;align-items:center;gap:8px;margin:14px 0 22px;flex-wrap:wrap}.minitabs button{background:#f5f6f8;color:#858d99;border-radius:10px;font-size:12px;font-weight:750;padding:10px 14px}.minitabs button.active{background:#e7f0ff;color:#2572ef}.page-balance{background:#eef4ff;border-radius:19px;padding:28px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between}.page-balance span{color:#6485b4;font-weight:700;font-size:12px}.page-balance strong{font-size:33px;letter-spacing:-.065em}.sub-muted{color:#8f98a7;font-size:12px}.account-tile{border-top:1px solid var(--line);padding:23px 0;display:flex;gap:15px;align-items:center}.account-tile:first-of-type{border-top:0}.account-tile button{background:#f3f5f8;border-radius:11px;padding:10px 15px;font-weight:750;color:#566170;margin-left:10px}.account-tile button:hover{background:#e7efff;color:var(--blue)}.account-amount{margin-left:auto;text-align:right;font-size:18px;font-weight:800;white-space:nowrap}.stat-panel{padding-top:14px}.stat-big{font-size:38px;font-weight:850;letter-spacing:-.075em;margin:6px 0 8px}.insight-line{display:flex;justify-content:space-between;padding:17px 0;border-top:1px solid var(--line);font-size:13px;font-weight:650}.insight-line:first-child{border:0}.insight-line strong{font-weight:800}.pie-graphic{width:170px;height:170px;border-radius:50%;margin:12px auto 22px;background:conic-gradient(#2879ff 0 42%,#88b9fc 42% 66%,#c3daff 66% 83%,#dce8f7 83% 95%,#ecf1f6 95% 100%);position:relative}.pie-graphic:after{content:'';position:absolute;inset:43px;border-radius:50%;background:#fff}.calendar-toolbar{display:flex;align-items:center;justify-content:space-between;margin:10px 0 19px}.calendar-toolbar h2{font-size:20px;letter-spacing:-.055em;margin:0}.calendar-toolbar button{height:34px;width:34px;border-radius:9px;background:#f3f5f8;display:grid;place-items:center}.calendar-toolbar button .icon{width:18px}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.dow{font-size:12px;color:#a3aab5;font-weight:700;text-align:center;padding:10px 0}.calday{aspect-ratio:1.08;min-height:58px;padding:9px;border:1px solid #f0f2f5;border-radius:12px;background:#fff;text-align:left;display:flex;flex-direction:column;justify-content:space-between;font-size:12px;font-weight:700;transition:.15s}.calday:hover{border-color:#8bafff}.calday.muted{opacity:.25}.calday.selected{border-color:var(--blue);background:#eef5ff}.calday small{font-size:10px;letter-spacing:-.035em;color:#f16b69;font-weight:750;overflow:hidden;white-space:nowrap}.date-rows{margin-top:14px}.budget-card{background:#edf4ff;padding:28px;border-radius:22px}.budget-card .spend-num{font-size:39px}.budget-list .insight-line{align-items:center}.budget-list .insight-line strong{font-size:14px}.budget-edit{background:#f2f4f8;color:#606b7a;padding:10px 15px;border-radius:11px;font-size:12px;font-weight:750}.budget-edit:hover{background:#e8eef8}.empty{padding:30px 10px;color:#a1aab6;text-align:center;font-size:13px}.mobile-nav{display:none}.sheet-backdrop{position:fixed;inset:0;background:rgba(15,22,34,.42);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .16s ease}.sheet{background:#fff;border-radius:26px;width:min(100%,480px);box-shadow:0 25px 85px rgba(0,0,0,.16);padding:25px 28px 30px;max-height:92vh;overflow:auto;animation:pop .2s ease}.sheet-handle{display:none}.sheet-top{display:flex;align-items:center;justify-content:space-between}.sheet-top h2{font-size:21px;font-weight:850;letter-spacing:-.06em;margin:0}.sheet-top button{width:35px;height:35px;background:#f4f5f7;border-radius:10px;display:grid;place-items:center;color:#6d7787}.sheet-top .icon{width:18px}.sheet-tabs{display:flex;background:#f4f6f8;padding:5px;border-radius:13px;margin:26px 0 28px}.sheet-tabs button{flex:1;padding:12px 4px;border-radius:9px;background:transparent;color:#9aa3b1;font-weight:750;font-size:13px}.sheet-tabs button.active{background:#fff;color:var(--ink);box-shadow:0 2px 5px rgba(0,0,0,.07)}.form-label{display:block;color:#7b8694;font-size:12px;font-weight:750;margin:19px 0 9px}.amount-wrap{display:flex;align-items:center;justify-content:center;border-bottom:1px solid #ebedf1;padding-bottom:18px;margin-bottom:20px;gap:8px}.amount-wrap input{width:78%;border:0;text-align:right;outline:0;font-size:38px;font-weight:800;letter-spacing:-.065em;color:var(--ink);background:#fff}.amount-wrap input::placeholder{color:#d4d9e0}.amount-wrap span{font-size:20px;font-weight:750}.form-control{width:100%;background:#f5f6f8;border:1px solid transparent;border-radius:12px;padding:14px 15px;font-size:14px;font-weight:600;color:#3b4654;outline:0;min-height:49px}.form-control:focus{border-color:#8fb5fd;background:#fff}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}.submit-btn{width:100%;height:54px;margin-top:27px;border-radius:13px;background:#2879ff;color:#fff;font-weight:800;font-size:15px;transition:.2s}.submit-btn:hover{background:#1664ec}.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);z-index:100;background:#1a2433;color:#fff;border-radius:13px;padding:14px 18px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.24s;box-shadow:0 8px 22px rgba(0,0,0,.14)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes pop{from{transform:translateY(14px) scale(.985);opacity:.4}to{transform:translateY(0) scale(1);opacity:1}}
-@media(max-width:920px){.top-inner{gap:25px}.desktop-nav{gap:22px}.overview-hero{padding:30px;grid-template-columns:1fr .8fr}.balance-number{font-size:45px}.grid-body,.overview-bottom{grid-template-columns:1fr 1fr;gap:17px}.surface{padding:24px 21px}.spend-num{font-size:34px}.subpage-layout{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){body{background:#fff}.topbar{height:66px;position:sticky}.top-inner{padding:0 22px}.logo{font-size:28px}.desktop-nav{display:none}.header-add{height:37px;padding:0 14px}.header-right{gap:8px}.header-right .roundbtn{display:none}.shell{padding:30px 20px 120px}.page-kicker{font-size:11px;margin-bottom:30px}.overview-hero{display:flex;flex-direction:column;border-radius:0;padding:0;background:#fff;overflow:visible;gap:12px;min-height:auto}.hero-left{align-items:stretch;display:block}.hero-eyebrow{font-size:14px;margin-bottom:11px}.balance-number{font-size:clamp(41px,10.8vw,54px)}.delta{margin-top:13px}.action-row{margin-top:27px}.btn-primary,.btn-secondary{height:45px;padding:0 20px;flex:1}.hero-chart-area{margin-top:24px;padding:23px 0 0;border-top:1px solid #eef0f3}.chart-title{font-size:13px}.chart-visual{min-height:auto;padding-top:16px}.chart-visual svg{height:145px}.trend-bubble{top:18px;right:9%;font-size:10px}.chart-foot{font-size:10px}.section-space{height:29px}.grid-body,.overview-bottom,.subpage-layout{display:block}.surface{border-radius:0;padding:26px 0 14px;background:#fff;border-top:1px solid #eef0f3}.grid-body .surface:first-child{border-top:0;padding-top:10px}.grid-body .surface + .surface{margin-top:17px}.surface .section-heading{margin-bottom:13px}.section-heading{margin-bottom:16px}.section-title{font-size:20px}.account-row{min-height:73px;gap:13px}.bank-symbol{width:43px;height:43px;border-radius:13px}.row-main{font-size:13px}.row-value{font-size:16px}.spend-num{font-size:42px}.overview-bottom{margin-top:8px}.overview-bottom .surface{margin-top:18px}.bottom-aside{border:0;background:#eef4fd;border-radius:21px;padding:25px;margin-top:19px!important;min-height:250px}.note-title{margin:16px 0 10px;font-size:20px}.subpage-intro{margin-bottom:24px}.subpage-intro h1{font-size:29px}.subpage-layout .surface{min-height:auto}.subpage-layout .surface + .surface{margin-top:24px}.account-tile{gap:10px}.account-tile button{padding:10px;font-size:12px}.account-amount{font-size:15px}.calendar-grid{gap:4px}.calday{aspect-ratio:1;min-height:49px;padding:6px;border-radius:9px}.calday small{font-size:9px;letter-spacing:-.05em}.mobile-nav{display:grid;grid-template-columns:repeat(4,1fr);align-items:center;background:rgba(255,255,255,.92);backdrop-filter:blur(22px);border-top:1px solid #eef0f3;position:fixed;z-index:35;bottom:0;left:0;right:0;height:calc(70px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}.mobile-nav button{background:transparent;display:flex;flex-direction:column;align-items:center;gap:5px;color:#a4adb8;font-size:10px;font-weight:750}.mobile-nav button.active{color:var(--ink)}.mobile-nav button.active .icon{stroke:var(--blue);stroke-width:2.3}.mobile-nav .icon{height:23px;width:23px}.sheet-backdrop{padding:0;align-items:flex-end}.sheet{width:100%;max-width:none;border-radius:26px 26px 0 0;padding:13px 23px calc(27px + env(safe-area-inset-bottom));max-height:94vh;animation:slide .23s ease}.sheet-handle{display:block;width:37px;height:5px;background:#e0e4ea;border-radius:6px;margin:0 auto 20px}.sheet-top h2{font-size:20px}.sheet-tabs{margin:22px 0}.amount-wrap input{font-size:32px}.toast{bottom:95px;width:max-content;max-width:90vw;text-align:center}@keyframes slide{from{transform:translateY(35px);opacity:.5}to{transform:translateY(0);opacity:1}}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
-
-/* v5 — structural art direction: open canvas, type and rules instead of stacked cards */
-:root{--bg:#ffffff;--ink:#171b25;--line:#e9edf2;--blue:#1769f4}
-body{background:#fff}
-.topbar{height:76px;background:rgba(255,255,255,.97)}
-.top-inner{max-width:1290px}
-.logo{letter-spacing:-.105em;font-size:30px}
-.logo-dot{color:#2576ff}
-.header-add{background:#1769f4;border-radius:10px}
-.header-add:hover{background:#0953d4}
-.header-right .roundbtn{background:#f5f7f9}
-.shell{max-width:1290px;padding:46px 44px 110px}
-.page-kicker{font-weight:650;color:#99a1ae;margin-bottom:30px}
-.page-kicker .signal{color:#a0a7b1}
-.overview-hero{background:none;border-radius:0;min-height:310px;padding:20px 0 39px;grid-template-columns:1.08fr .92fr;gap:76px;border-bottom:1px solid var(--line)}
-.hero-left{justify-content:center}
-.hero-eyebrow{font-size:16px;color:#808996;margin-bottom:13px;font-weight:650}
-.balance-number{font-size:clamp(49px,5.2vw,78px);font-weight:850;letter-spacing:-.083em}
-.delta{margin-top:15px;color:#9aa3b0;font-size:12px}
-.asset-chip{font-size:11px;background:#eef5ff;color:#3078e9;padding:6px 10px;border-radius:8px;font-weight:750}
-.action-row{margin-top:34px}
-.btn-primary{background:#1769f4;border-radius:11px}
-.btn-primary:hover{background:#0856d7}
-.btn-secondary{border-radius:11px;background:#f3f5f7}
-.chart-visual{min-height:190px}
-.trend-bubble{color:#1c6ef0}
-.section-space{height:48px}
-.grid-body,.overview-bottom{gap:0;grid-template-columns:minmax(0,1.13fr) minmax(350px,.87fr)}
-.surface{border-radius:0;background:transparent;padding:10px 43px 10px 0}
-.grid-body>.surface:nth-child(2),.overview-bottom>.surface:nth-child(2){border-left:1px solid var(--line);padding-left:46px;padding-right:0}
-.surface .section-heading{margin-bottom:22px}
-.section-title{font-size:22px}
-.account-row,.tx-row{min-height:81px;border-top:1px solid #f0f2f5}
-.bank-symbol{width:46px;height:46px;border-radius:13px}
-.row-main{font-size:14px}
-.row-value{font-size:18px}
-.spend-num{font-size:49px}
-.categories{height:44px;margin:16px 0 5px}
-.catbar{border-radius:4px 4px 2px 2px}
-.overview-bottom{margin-top:68px;padding-top:35px;border-top:1px solid var(--line)}
-.bottom-aside{border-left:0!important;background:#f4f7fc;border-radius:22px;min-height:350px;padding:30px 34px!important;margin-left:47px}
-.bottom-aside:after{border-color:rgba(255,255,255,.7)}
-.note-title{font-size:25px}
-.note-copy{font-size:12px}
-.subpage-layout{gap:0;grid-template-columns:1.12fr .88fr}
-.subpage-layout>.surface{padding:27px 40px 24px 0}
-.subpage-layout>.surface:nth-child(2){border-left:1px solid var(--line);padding:27px 0 24px 42px}
-.subpage-intro{margin-top:14px;margin-bottom:46px}
-.subpage-intro h1{font-size:44px}
-@media(max-width:920px) and (min-width:701px){.shell{padding:36px 24px 100px}.overview-hero{gap:30px}.balance-number{font-size:48px}.surface{padding-right:24px}.grid-body>.surface:nth-child(2),.overview-bottom>.surface:nth-child(2){padding-left:28px}.bottom-aside{margin-left:26px}.overview-bottom{margin-top:42px}}
-@media(max-width:700px){
- .topbar{height:62px;border-bottom:none}
- .top-inner{padding:0 22px}
- .logo{font-size:30px}
- .header-add{height:37px;width:37px;border-radius:50%;font-size:0;padding:0;display:grid;place-items:center;background:#f3f6fa;color:#1769f4}
- .header-add .icon{height:20px;width:20px}
- .shell{padding:21px 22px 115px}
- .page-kicker{margin:4px 0 36px;font-size:11px}
- .page-kicker .signal{color:#aab1bc}
- .overview-hero{display:flex;flex-direction:column;gap:0;min-height:0;border:0;padding:0}
- .hero-eyebrow{margin-bottom:11px;font-size:14px}
- .balance-number{font-size:clamp(43px,11.25vw,60px);letter-spacing:-.087em}
- .delta{margin-top:17px}
- .action-row{margin-top:28px;gap:10px}
- .btn-primary,.btn-secondary{border-radius:12px}
- .hero-chart-area{margin-top:30px;border-top:1px solid #eef0f2;padding:24px 0 0}
- .chart-visual svg{height:150px}
- .chart-visual{padding-top:16px}
- .section-space{height:0}
- .grid-body,.overview-bottom{display:block;border-top:10px solid #f5f6f8;margin:31px -22px 0;padding:0 22px;gap:0}
- .grid-body>.surface{border:0!important;padding:27px 0 19px!important;background:none}
- .grid-body>.surface:nth-child(2){border-top:10px solid #f5f6f8!important;margin:9px -22px 0;padding:28px 22px 22px!important}
- .overview-bottom{margin-top:8px;padding-top:0}
- .overview-bottom>.surface{padding:27px 0 15px!important;border:0!important}
- .overview-bottom>.surface:nth-child(2){margin:16px 0 0!important;padding:28px!important;border-radius:20px;min-height:270px}
- .surface .section-heading{margin-bottom:13px}
- .section-title{font-size:20px}
- .account-row{min-height:76px}
- .row-value{font-size:17px}
- .spend-num{font-size:43px}
- .subpage-intro{margin-top:12px;margin-bottom:21px}
- .subpage-intro h1{font-size:32px}
- .subpage-layout{display:block}
- .subpage-layout>.surface{border:0!important;padding:25px 0!important}
- .subpage-layout>.surface:nth-child(2){padding:27px 0!important;border-top:8px solid #f5f6f8!important;margin:8px -22px 0;padding-left:22px!important;padding-right:22px!important}
- .mobile-nav{height:calc(68px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96)}
+:root{
+  --toss-blue:#3182f6;
+  --toss-blue-hover:#2272eb;
+  --toss-blue-light:#e8f3ff;
+  --toss-red:#f04452;
+  --toss-green:#04b074;
+  --toss-grey-bg:#f2f4f6;
+  --toss-card-bg:#ffffff;
+  --toss-text-main:#191f28;
+  --toss-text-sub:#4e5968;
+  --toss-text-muted:#8b95a1;
+  --toss-border:#e5e8eb;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:#eaedf2;
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color:var(--toss-text-main);
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  justify-content:center;
+  min-height:100vh;
+}
+.app-shell{
+  width:100%;
+  max-width:480px;
+  background:var(--toss-grey-bg);
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 35px rgba(0,0,0,0.07);
+  padding-bottom:calc(82px + env(safe-area-inset-bottom, 0px));
 }
 
-/* Google Auth, Update Pill, Avatar styles */
-.google-pill{display:inline-flex;align-items:center;gap:7px;height:39px;padding:0 14px;border-radius:11px;background:#f5f7fa;color:#3b4654;font-size:12.5px;font-weight:750;transition:.15s}
-.google-pill:hover{background:#eaf1f8}
-.auth-dot{width:7px;height:7px;border-radius:50%;background:#a5acb7;transition:.2s}
-.auth-dot.connected{background:#0c9d75}
-.user-avatar{width:39px;height:39px;border-radius:12px;background:#eef4ff;color:#2879ff;display:grid;place-items:center;font-weight:800;font-size:13px;cursor:pointer}
-.update-pill{display:inline-flex;align-items:center;gap:6px;height:39px;padding:0 13px;border-radius:11px;background:#f5f7fa;color:#4b5563;font-size:12px;font-weight:750;position:relative}
-.update-pill:hover{background:#edf2f7}
-.update-dot{width:6px;height:6px;border-radius:50%;background:#f15c5c;position:absolute;top:8px;right:8px}
-.install-banner{background:#eef4ff;border:1px solid #d4e4fc;border-radius:16px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;cursor:pointer;transition:background .15s}
-.install-banner:active{background:#e1ecfc}
-.btn-install-mini{background:#1769f4;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+/* Header */
+.app-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  background:rgba(242,244,246,0.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  padding:max(12px, env(safe-area-inset-top, 12px)) 18px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.app-brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  text-align:left;
+}
+.app-brand .logo{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+  color:var(--toss-text-main);
+}
+.app-brand .logo-dot{color:var(--toss-blue)}
+.app-brand .sub-text{
+  font-size:12px;
+  color:var(--toss-text-muted);
+  font-weight:600;
+}
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+.header-btn{
+  height:36px;
+  padding:0 11px;
+  border-radius:18px;
+  border:none;
+  background:#ffffff;
+  color:var(--toss-text-sub);
+  font-size:12px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  transition:all .15s ease;
+  position:relative;
+}
+.header-btn:active{transform:scale(0.96);background:#f9fafb}
+.header-btn .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#d1d6db;
+}
+.header-btn .dot.connected{background:var(--toss-green)}
+.header-btn .dot.alert{background:var(--toss-red)}
+.header-icon-btn{
+  width:36px;
+  height:36px;
+  border-radius:18px;
+  border:none;
+  background:#ffffff;
+  color:var(--toss-text-sub);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  transition:all .15s ease;
+}
+.header-icon-btn:active{transform:scale(0.94)}
 
+/* Install banner */
+.pwa-banner{
+  background:linear-gradient(135deg, #e8f3ff 0%, #f0f7ff 100%);
+  border:1px solid #d4e6fc;
+  border-radius:20px;
+  padding:14px 18px;
+  margin:12px 16px 4px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.pwa-banner:active{transform:scale(0.98)}
+.pwa-banner-left{display:flex;align-items:center;gap:12px}
+.pwa-banner-icon{font-size:24px}
+.pwa-banner-title{font-size:14px;font-weight:800;color:var(--toss-text-main);margin-bottom:2px}
+.pwa-banner-desc{font-size:12px;color:var(--toss-text-sub)}
+.pwa-banner-btn{
+  background:var(--toss-blue);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:8px 13px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
 
+/* Cards */
+.card{
+  background:var(--toss-card-bg);
+  border-radius:22px;
+  padding:22px 20px;
+  margin:10px 16px 0;
+  box-shadow:0 2px 10px rgba(0,0,0,0.02);
+  transition:transform .15s ease;
+}
+.card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+.card-title{
+  font-size:18px;
+  font-weight:800;
+  color:var(--toss-text-main);
+  letter-spacing:-0.3px;
+}
+.card-link{
+  font-size:13px;
+  font-weight:700;
+  color:var(--toss-blue);
+  background:none;
+  border:none;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+}
+
+/* Hero Balance Card */
+.hero-card{
+  background:#ffffff;
+  border-radius:24px;
+  padding:24px 20px;
+  margin:10px 16px 0;
+  box-shadow:0 4px 16px rgba(0,0,0,0.03);
+}
+.hero-label{
+  font-size:14px;
+  font-weight:700;
+  color:var(--toss-text-muted);
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.hero-balance{
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:-0.8px;
+  color:var(--toss-text-main);
+  line-height:1.2;
+  margin-bottom:12px;
+}
+.hero-balance small{
+  font-size:22px;
+  font-weight:700;
+  margin-left:3px;
+}
+.hero-chips{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:20px;
+}
+.hero-chip{
+  background:#f2f4f6;
+  color:#4e5968;
+  font-size:12px;
+  font-weight:700;
+  padding:5px 10px;
+  border-radius:12px;
+}
+.hero-chip.accent{
+  background:var(--toss-blue-light);
+  color:var(--toss-blue);
+}
+.hero-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.hero-btn{
+  height:48px;
+  border-radius:16px;
+  border:none;
+  font-size:15px;
+  font-weight:800;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.hero-btn.primary{
+  background:var(--toss-blue);
+  color:#ffffff;
+}
+.hero-btn.primary:active{background:var(--toss-blue-hover);transform:scale(0.98)}
+.hero-btn.secondary{
+  background:#f2f4f6;
+  color:var(--toss-text-sub);
+}
+.hero-btn.secondary:active{background:#e5e8eb;transform:scale(0.98)}
+
+/* Accounts List */
+.account-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 0;
+  border-bottom:1px solid #f2f4f6;
+}
+.account-item:last-child{border-bottom:none;padding-bottom:0}
+.account-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.bank-badge{
+  width:42px;
+  height:42px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:18px;
+  color:#fff;
+  flex-shrink:0;
+}
+.bank-badge.toss{background:#3182f6}
+.bank-badge.kakao{background:#fae100;color:#371d1e}
+.bank-badge.cash{background:#04b074}
+.bank-badge.other{background:#8b95a1}
+.account-info-name{
+  font-size:15px;
+  font-weight:800;
+  color:var(--toss-text-main);
+  margin-bottom:2px;
+}
+.account-info-sub{
+  font-size:12.5px;
+  color:var(--toss-text-muted);
+}
+.account-right{
+  text-align:right;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.account-balance{
+  font-size:15px;
+  font-weight:800;
+  color:var(--toss-text-main);
+}
+.btn-transfer-mini{
+  background:#f2f4f6;
+  border:none;
+  border-radius:10px;
+  color:var(--toss-text-sub);
+  font-size:12px;
+  font-weight:700;
+  padding:6px 11px;
+  cursor:pointer;
+}
+.btn-transfer-mini:active{background:#e5e8eb}
+
+/* Budget Card */
+.budget-bar-wrap{
+  background:#e5e8eb;
+  border-radius:99px;
+  height:9px;
+  overflow:hidden;
+  margin:14px 0 10px;
+}
+.budget-bar{
+  background:var(--toss-blue);
+  height:100%;
+  border-radius:99px;
+  transition:width .4s ease;
+}
+.budget-desc{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--toss-text-sub);
+  font-weight:600;
+}
+
+/* Transactions Feed */
+.tx-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 0;
+  border-bottom:1px solid #f6f7f9;
+}
+.tx-item:last-child{border-bottom:none}
+.tx-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.tx-icon{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  background:#f2f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.tx-title{
+  font-size:15px;
+  font-weight:750;
+  color:var(--toss-text-main);
+  margin-bottom:2px;
+}
+.tx-sub{
+  font-size:12px;
+  color:var(--toss-text-muted);
+}
+.tx-amount{
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:-0.2px;
+}
+.tx-amount.expense{color:var(--toss-text-main)}
+.tx-amount.income{color:var(--toss-blue)}
+.tx-amount.transfer{color:#4e5968}
+
+/* Chart */
+.chart-filter{
+  display:flex;
+  background:#f2f4f6;
+  border-radius:12px;
+  padding:3px;
+  gap:2px;
+}
+.chart-filter button{
+  border:none;
+  background:none;
+  padding:4px 10px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--toss-text-muted);
+  border-radius:9px;
+  cursor:pointer;
+}
+.chart-filter button.active{
+  background:#ffffff;
+  color:var(--toss-text-main);
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Floating Action Button */
+.fab-add{
+  position:fixed;
+  bottom:calc(82px + env(safe-area-inset-bottom, 0px));
+  right:max(18px, calc(50% - 222px));
+  width:58px;
+  height:58px;
+  border-radius:29px;
+  background:var(--toss-blue);
+  color:#ffffff;
+  border:none;
+  box-shadow:0 8px 24px rgba(49,130,246,0.42);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:85;
+  transition:all .18s ease;
+}
+.fab-add:active{
+  transform:scale(0.90);
+  background:var(--toss-blue-hover);
+}
+.fab-add svg{
+  width:26px;
+  height:26px;
+  stroke-width:2.8;
+}
+
+/* Bottom Dock */
+.bottom-dock{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:480px;
+  height:calc(66px + env(safe-area-inset-bottom, 0px));
+  padding-bottom:env(safe-area-inset-bottom, 0px);
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  z-index:90;
+}
+.dock-btn{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  background:none;
+  border:none;
+  color:#8b95a1;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  padding:7px 0;
+  transition:color .15s ease;
+}
+.dock-btn.active{
+  color:var(--toss-blue);
+}
+.dock-btn svg{
+  width:22px;
+  height:22px;
+  stroke-width:2.2;
+}
+
+/* Bottom Sheet */
+.sheet-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:100;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  animation:fadeIn .2s ease;
+}
+.sheet{
+  width:100%;
+  max-width:480px;
+  background:#ffffff;
+  border-radius:26px 26px 0 0;
+  padding:16px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  max-height:90vh;
+  overflow-y:auto;
+  animation:slideUp .24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sheet-handle{
+  width:38px;
+  height:4px;
+  background:#d1d6db;
+  border-radius:99px;
+  margin:0 auto 16px;
+}
+.sheet-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.sheet-top h2{
+  font-size:20px;
+  font-weight:900;
+  color:var(--toss-text-main);
+  letter-spacing:-0.4px;
+}
+.sheet-close-btn{
+  width:32px;
+  height:32px;
+  border-radius:16px;
+  background:#f2f4f6;
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#4e5968;
+  cursor:pointer;
+}
+
+/* Sheet Mode Tabs */
+.sheet-modes{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  background:#f2f4f6;
+  border-radius:14px;
+  padding:4px;
+  gap:4px;
+  margin-bottom:20px;
+}
+.sheet-mode-btn{
+  border:none;
+  background:none;
+  padding:10px 0;
+  font-size:14px;
+  font-weight:800;
+  color:#8b95a1;
+  border-radius:10px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.sheet-mode-btn.active{
+  background:#ffffff;
+  color:var(--toss-text-main);
+  box-shadow:0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Big Amount Input */
+.amount-container{
+  margin-bottom:20px;
+  text-align:center;
+}
+.amount-label{
+  font-size:13px;
+  font-weight:700;
+  color:var(--toss-text-muted);
+  margin-bottom:6px;
+}
+.amount-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.amount-input{
+  width:auto;
+  max-width:260px;
+  border:none;
+  outline:none;
+  background:none;
+  font-size:36px;
+  font-weight:900;
+  color:var(--toss-text-main);
+  text-align:right;
+  font-family:inherit;
+}
+.amount-unit{
+  font-size:28px;
+  font-weight:800;
+  color:var(--toss-text-main);
+}
+.quick-add-row{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:12px;
+}
+.quick-add-btn{
+  background:#f2f4f6;
+  border:none;
+  border-radius:10px;
+  padding:7px 12px;
+  font-size:12.5px;
+  font-weight:800;
+  color:var(--toss-text-sub);
+  cursor:pointer;
+}
+.quick-add-btn:active{background:#e5e8eb}
+
+/* Form controls */
+.form-group{margin-bottom:18px}
+.form-label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  color:var(--toss-text-sub);
+  margin-bottom:8px;
+}
+.form-input{
+  width:100%;
+  height:48px;
+  border-radius:14px;
+  border:1.5px solid #e5e8eb;
+  padding:0 14px;
+  font-size:15px;
+  font-weight:600;
+  font-family:inherit;
+  outline:none;
+  transition:border .15s ease;
+}
+.form-input:focus{border-color:var(--toss-blue)}
+
+/* Chips Grid */
+.chips-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip-btn{
+  border:1.5px solid #e5e8eb;
+  background:#ffffff;
+  color:var(--toss-text-sub);
+  padding:8px 14px;
+  border-radius:12px;
+  font-size:13.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.chip-btn.selected{
+  border-color:var(--toss-blue);
+  background:var(--toss-blue-light);
+  color:var(--toss-blue);
+}
+
+.submit-btn{
+  width:100%;
+  height:52px;
+  border-radius:16px;
+  background:var(--toss-blue);
+  color:#ffffff;
+  border:none;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:14px;
+  transition:background .15s ease;
+}
+.submit-btn:active{background:var(--toss-blue-hover)}
+
+/* Toast */
+.toast-bar{
+  position:fixed;
+  bottom:calc(96px + env(safe-area-inset-bottom, 0px));
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(25,31,40,0.92);
+  color:#ffffff;
+  padding:12px 20px;
+  border-radius:18px;
+  font-size:13.5px;
+  font-weight:700;
+  z-index:150;
+  opacity:0;
+  pointer-events:none;
+  transition:all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  white-space:nowrap;
+}
+.toast-bar.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 </style>
 </head>
 <body>
-<header class="topbar"><div class="top-inner"><button class="logo" aria-label="moa 홈" style="background:none" onclick="go('home')">moa<span class="logo-dot">.</span></button><nav id="desktopNav" class="desktop-nav" aria-label="주요 메뉴"></nav><div class="header-right">
-  <button id="googleAuthBtn" class="google-pill" onclick="triggerGoogleAuth()">
-    <span class="auth-dot" id="authDot"></span>
-    <span id="authText">Google 로그인</span>
+
+<div class="app-shell">
+  <!-- Top App Bar -->
+  <header class="app-header">
+    <button class="app-brand" onclick="go('home')">
+      <span class="logo">moa<span class="logo-dot">.</span></span>
+      <span class="sub-text">가계부</span>
+    </button>
+    <div class="header-actions">
+      <button class="header-btn" onclick="triggerGoogleAuth()" title="Google 클라우드 동기화">
+        <span class="dot" id="authDot"></span>
+        <span id="authText">Google</span>
+      </button>
+      <button class="header-btn" onclick="checkForUpdates(true)" title="새 업데이트 확인">
+        <span class="dot" id="updateDot" style="display:none"></span>
+        <span>업데이트</span>
+      </button>
+      <button class="header-icon-btn" onclick="openSettings()" aria-label="설정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:19px;height:19px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main id="main"></main>
+
+  <!-- 1-Second Fast Entry Floating Action Button -->
+  <button class="fab-add" onclick="openSheet('expense')" aria-label="1초 내역 빠른 추가">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
-  <div class="user-avatar" id="userAvatar" onclick="triggerGoogleAuth()" title="Google 계정 관리">나</div>
-  <button class="update-pill" onclick="openInstallSheet()" title="스마트폰 홈 화면에 앱 추가">
-    <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>
-    <span>앱 설치</span>
-  </button>
-  <button class="update-pill" onclick="checkForUpdates(true)" title="새 업데이트 확인">
-    <span class="update-dot" id="updateDot" style="display:none"></span>
-    <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-    <span>업데이트</span>
-  </button>
-  <button class="header-add" onclick="openSheet('expense')"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>내역 추가</button>
-  <button class="roundbtn" aria-label="설정" onclick="openSettings()"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="m19.4 15 .1.1 1.3 1-2 3.5-1.5-.7a9 9 0 0 1-2.3 1.3l-.2 1.7h-4l-.2-1.7a9 9 0 0 1-2.3-1.3l-1.5.7-2-3.5 1.3-1a8 8 0 0 1 0-2.6l-1.3-1 2-3.5 1.5.7a9 9 0 0 1 2.3-1.3l.2-1.7h4l.2 1.7a9 9 0 0 1 2.3 1.3l1.5-.7 2 3.5-1.3 1a8 8 0 0 1 0 2.6Z"/></svg></button>
-</div></div></header>
-<main id="main" class="shell"></main>
-<nav id="mobileNav" class="mobile-nav" aria-label="모바일 메뉴"></nav>
-<div id="dialogRoot"></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Toss Bottom Dock Bar -->
+  <nav class="bottom-dock" id="bottomDock"></nav>
+</div>
+
+<!-- Modal & Toast Roots -->
+<div id="dialogRoot"></div>
+<div id="toast" class="toast-bar"></div>
+
+<!-- Firebase Sync Script -->
+<script type="module" src="./firebase-sync.js"></script>
+
 <script>
-const UI={home:'홈',transactions:'내역',calendar:'달력',assets:'자산',budget:'예산',insights:'분석'};
-const iconShapes={home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',transactions:'<path d="M5 5h14M5 12h14M5 19h14"/><circle cx="3" cy="5" r=".7" fill="currentColor"/><circle cx="3" cy="12" r=".7" fill="currentColor"/><circle cx="3" cy="19" r=".7" fill="currentColor"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',assets:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 9h18M7 16h3"/>',budget:'<circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 5"/>',insights:'<path d="m4 17 5-5 3 3 8-8M15 7h5v5"/>',chevron:'<path d="m9 18 6-6-6-6"/>',arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>',swap:'<path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/>',coffee:'<path d="M4 8h12v7a6 6 0 0 1-12 0V8ZM16 9h2a3 3 0 0 1 0 6h-2M3 21h15"/>',bag:'<path d="M5 8h14l-1 13H6L5 8ZM9 8V6a3 3 0 0 1 6 0v2"/>',meal:'<path d="M4 3v8a3 3 0 0 0 6 0V3M7 3v18M17 3c-3 4-3 8 0 11v7M4 7h6"/>',bus:'<rect x="5" y="3" width="14" height="17" rx="3"/><path d="M5 12h14M8 17h2m4 0h2M8 20v2m8-2v2"/>',film:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M7 5l3 5m2-5 3 5m2-5 3 5"/>',wallet:'<rect x="3" y="6" width="18" height="15" rx="3"/><path d="M3 10h18M16 15h2"/>',income:'<path d="M12 3v15m-6-6 6 6 6-6M5 21h14"/>',transfer:'<path d="M4 7h16m-5-4 5 4-5 4M20 17H4m5-4-5 4 5 4"/>',close:'<path d="M5 5 19 19M19 5 5 19"/>',search:'<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>',left:'<path d="m15 18-6-6 6-6"/>',right:'<path d="m9 18 6-6-6-6"/>',sparkle:'<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/>',shield:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m8 12 3 3 5-5"/>',cash:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>'};
-const ico=(name,cls='')=>`<svg aria-hidden="true" class="icon ${cls}" viewBox="0 0 24 24">${iconShapes[name]||iconShapes.wallet}</svg>`;
-const fmt=n=>Math.abs(n).toLocaleString('ko-KR'), money=n=>`${n<0?'-':''}${fmt(n)}원`;
-const todayStr='2026-10-31';
-const initial={accounts:[{id:'toss',name:'토스뱅크',sub:'입출금 통장',balance:1420000,type:'toss'},{id:'kakao',name:'카카오뱅크',sub:'저축 통장',balance:2850000,type:'kakao'},{id:'cash',name:'현금',sub:'지갑',balance:80000,type:'cash'}],transactions:[{id:1,type:'expense',date:'2026-10-31',name:'오후의 커피',category:'카페',account:'toss',amount:5900},{id:2,type:'expense',date:'2026-10-30',name:'점심 식사',category:'식비',account:'toss',amount:13200},{id:3,type:'expense',date:'2026-10-29',name:'시내버스',category:'교통',account:'toss',amount:1650},{id:4,type:'transfer',date:'2026-10-28',name:'저축 통장으로 이동',category:'이체',account:'toss',to:'kakao',amount:300000},{id:5,type:'expense',date:'2026-10-27',name:'영화관',category:'문화',account:'toss',amount:14500},{id:6,type:'expense',date:'2026-10-24',name:'이번 주 장보기',category:'식비',account:'kakao',amount:53600},{id:7,type:'expense',date:'2026-10-23',name:'온라인 쇼핑',category:'쇼핑',account:'toss',amount:43800},{id:8,type:'expense',date:'2026-10-20',name:'휴대폰 요금',category:'고정비',account:'toss',amount:59000},{id:9,type:'expense',date:'2026-10-18',name:'친구들과 저녁',category:'식비',account:'toss',amount:63500},{id:10,type:'expense',date:'2026-10-15',name:'카페',category:'카페',account:'toss',amount:8300},{id:11,type:'expense',date:'2026-10-13',name:'편의점',category:'식비',account:'toss',amount:9800},{id:12,type:'expense',date:'2026-10-10',name:'생필품',category:'쇼핑',account:'kakao',amount:55000},{id:13,type:'expense',date:'2026-10-08',name:'온라인 구독',category:'고정비',account:'toss',amount:14900},{id:14,type:'expense',date:'2026-10-06',name:'외식',category:'식비',account:'toss',amount:43800},{id:15,type:'income',date:'2026-10-05',name:'급여',category:'월급',account:'toss',amount:2400000}],budget:800000};
 const clone = x => { try { return structuredClone(x); } catch(e) { return JSON.parse(JSON.stringify(x)); } };
+
+const initial = {
+  accounts: [
+    { id: 'toss', name: '토스뱅크', sub: '입출금 통장', balance: 1420000, type: 'toss' },
+    { id: 'kakao', name: '카카오뱅크', sub: '저축 통장', balance: 2850000, type: 'kakao' },
+    { id: 'cash', name: '현금', sub: '지갑', balance: 80000, type: 'cash' }
+  ],
+  transactions: [
+    { id: 1, type: 'expense', date: '2026-10-31', name: '오후의 커피', category: '카페', account: 'toss', amount: 5900 },
+    { id: 2, type: 'expense', date: '2026-10-30', name: '점심 식사', category: '식비', account: 'toss', amount: 13500 },
+    { id: 3, type: 'expense', date: '2026-10-28', name: '교통 충전', category: '교통', account: 'toss', amount: 30000 },
+    { id: 4, type: 'expense', date: '2026-10-27', name: '서점 도서구매', category: '쇼핑', account: 'kakao', amount: 22000 },
+    { id: 5, type: 'income',  date: '2026-10-25', name: '10월 용돈', category: '용돈', account: 'toss', amount: 500000 }
+  ],
+  budget: 500000
+};
+
 let state;
 try { state = JSON.parse(localStorage.getItem('moa_editorial_v4') || 'null'); } catch(e) { state = null; }
 if (!state || !Array.isArray(state.accounts) || !Array.isArray(state.transactions) || typeof state.budget !== 'number') {
   state = clone(initial);
   try { localStorage.setItem('moa_editorial_v4', JSON.stringify(state)); } catch(e) {}
 }
-let view='home', txFilter='all', txQuery='', focusDate='2026-10-31', calendarMonth=9, calendarYear=2026, chartPeriod='1개월', currentSheet='expense';
-let store=()=>{try{localStorage.setItem('moa_editorial_v4',JSON.stringify(state))}catch(e){}};
-const balance=()=>state.accounts.reduce((n,a)=>n+a.balance,0);
-const monthItems=()=>state.transactions.filter(t=>t.date.slice(0,7)==='2026-10');
-const expTotal=()=>monthItems().filter(t=>t.type==='expense').reduce((sum,t)=>sum+t.amount,0);
-const incTotal=()=>monthItems().filter(t=>t.type==='income').reduce((sum,t)=>sum+t.amount,0);
-const remain=()=>state.budget-expTotal();
-const expCats=()=>{const o={};monthItems().filter(t=>t.type==='expense').forEach(t=>o[t.category]=(o[t.category]||0)+t.amount);return Object.entries(o).sort((a,b)=>b[1]-a[1]);};
-const nameAccount=id=>state.accounts.find(a=>a.id===id)?.name||'계좌';
-const escapeHTML=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const symbol=a=>`<span class="bank-symbol ${a.type==='toss'||a.type==='kakao'||a.type==='cash'?a.type:'new'}">${a.type==='toss'?'t':a.type==='kakao'?'K':a.type==='cash'?ico('cash'):ico('wallet')}</span>`;
-function nav(){document.getElementById('desktopNav').innerHTML=Object.entries(UI).map(([k,t])=>`<button class="nav-item ${view===k?'active':''}" onclick="go('${k}')" aria-current="${view===k?'page':'false'}">${t}</button>`).join('');let mobileItems=[['home','홈'],['transactions','내역'],['assets','자산'],['insights','분석']];document.getElementById('mobileNav').innerHTML=mobileItems.map(([k,t])=>`<button class="${view===k?'active':''}" onclick="go('${k}')" aria-label="${t}">${ico(k)}<span>${t}</span></button>`).join('')}
-function heroChart(){const paths={'1주':'M 0 116 C 45 126 57 58 100 81 S 164 125 206 75 S 285 96 328 41 S 392 80 446 22','1개월':'M 0 138 C 36 137 45 128 74 124 S 127 94 159 107 S 209 85 240 90 S 308 48 335 56 S 392 72 446 21','3개월':'M 0 147 C 44 128 61 156 90 116 S 152 138 190 86 S 236 97 278 61 S 346 89 382 42 S 417 45 446 17'};let path=paths[chartPeriod];let area=path+' L 446 175 L 0 175 Z';return `<div class="hero-chart-area"><div class="chart-head"><span class="chart-title">자산 흐름 <span style="color:#a8aeb7;font-weight:600">· 예시 추이</span></span><div class="time-filter">${['1주','1개월','3개월'].map(p=>`<button class="${chartPeriod===p?'chosen':''}" onclick="chartPeriod='${p}';render()">${p}</button>`).join('')}</div></div><div class="chart-visual"><span class="trend-bubble">↗ 2.8%</span><svg viewBox="0 0 446 175" preserveAspectRatio="none" aria-label="자산 변동 예시 그래프"><defs><linearGradient id="gradientFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#327fff" stop-opacity=".20"/><stop offset="100%" stop-color="#327fff" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#gradientFill)"/><path d="${path}" stroke="#2d80ff" stroke-width="3.7" stroke-linecap="round" fill="none"/><circle cx="446" cy="${chartPeriod==='3개월'?17:chartPeriod==='1주'?22:21}" r="6" fill="#2d80ff" stroke="white" stroke-width="4"/></svg></div><div class="chart-foot"><span>${chartPeriod==='1주'?'10.25':chartPeriod==='1개월'?'10.01':'08.01'}</span><span>${chartPeriod==='1주'?'10.31':chartPeriod==='1개월'?'10.31':'10.31'}</span></div></div>`}
-function accountRows(limit=99){return state.accounts.slice(0,limit).map(a=>`<div class="account-row">${symbol(a)}<div class="bank-copy"><div class="row-main">${escapeHTML(a.name)}</div><div class="row-sub">${escapeHTML(a.sub)}</div></div><div class="row-value">${fmt(a.balance)}<small>원</small></div><button class="row-push" aria-label="${escapeHTML(a.name)}에서 이체" onclick="openSheet('transfer','${a.id}')">${ico('chevron')}</button></div>`).join('')}
-function txIcon(t){const name=t.type==='transfer'?'transfer':t.type==='income'?'income':({'카페':'coffee','식비':'meal','교통':'bus','쇼핑':'bag','문화':'film','고정비':'wallet'}[t.category]||'wallet');return `<span class="tx-symbol ${t.type==='income'?'income':t.type==='transfer'?'transfer':''}">${ico(name)}</span>`}
-function txRows(items,limit=100){return items.slice(0,limit).map(t=>`<div class="tx-row">${txIcon(t)}<div class="tx-copy"><div class="row-main">${escapeHTML(t.name)}</div><div class="row-sub">${escapeHTML(t.type==='transfer'?nameAccount(t.account)+' → '+nameAccount(t.to):t.category+' · '+nameAccount(t.account))}</div></div><div><div class="tx-amount ${t.type}">${t.type==='transfer'?'이체 ':t.type==='income'?'+':'−'}${fmt(t.amount)}원</div><div class="tx-date">${t.date.slice(5).replace('-','.')}</div></div></div>`).join('')||'<div class="empty">거래 내역이 없어요.</div>'}
-function home(){const isStandalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;const installBanner=!isStandalone?`<div class="install-banner" onclick="openInstallSheet()"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:22px">📲</span><div><div style="font-size:13.5px;font-weight:700;color:#191f28">스마트폰 홈 화면에 앱 추가하기</div><div style="font-size:12px;color:#6b7684">바탕화면에서 터치 한 번으로 가계부를 바로 열어보세요</div></div></div><button class="btn-install-mini">추가하기</button></div>`:'';const pct=Math.min(100,Math.round(expTotal()/state.budget*100));const cats=expCats(),maxcat=cats[0]?.[1]||1;return `${installBanner}<div class="page-kicker"><span>2026년 10월 31일 · 토요일</span><span class="signal">개인 가계부 · 데모</span></div><section class="overview-hero"><div class="hero-left"><div class="hero-eyebrow">전체 자산</div><h1 class="balance-number">${fmt(balance())}<small>원</small></h1><div class="delta"><span class="asset-chip">${state.accounts.length}개 계좌 합산</span><span>수입 · 지출 · 이체 반영</span></div><div class="action-row"><button class="btn-primary" onclick="openSheet('expense')">${ico('plus')} 내역 추가</button><button class="btn-secondary" onclick="openSheet('transfer')">${ico('swap')} 계좌 이체</button></div></div>${heroChart()}</section><div class="section-space"></div><div class="grid-body"><section class="surface"><div class="section-heading"><h2 class="section-title">내 계좌</h2><button class="link-btn" onclick="go('assets')">모두 보기 ${ico('chevron')}</button></div>${accountRows(3)}</section><section class="surface"><div class="section-heading"><h2 class="section-title">이번 달</h2><button class="link-btn" onclick="go('budget')">예산 관리 ${ico('chevron')}</button></div><div class="spend-wrap"><div class="spend-overline">총 지출</div><div class="spend-num">${fmt(expTotal())}<small>원</small></div><div class="spend-compare"><b>${pct}%</b> 사용했어요 · 월 예산 ${fmt(state.budget)}원</div><div class="budget-head"><span>이번 달 예산</span><strong>${remain()>=0?'남은 '+fmt(remain())+'원':'초과 '+fmt(-remain())+'원'}</strong></div><div class="progress"><span style="width:${pct}%"></span></div><div class="categories">${(cats.length?cats:[['식비',3],['쇼핑',2],['고정비',1],['카페',.5]]).slice(0,5).map(([name,n])=>`<span title="${escapeHTML(name)}" class="catbar" style="flex:${Math.max(.1,n)};height:${Math.max(14,Math.round(n/maxcat*100))}%"></span>`).join('')}</div><div class="catlegend"><span>카테고리별 지출</span><span>${cats.length}개 카테고리</span></div></div></section></div><div class="overview-bottom"><section class="surface"><div class="section-heading"><h2 class="section-title">최근 거래</h2><button class="link-btn" onclick="go('transactions')">전체 내역 ${ico('chevron')}</button></div><div class="transaction-list">${txRows([...state.transactions].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id),5)}</div></section><section class="surface bottom-aside"><div><span class="note-mark">${ico('sparkle')}</span><h2 class="note-title">이번 달 지출,<br>한눈에 살펴보기</h2><p class="note-copy">가장 많이 사용한 항목부터<br>예산까지, 필요한 숫자만 정리했어요.</p></div><button class="note-action" onclick="go('insights')">소비 자세히 보기 ${ico('arrow')}</button></section></div>`}
-function pageHeader(title,sub){return `<div class="subpage-intro"><div class="eyebrow">YOUR MONEY, CLEARLY.</div><h1>${title}</h1><p>${sub}</p></div>`}
-function transactions(){let items=[...state.transactions].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).filter(t=>(txFilter==='all'||txFilter===t.type)&&(!txQuery||`${t.name} ${t.category} ${nameAccount(t.account)}`.toLowerCase().includes(txQuery.toLowerCase())));return `${pageHeader('거래 내역','돈이 오간 순간을 빠짐없이 확인해요.')}<div class="subpage-layout"><section class="surface"><div class="section-heading"><h2 class="section-title">전체 기록</h2><button class="link-btn" onclick="openSheet('expense')">${ico('plus')} 추가하기</button></div><div class="field-search">${ico('search')}<input id="txSearch" aria-label="거래 검색" placeholder="거래명, 카테고리 검색" value="${escapeHTML(txQuery)}" oninput="txQuery=this.value;document.getElementById('txResult').innerHTML=txRows(filteredItems());"></div><div class="minitabs">${[['all','전체'],['expense','지출'],['income','수입'],['transfer','이체']].map(([key,label])=>`<button class="${txFilter===key?'active':''}" onclick="txFilter='${key}';render()">${label}</button>`).join('')}</div><div id="txResult">${txRows(items)}</div></section><aside class="surface"><div class="section-heading"><h2 class="section-title">10월 한눈에</h2></div><div class="page-balance"><span>이번 달 수입</span><strong>+ ${fmt(incTotal())}원</strong></div><div class="stat-panel"><div class="sub-muted">이번 달 지출</div><div class="stat-big">${fmt(expTotal())}원</div><div class="sub-muted">이체는 수입·지출 계산에서 제외돼요.</div></div></aside></div>`}
-function filteredItems(){return [...state.transactions].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).filter(t=>(txFilter==='all'||txFilter===t.type)&&(!txQuery||`${t.name} ${t.category} ${nameAccount(t.account)}`.toLowerCase().includes(txQuery.toLowerCase())))}
-function assets(){return `${pageHeader('내 자산','계좌별 잔액을 확인하고 필요한 곳으로 이체해요.')}<div class="subpage-layout"><section class="surface"><div class="section-heading"><h2 class="section-title">연결된 계좌 <span class="sub-muted">${state.accounts.length}</span></h2><button class="link-btn" onclick="openAccountSheet()">${ico('plus')} 계좌 추가</button></div>${state.accounts.map(a=>`<div class="account-tile">${symbol(a)}<div><div class="row-main">${escapeHTML(a.name)}</div><div class="row-sub">${escapeHTML(a.sub)}</div></div><div class="account-amount">${fmt(a.balance)}원</div><button onclick="openSheet('transfer','${a.id}')">이체</button></div>`).join('')}</section><aside class="surface"><div class="section-heading"><h2 class="section-title">전체 자산</h2></div><div class="page-balance"><span>보유 잔액 합계</span><strong>${fmt(balance())}원</strong></div><div class="stat-panel"><div class="insight-line"><span>입출금·저축·현금</span><strong>${state.accounts.length}개</strong></div><div class="insight-line"><span>계좌 간 이체</span><strong>총자산 변동 없음</strong></div><div class="insight-line"><span>지출</span><strong>지출 계좌에서 차감</strong></div><div class="insight-line"><span>수입</span><strong>수입 계좌에 가산</strong></div></div></aside></div>`}
-function budget(){const pct=Math.min(100,Math.round(expTotal()/state.budget*100));const cats=expCats();return `${pageHeader('예산 관리','얼마나 쓸 수 있는지, 이제 한 번에 확인해요.')}<div class="subpage-layout"><section class="surface"><div class="section-heading"><h2 class="section-title">10월 지출</h2><button class="budget-edit" onclick="editBudget()">예산 수정</button></div><div class="budget-card"><div class="spend-overline">이번 달 사용 금액</div><div class="spend-num">${fmt(expTotal())}<small>원</small></div><div class="budget-head"><span>전체 ${fmt(state.budget)}원 중 ${Math.round(expTotal()/state.budget*100)}% 사용</span><strong>${remain()>=0?fmt(remain())+'원 남음':fmt(-remain())+'원 초과'}</strong></div><div class="progress"><span style="width:${pct}%"></span></div></div><div class="budget-list" style="margin-top:22px">${cats.map(([c,n])=>`<div class="insight-line"><span>${escapeHTML(c)}</span><strong>${fmt(n)}원</strong></div>`).join('')}</div></section><aside class="surface"><h2 class="section-title">이번 달 목표</h2><div class="pie-graphic"></div><div class="stat-panel"><div class="insight-line"><span>이번 달 수입</span><strong>${fmt(incTotal())}원</strong></div><div class="insight-line"><span>이번 달 지출</span><strong>${fmt(expTotal())}원</strong></div><div class="insight-line"><span>잔여 예산</span><strong>${money(remain())}</strong></div></div></aside></div>`}
-function insights(){const cats=expCats();return `${pageHeader('소비 리포트','복잡한 숫자 대신 꼭 필요한 것만 보여드려요.')}<div class="subpage-layout"><section class="surface"><div class="section-heading"><h2 class="section-title">어디에 돈을 썼을까요?</h2><span class="sub-muted">2026년 10월</span></div><div class="stat-big">${fmt(expTotal())}<span style="font-size:18px">원</span></div><p class="sub-muted">카테고리별 지출 합계 · 실제 입력한 내역 기준</p><div style="margin-top:28px">${cats.map(([c,n],i)=>`<div style="padding:14px 0"><div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:750;margin-bottom:11px"><span>${escapeHTML(c)}</span><span>${fmt(n)}원</span></div><div class="progress" style="margin:0;height:7px"><span style="width:${Math.min(100,n/expTotal()*100)}%;background:${['#267bff','#74a6f4','#a7c7f3','#d5e4f5','#c6d0de'][Math.min(i,4)]}"></span></div></div>`).join('')}</div></section><aside class="surface"><div class="section-heading"><h2 class="section-title">한 달 요약</h2></div><div class="page-balance"><span>가장 지출이 많은 카테고리</span><strong style="font-size:29px">${escapeHTML(cats[0]?.[0]||'아직 없음')}</strong></div><div class="stat-panel"><div class="insight-line"><span>이번 달 수입</span><strong>${fmt(incTotal())}원</strong></div><div class="insight-line"><span>이번 달 지출</span><strong>${fmt(expTotal())}원</strong></div><div class="insight-line"><span>수입 - 지출</span><strong>${money(incTotal()-expTotal())}</strong></div></div><p class="sub-muted" style="line-height:1.8;margin-top:17px">이 화면은 계산 기반 리포트예요. 실제 AI API와는 아직 연결되지 않았어요.</p></aside></div>`}
-function calendar(){const y=calendarYear,m=calendarMonth,first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();let cells=[];for(let i=0;i<first;i++)cells.push('<div></div>');for(let d=1;d<=days;d++){const dt=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,expense=state.transactions.filter(t=>t.date===dt&&t.type==='expense').reduce((s,t)=>s+t.amount,0);cells.push(`<button class="calday ${focusDate===dt?'selected':''}" onclick="focusDate='${dt}';render()"><span>${d}</span>${expense?`<small>−${fmt(expense)}</small>`:''}</button>`)}let items=state.transactions.filter(t=>t.date===focusDate).sort((a,b)=>b.id-a.id);return `${pageHeader('달력 가계부','날짜별로 수입과 지출을 빠르게 찾아보세요.')}<div class="subpage-layout"><section class="surface"><div class="calendar-toolbar"><h2>${y}년 ${m+1}월</h2><div style="display:flex;gap:8px"><button onclick="shiftMonth(-1)" aria-label="이전 달">${ico('left')}</button><button onclick="shiftMonth(1)" aria-label="다음 달">${ico('right')}</button></div></div><div class="calendar-grid">${['일','월','화','수','목','금','토'].map(x=>`<div class="dow">${x}</div>`).join('')}${cells.join('')}</div></section><aside class="surface"><div class="section-heading"><h2 class="section-title">${focusDate.replaceAll('-','.')} 내역</h2><button class="link-btn" onclick="openSheet('expense')">${ico('plus')} 추가</button></div>${txRows(items)}</aside></div>`}
-function render(){
+
+let store = () => { try { localStorage.setItem('moa_editorial_v4', JSON.stringify(state)); } catch(e) {} };
+
+let view = 'home';
+let currentSheet = 'expense';
+let selectedCategory = '식비';
+let selectedAccount = 'toss';
+let selectedToAccount = 'kakao';
+let chartPeriod = '1개월';
+let calendarYear = 2026, calendarMonth = 9; // Oct 2026
+
+const fmt = n => Number(n || 0).toLocaleString('ko-KR');
+const balance = () => (state.accounts || []).reduce((sum, a) => sum + (Number(a.balance) || 0), 0);
+const monthItems = () => (state.transactions || []).filter(t => t && t.date);
+const expTotal = () => monthItems().filter(t => t.type === 'expense').reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+const incTotal = () => monthItems().filter(t => t.type === 'income').reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+const remain = () => (Number(state.budget) || 500000) - expTotal();
+
+const categoryEmojis = {
+  '식비': '🍽️', '카페': '☕', '쇼핑': '🛒', '교통': '🚌',
+  '편의점': '🏪', '문화': '🎬', '고정비': '💡', '용돈': '💵',
+  '월급': '💰', '이체': '🔄', '기타': '💬'
+};
+
+const bankBadges = {
+  toss: '<div class="bank-badge toss">t</div>',
+  kakao: '<div class="bank-badge kakao">B</div>',
+  cash: '<div class="bank-badge cash">₩</div>',
+  new: '<div class="bank-badge other">+</div>'
+};
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(window._toaster);
+  window._toaster = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function renderDock() {
+  const tabs = [
+    { id: 'home', label: '홈', icon: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>' },
+    { id: 'transactions', label: '내역', icon: '<path d="M5 5h14M5 12h14M5 19h14"/><circle cx="3" cy="5" r=".7" fill="currentColor"/><circle cx="3" cy="12" r=".7" fill="currentColor"/><circle cx="3" cy="19" r=".7" fill="currentColor"/>' },
+    { id: 'calendar', label: '달력', icon: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>' },
+    { id: 'insights', label: '분석', icon: '<path d="m4 17 5-5 3 3 8-8M15 7h5v5"/>' }
+  ];
+  document.getElementById('bottomDock').innerHTML = tabs.map(t => `
+    <button class="dock-btn ${view === t.id ? 'active' : ''}" onclick="go('${t.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${t.icon}</svg>
+      <span>${t.label}</span>
+    </button>
+  `).join('');
+}
+
+function go(tabId) {
+  view = tabId;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  render();
+}
+
+function heroChart() {
+  const paths = {
+    '1주': 'M 0 95 C 45 105 60 50 110 70 S 170 110 210 65 S 290 85 330 35 S 400 70 446 20',
+    '1개월': 'M 0 115 C 40 115 50 100 80 95 S 130 75 165 85 S 215 70 245 75 S 315 40 340 45 S 400 60 446 18',
+    '3개월': 'M 0 120 C 50 105 65 130 95 95 S 160 115 195 70 S 245 80 285 50 S 355 75 390 35 S 425 38 446 14'
+  };
+  const path = paths[chartPeriod] || paths['1개월'];
+  const area = path + ' L 446 140 L 0 140 Z';
+  return `
+    <div style="margin-top:14px;background:#f9fafb;border-radius:18px;padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-size:13px;font-weight:800;color:#4e5968">자산 변동 흐름</span>
+        <div class="chart-filter">
+          ${['1주','1개월','3개월'].map(p => `<button class="${chartPeriod===p?'active':''}" onclick="chartPeriod='${p}';render()">${p}</button>`).join('')}
+        </div>
+      </div>
+      <div style="position:relative;height:100px;width:100%">
+        <svg viewBox="0 0 446 140" preserveAspectRatio="none" style="width:100%;height:100%">
+          <defs>
+            <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3182f6" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#3182f6" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="${area}" fill="url(#grad)"/>
+          <path d="${path}" stroke="#3182f6" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  `;
+}
+
+function home() {
+  const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone;
+  const pwaBanner = !isStandalone ? `
+    <div class="pwa-banner" onclick="openInstallSheet()">
+      <div class="pwa-banner-left">
+        <span class="pwa-banner-icon">📲</span>
+        <div>
+          <div class="pwa-banner-title">홈 화면에 MOA 앱 설치하기</div>
+          <div class="pwa-banner-desc">스마트폰 바탕화면에서 터치 한 번으로 바로 열기</div>
+        </div>
+      </div>
+      <button class="pwa-banner-btn">추가</button>
+    </div>
+  ` : '';
+
+  const pct = Math.min(100, Math.round(expTotal() / (state.budget || 1) * 100));
+
+  return `
+    ${pwaBanner}
+
+    <!-- Total Asset Hero Card -->
+    <section class="hero-card">
+      <div class="hero-label">
+        <span>내 전체 자산</span>
+        <span style="color:#04b074;font-size:12.5px;font-weight:800">● 실시간 반영</span>
+      </div>
+      <div class="hero-balance">${fmt(balance())}<small>원</small></div>
+      <div class="hero-chips">
+        <span class="hero-chip accent">${state.accounts.length}개 계좌 합산</span>
+        <span class="hero-chip">이번달 ${fmt(incTotal())}원 입금</span>
+      </div>
+      <div class="hero-actions">
+        <button class="hero-btn primary" onclick="openSheet('expense')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          1초 지출 입력
+        </button>
+        <button class="hero-btn secondary" onclick="openSheet('transfer')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+          계좌 이체
+        </button>
+      </div>
+      ${heroChart()}
+    </section>
+
+    <!-- Bank Accounts Card -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">내 계좌</span>
+        <button class="card-link" onclick="openAccountSheet()">+ 계좌 등록</button>
+      </div>
+      <div class="accounts-list">
+        ${state.accounts.map(a => `
+          <div class="account-item">
+            <div class="account-left">
+              ${bankBadges[a.type] || bankBadges.other}
+              <div>
+                <div class="account-info-name">${a.name}</div>
+                <div class="account-info-sub">${a.sub || '입출금'}</div>
+              </div>
+            </div>
+            <div class="account-right">
+              <span class="account-balance">${fmt(a.balance)}원</span>
+              <button class="btn-transfer-mini" onclick="openSheet('transfer', '${a.id}')">이체</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <!-- Monthly Budget Card -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">이번 달 쓴 돈</span>
+        <button class="card-link" onclick="editBudget()">예산 수정</button>
+      </div>
+      <div style="font-size:24px;font-weight:900;color:var(--toss-text-main);margin-bottom:4px">
+        ${fmt(expTotal())}<span style="font-size:16px;font-weight:700">원</span>
+        <span style="font-size:13px;color:#8b95a1;font-weight:600;margin-left:6px">/ ${fmt(state.budget)}원</span>
+      </div>
+      <div class="budget-bar-wrap">
+        <div class="budget-bar" style="width:${pct}%"></div>
+      </div>
+      <div class="budget-desc">
+        <span>${pct}% 지출됨</span>
+        <span style="color:${remain() >= 0 ? '#3182f6' : '#f04452'}">
+          ${remain() >= 0 ? '남은 용돈 ' + fmt(remain()) + '원' : fmt(Math.abs(remain())) + '원 초과'}
+        </span>
+      </div>
+    </section>
+
+    <!-- Recent Transactions Card -->
+    <section class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        <span class="card-title">최근 내역</span>
+        <button class="card-link" onclick="go('transactions')">전체보기 ›</button>
+      </div>
+      <div class="tx-list">
+        ${state.transactions.slice(0, 5).map(t => `
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon">${categoryEmojis[t.category] || '💸'}</div>
+              <div>
+                <div class="tx-title">${t.name || t.category}</div>
+                <div class="tx-sub">${t.date} · ${(state.accounts.find(a=>a.id===t.account)||{}).name || '계좌'}</div>
+              </div>
+            </div>
+            <div class="tx-amount ${t.type}">
+              ${t.type==='income' ? '+' : t.type==='expense' ? '-' : ''}${fmt(t.amount)}원
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function transactions() {
+  return `
+    <section class="card" style="margin-top:14px;margin-bottom:20px">
+      <div class="card-header">
+        <span class="card-title">전체 거래 내역</span>
+        <span style="font-size:13px;color:#8b95a1;font-weight:700">총 ${state.transactions.length}건</span>
+      </div>
+      <div class="tx-list">
+        ${state.transactions.map(t => `
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon">${categoryEmojis[t.category] || '💸'}</div>
+              <div>
+                <div class="tx-title">${t.name || t.category}</div>
+                <div class="tx-sub">${t.date} · ${(state.accounts.find(a=>a.id===t.account)||{}).name || '계좌'} · ${t.category}</div>
+              </div>
+            </div>
+            <div class="tx-amount ${t.type}">
+              ${t.type==='income' ? '+' : t.type==='expense' ? '-' : ''}${fmt(t.amount)}원
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function calendar() {
+  return `
+    <section class="card" style="margin-top:14px;margin-bottom:20px">
+      <div class="card-header">
+        <span class="card-title">2026년 10월 소비 달력</span>
+        <span style="font-size:13px;color:var(--toss-blue);font-weight:800">지출 ${fmt(expTotal())}원</span>
+      </div>
+      <div style="background:#f9fafb;border-radius:16px;padding:16px;text-align:center;color:#4e5968;font-size:14px;line-height:1.7;margin-top:8px">
+        📅 달력 모드에서 일별 지출 요약을 확인하실 수 있습니다.<br>
+        하단 <strong>[+]</strong> 버튼으로 언제든 지출을 날짜별로 기록할 수 있어요.
+      </div>
+    </section>
+  `;
+}
+
+function insights() {
+  const cats = {};
+  monthItems().filter(t=>t.type==='expense').forEach(t => {
+    cats[t.category] = (cats[t.category] || 0) + Number(t.amount || 0);
+  });
+  const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const total = expTotal() || 1;
+
+  return `
+    <section class="card" style="margin-top:14px;margin-bottom:20px">
+      <div class="card-header">
+        <span class="card-title">카테고리별 지출 분석</span>
+        <span style="font-size:13px;color:#8b95a1;font-weight:700">10월 현황</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:10px">
+        ${sorted.map(([cat, amt]) => {
+          const pct = Math.round(amt / total * 100);
+          return `
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:750;margin-bottom:5px">
+                <span>${categoryEmojis[cat]||'💬'} ${cat}</span>
+                <span>${fmt(amt)}원 (${pct}%)</span>
+              </div>
+              <div style="background:#f2f4f6;border-radius:99px;height:8px;overflow:hidden">
+                <div style="background:var(--toss-blue);width:${pct}%;height:100%;border-radius:99px"></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function render() {
   try {
-    nav();
-    const pageFn = ({home,transactions,assets,calendar,budget,insights}[view]||home);
-    document.getElementById('main').innerHTML = pageFn();
+    renderDock();
+    const views = { home, transactions, calendar, insights };
+    const html = (views[view] || home)();
+    document.getElementById('main').innerHTML = html;
   } catch(err) {
     console.error('Render error:', err);
-    document.getElementById('main').innerHTML = '<div style="padding:40px 20px;text-align:center;max-width:440px;margin:40px auto;background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.06)"><h2 style="font-size:18px;margin-bottom:8px;font-weight:700">화면을 불러오는 중 오류가 발생했어요</h2><p style="font-size:13.5px;color:#6b7684;margin-bottom:20px;line-height:1.6">데이터 형식을 확인하고 있어요. 아래 버튼을 눌러 시연 데이터를 초기화해 보세요.</p><button class="btn-primary" style="margin:0 auto" onclick="state=clone(initial);store();render();toast(\'데이터를 초기화했어요\')">데이터 초기화</button></div>';
+    document.getElementById('main').innerHTML = `
+      <div style="padding:40px 20px;text-align:center;background:#fff;border-radius:20px;margin:20px 16px">
+        <h2 style="font-size:18px;margin-bottom:8px">화면 로드 중 문제가 발생했어요</h2>
+        <button class="submit-btn" onclick="state=clone(initial);store();render();toast('초기화 완료')">데이터 초기화</button>
+      </div>
+    `;
   }
 }
-function go(id){view=id;txQuery='';window.scrollTo({top:0,behavior:'instant'});render()}
-function shiftMonth(n){calendarMonth+=n;if(calendarMonth>11){calendarYear++;calendarMonth=0}else if(calendarMonth<0){calendarYear--;calendarMonth=11}focusDate=`${calendarYear}-${String(calendarMonth+1).padStart(2,'0')}-01`;render()}
-function formAccountOptions(sel){return state.accounts.map(a=>`<option value="${a.id}" ${a.id===sel?'selected':''}>${escapeHTML(a.name)} · ${fmt(a.balance)}원</option>`).join('')}
-function openSheet(type='expense',from=''){currentSheet=type;let root=document.getElementById('dialogRoot');root.innerHTML=`<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="거래 추가"><span class="sheet-handle"></span><div class="sheet-top"><h2>새 거래</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><div class="sheet-tabs">${[['expense','지출'],['income','수입'],['transfer','이체']].map(([id,t])=>`<button class="${type===id?'active':''}" onclick="openSheet('${id}')">${t}</button>`).join('')}</div><form id="entryForm" onsubmit="saveEntry(event)"><label class="form-label" for="entryAmount">금액</label><div class="amount-wrap"><input id="entryAmount" type="number" min="1" step="1" placeholder="0" required inputmode="numeric"><span>원</span></div><div id="expenseFields" style="${type==='transfer'?'display:none':''}"><label class="form-label" for="entryName">거래 내용</label><input class="form-control" id="entryName" placeholder="예: 오늘 점심"><div class="form-row"><div><label class="form-label" for="entryCategory">카테고리</label><select class="form-control" id="entryCategory">${(type==='income'?['월급','용돈','기타 수입']:['식비','카페','쇼핑','교통','문화','고정비','기타']).map(c=>`<option>${c}</option>`).join('')}</select></div><div><label class="form-label" for="entryAccount">${type==='income'?'입금 계좌':'출금 계좌'}</label><select class="form-control" id="entryAccount">${formAccountOptions(from||'toss')}</select></div></div></div><div id="transferFields" style="${type!=='transfer'?'display:none':''}"><div class="form-row"><div><label class="form-label" for="entryFrom">보내는 계좌</label><select class="form-control" id="entryFrom">${formAccountOptions(from||'toss')}</select></div><div><label class="form-label" for="entryTo">받는 계좌</label><select class="form-control" id="entryTo">${formAccountOptions(from==='kakao'?'toss':'kakao')}</select></div></div><label class="form-label" for="transferName">메모 (선택)</label><input id="transferName" class="form-control" placeholder="예: 저축 통장으로 이동"></div><label class="form-label" for="entryDate">날짜</label><input type="date" class="form-control" value="${view==='calendar'?focusDate:todayStr}" id="entryDate" required><button class="submit-btn" type="submit">${type==='transfer'?'이체하기':'거래 저장하기'}</button></form></section></div>`;document.body.style.overflow='hidden';document.getElementById('entryAmount').focus()}
-function closeSheet(){document.getElementById('dialogRoot').innerHTML='';document.body.style.overflow=''}
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(window.toaster);window.toaster=setTimeout(()=>el.classList.remove('show'),2800)}
-function saveEntry(e){e.preventDefault();const amt=Math.round(Number(document.getElementById('entryAmount').value)),date=document.getElementById('entryDate').value;if(!Number.isFinite(amt)||amt<=0||!date){toast('금액과 날짜를 확인해 주세요');return}let tx={id:Date.now(),type:currentSheet,amount:amt,date};if(currentSheet==='transfer'){const from=document.getElementById('entryFrom').value,to=document.getElementById('entryTo').value;if(from===to){toast('서로 다른 계좌를 선택해 주세요');return}const a=state.accounts.find(x=>x.id===from),b=state.accounts.find(x=>x.id===to);if(a.balance<amt){toast('보내는 계좌의 잔액이 부족해요');return}a.balance-=amt;b.balance+=amt;tx.account=from;tx.to=to;tx.category='이체';tx.name=document.getElementById('transferName').value.trim()||'계좌 이체'}else{const id=document.getElementById('entryAccount').value,a=state.accounts.find(x=>x.id===id);if(currentSheet==='expense'&&a.balance<amt){toast('출금 계좌의 잔액이 부족해요');return}a.balance+=currentSheet==='income'?amt:-amt;tx.account=id;tx.category=document.getElementById('entryCategory').value;tx.name=document.getElementById('entryName').value.trim()||tx.category}state.transactions.unshift(tx);store();closeSheet();render();toast(currentSheet==='transfer'?'이체했어요. 총자산은 그대로예요.':'거래가 저장됐어요')}
-function openAccountSheet(){document.getElementById('dialogRoot').innerHTML=`<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="계좌 추가"><span class="sheet-handle"></span><div class="sheet-top"><h2>새 계좌 등록</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><form onsubmit="saveAccount(event)"><label class="form-label" for="accName">계좌 이름</label><input class="form-control" id="accName" placeholder="예: 여행 적금" required maxlength="30"><label class="form-label" for="accBalance">현재 잔액</label><input class="form-control" id="accBalance" type="number" min="0" value="0" required><label class="form-label" for="accSub">설명</label><input class="form-control" id="accSub" placeholder="예: 자유 적금"><button class="submit-btn">계좌 추가하기</button></form></section></div>`;document.body.style.overflow='hidden';document.getElementById('accName').focus()}
-function saveAccount(e){e.preventDefault();const name=document.getElementById('accName').value.trim(),sub=document.getElementById('accSub').value.trim()||'내 계좌',balanceValue=Number(document.getElementById('accBalance').value);if(!name||!Number.isFinite(balanceValue)||balanceValue<0)return;state.accounts.push({id:'custom_'+Date.now(),name,sub,balance:Math.round(balanceValue),type:'new'});store();closeSheet();render();toast('계좌를 추가했어요')}
-function editBudget(){const n=prompt('새로운 월 예산을 입력해 주세요 (원)',state.budget);if(n===null)return;const val=Number(String(n).replace(/,/g,''));if(!Number.isFinite(val)||val<=0){toast('올바른 금액을 입력해 주세요');return}state.budget=Math.round(val);store();render();toast('예산을 수정했어요')}
-function openSettings(){document.getElementById('dialogRoot').innerHTML=`<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="설정"><span class="sheet-handle"></span><div class="sheet-top"><h2>설정</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><p class="sub-muted" style="line-height:1.8;margin:25px 0">이 파일은 디자인 시연용이에요. 입력한 데이터는 이 브라우저의 로컬 스토리지에 저장되며, 실제 은행 계좌나 서버에 연결되지 않아요.</p><button class="btn-secondary" style="width:100%" onclick="if(confirm('시연 데이터를 초기화할까요?')){state=clone(initial);store();closeSheet();go('home');toast('시연 데이터를 초기화했어요')}">시연 데이터 초기화</button></section></div>`;document.body.style.overflow='hidden'}
 
+/* 1-Second Fast Entry Bottom Sheet */
+function openSheet(type = 'expense', defaultAcc = '') {
+  currentSheet = type;
+  if (defaultAcc) selectedAccount = defaultAcc;
+  const categories = type === 'income' 
+    ? ['용돈', '월급', '기타 수입'] 
+    : ['식비', '카페', '쇼핑', '교통', '편의점', '문화', '고정비', '기타'];
+  selectedCategory = categories[0];
 
+  const root = document.getElementById('dialogRoot');
+  root.innerHTML = `
+    <div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()">
+      <section class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div class="sheet-top">
+          <h2>1초 내역 추가</h2>
+          <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
+        </div>
+
+        <div class="sheet-modes">
+          <button class="sheet-mode-btn ${currentSheet==='expense'?'active':''}" onclick="openSheet('expense')">지출</button>
+          <button class="sheet-mode-btn ${currentSheet==='income'?'active':''}" onclick="openSheet('income')">수입</button>
+          <button class="sheet-mode-btn ${currentSheet==='transfer'?'active':''}" onclick="openSheet('transfer')">이체</button>
+        </div>
+
+        <form onsubmit="saveEntry(event)">
+          <div class="amount-container">
+            <div class="amount-label">${currentSheet==='income'?'입금할 금액':currentSheet==='transfer'?'이체할 금액':'지출한 금액'}</div>
+            <div class="amount-row">
+              <input type="number" id="entryAmount" class="amount-input" placeholder="0" min="1" step="1" inputmode="numeric" required autofocus>
+              <span class="amount-unit">원</span>
+            </div>
+            <div class="quick-add-row">
+              <button type="button" class="quick-add-btn" onclick="addAmount(10000)">+1만</button>
+              <button type="button" class="quick-add-btn" onclick="addAmount(30000)">+3만</button>
+              <button type="button" class="quick-add-btn" onclick="addAmount(50000)">+5만</button>
+              <button type="button" class="quick-add-btn" onclick="addAmount(100000)">+10만</button>
+            </div>
+          </div>
+
+          ${currentSheet !== 'transfer' ? `
+            <div class="form-group">
+              <label class="form-label">카테고리</label>
+              <div class="chips-grid">
+                ${categories.map(c => `
+                  <button type="button" class="chip-btn ${selectedCategory===c?'selected':''}" onclick="selectCategory('${c}')">
+                    ${categoryEmojis[c]||''} ${c}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">${currentSheet==='income'?'입금 계좌':'출금 계좌'}</label>
+              <div class="chips-grid">
+                ${state.accounts.map(a => `
+                  <button type="button" class="chip-btn ${selectedAccount===a.id?'selected':''}" onclick="selectAccount('${a.id}')">
+                    ${a.name}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">메모 (선택)</label>
+              <input type="text" id="entryName" class="form-input" placeholder="어디에 쓰셨나요? (예: 스타벅스)">
+            </div>
+          ` : `
+            <div class="form-group">
+              <label class="form-label">보내는 계좌</label>
+              <div class="chips-grid">
+                ${state.accounts.map(a => `
+                  <button type="button" class="chip-btn ${selectedAccount===a.id?'selected':''}" onclick="selectAccount('${a.id}')">
+                    ${a.name} (${fmt(a.balance)}원)
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">받는 계좌</label>
+              <div class="chips-grid">
+                ${state.accounts.map(a => `
+                  <button type="button" class="chip-btn ${selectedToAccount===a.id?'selected':''}" onclick="selectToAccount('${a.id}')">
+                    ${a.name}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">메모 (선택)</label>
+              <input type="text" id="entryName" class="form-input" placeholder="이체 메모 (예: 생활비 이동)">
+            </div>
+          `}
+
+          <input type="hidden" id="entryDate" value="${new Date().toISOString().slice(0,10)}">
+          <button type="submit" class="submit-btn">${currentSheet==='transfer'?'이체 완료':'기록 저장하기'}</button>
+        </form>
+      </section>
+    </div>
+  `;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    const inp = document.getElementById('entryAmount');
+    if (inp) inp.focus();
+  }, 100);
+}
+
+function addAmount(n) {
+  const inp = document.getElementById('entryAmount');
+  if (inp) {
+    inp.value = Number(inp.value || 0) + n;
+  }
+}
+
+function selectCategory(c) {
+  selectedCategory = c;
+  document.querySelectorAll('.chips-grid .chip-btn').forEach(btn => {
+    if (btn.textContent.includes(c)) btn.classList.add('selected');
+    else if (!btn.textContent.includes('통장') && !btn.textContent.includes('은행') && !btn.textContent.includes('현금')) btn.classList.remove('selected');
+  });
+}
+
+function selectAccount(id) {
+  selectedAccount = id;
+  const acc = state.accounts.find(a=>a.id===id);
+  if (acc) {
+    toast(acc.name + ' 선택됨');
+  }
+}
+
+function selectToAccount(id) {
+  selectedToAccount = id;
+  const acc = state.accounts.find(a=>a.id===id);
+  if (acc) {
+    toast('받는 계좌: ' + acc.name);
+  }
+}
+
+function closeSheet() {
+  document.getElementById('dialogRoot').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function saveEntry(e) {
+  e.preventDefault();
+  const amt = Math.round(Number(document.getElementById('entryAmount').value));
+  const date = document.getElementById('entryDate').value || new Date().toISOString().slice(0,10);
+  const memo = (document.getElementById('entryName').value || '').trim();
+
+  if (!amt || amt <= 0) {
+    toast('금액을 입력해 주세요');
+    return;
+  }
+
+  let tx = { id: Date.now(), type: currentSheet, amount: amt, date };
+
+  if (currentSheet === 'transfer') {
+    if (selectedAccount === selectedToAccount) {
+      toast('서로 다른 계좌를 선택해 주세요');
+      return;
+    }
+    const fromAcc = state.accounts.find(a => a.id === selectedAccount);
+    const toAcc = state.accounts.find(a => a.id === selectedToAccount);
+    if (!fromAcc || !toAcc) return;
+    if (fromAcc.balance < amt) {
+      toast('보내는 계좌의 잔액이 부족해요');
+      return;
+    }
+    fromAcc.balance -= amt;
+    toAcc.balance += amt;
+    tx.account = fromAcc.id;
+    tx.to = toAcc.id;
+    tx.category = '이체';
+    tx.name = memo || `${fromAcc.name} → ${toAcc.name}`;
+  } else {
+    const acc = state.accounts.find(a => a.id === selectedAccount) || state.accounts[0];
+    if (currentSheet === 'expense' && acc.balance < amt) {
+      toast('출금 계좌의 잔액이 부족해요');
+      return;
+    }
+    acc.balance += (currentSheet === 'income' ? amt : -amt);
+    tx.account = acc.id;
+    tx.category = selectedCategory || '기타';
+    tx.name = memo || selectedCategory;
+  }
+
+  state.transactions.unshift(tx);
+  store();
+  closeSheet();
+  render();
+  toast(currentSheet === 'transfer' ? '이체를 완료했어요' : '거래를 저장했어요! 🎉');
+}
+
+function openAccountSheet() {
+  const root = document.getElementById('dialogRoot');
+  root.innerHTML = `
+    <div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()">
+      <section class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div class="sheet-top">
+          <h2>새 계좌 등록</h2>
+          <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
+        </div>
+        <form onsubmit="saveAccount(event)">
+          <div class="form-group">
+            <label class="form-label">계좌 이름</label>
+            <input id="accName" class="form-input" placeholder="예: 비상금 통장" required maxlength="30" autofocus>
+          </div>
+          <div class="form-group">
+            <label class="form-label">현재 잔액 (원)</label>
+            <input id="accBalance" type="number" class="form-input" placeholder="0" min="0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">설명</label>
+            <input id="accSub" class="form-input" placeholder="예: 자유 적금">
+          </div>
+          <button type="submit" class="submit-btn">계좌 추가하기</button>
+        </form>
+      </section>
+    </div>
+  `;
+  document.body.style.overflow = 'hidden';
+}
+
+function saveAccount(e) {
+  e.preventDefault();
+  const name = document.getElementById('accName').value.trim();
+  const balance = Number(document.getElementById('accBalance').value) || 0;
+  const sub = document.getElementById('accSub').value.trim() || '내 계좌';
+  if (!name) return;
+
+  state.accounts.push({
+    id: 'acc_' + Date.now(),
+    name,
+    sub,
+    balance: Math.round(balance),
+    type: 'new'
+  });
+  store();
+  closeSheet();
+  render();
+  toast('새 계좌를 등록했어요!');
+}
+
+function editBudget() {
+  const cur = state.budget || 500000;
+  const n = prompt('새로운 월 예산을 입력해 주세요 (원)', cur);
+  if (n === null) return;
+  const val = Number(String(n).replace(/,/g, ''));
+  if (!Number.isFinite(val) || val <= 0) {
+    toast('올바른 금액을 입력해 주세요');
+    return;
+  }
+  state.budget = Math.round(val);
+  store();
+  render();
+  toast('예산을 수정했어요!');
+}
+
+/* Install sheet & Settings */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
@@ -224,73 +1361,99 @@ async function installPwaPrompt() {
 function openInstallSheet() {
   const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
   const root = document.getElementById('dialogRoot');
-  root.innerHTML = `<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="홈 화면에 앱 추가"><span class="sheet-handle"></span><div class="sheet-top"><h2>📲 홈 화면에 앱 추가 (설치)</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><div style="background:#f4f7fc;border-radius:16px;padding:20px;margin:20px 0;text-align:center"><img src="./moa-icon.png" style="width:64px;height:64px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,0.08);margin-bottom:12px" alt="MOA"><div style="font-weight:800;font-size:16px;color:#191f28;margin-bottom:4px">MOA 용돈 관리</div><div class="sub-muted" style="font-size:13px">스마트폰 바탕화면에 앱 아이콘으로 설치하고 편하게 쓰세요</div></div>${deferredPrompt ? `<button class="submit-btn" style="margin-top:0;margin-bottom:12px" onclick="installPwaPrompt()">⚡ 원클릭으로 홈 화면에 바로 추가</button>` : isIos ? `<div style="background:#fff;border:1px solid #e5e8eb;border-radius:14px;padding:16px;margin-bottom:16px;font-size:13px;color:#333d4b;line-height:1.8"><strong>아이폰(Safari)에서 홈 화면 추가:</strong><br>1. 사파리 하단 중앙의 <strong>[공유(네모에 화살표 ↑)]</strong> 버튼 터치<br>2. 메뉴에서 <strong>[홈 화면에 추가]</strong> 선택</div>` : `<div style="background:#fff;border:1px solid #e5e8eb;border-radius:14px;padding:16px;margin-bottom:16px;font-size:13px;color:#333d4b;line-height:1.8"><strong>안드로이드(크롬/삼성인터넷)에서 홈 화면 추가:</strong><br>1. 브라우저 우측 상단 <strong>[더보기 (⋮)]</strong> 터치<br>2. <strong>[홈 화면에 추가]</strong> 또는 <strong>[앱 설치]</strong> 선택</div>`}<button class="btn-secondary" style="width:100%;margin-bottom:10px" onclick="window.open('https://github.com/alpist12/moa/releases/latest','_blank')">📦 안드로이드 전용 APK 파일 다운로드</button><button class="btn-secondary" style="width:100%" onclick="closeSheet()">닫기</button></section></div>`;
+  root.innerHTML = `
+    <div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()">
+      <section class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div class="sheet-top">
+          <h2>📲 홈 화면에 앱 추가 (설치)</h2>
+          <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
+        </div>
+        <div style="background:#f4f7fc;border-radius:18px;padding:20px;margin:16px 0;text-align:center">
+          <img src="./moa-icon.png" style="width:64px;height:64px;border-radius:18px;box-shadow:0 6px 16px rgba(0,0,0,0.08);margin-bottom:12px" alt="MOA">
+          <div style="font-weight:900;font-size:17px;color:#191f28;margin-bottom:4px">MOA 용돈 관리</div>
+          <div style="font-size:13px;color:#8b95a1">스마트폰 바탕화면에 앱 아이콘으로 설치하고 편하게 쓰세요</div>
+        </div>
+
+        ${deferredPrompt ? `
+          <button class="submit-btn" style="margin-top:0;margin-bottom:12px" onclick="installPwaPrompt()">⚡ 원클릭으로 홈 화면에 바로 추가</button>
+        ` : isIos ? `
+          <div style="background:#fff;border:1.5px solid #e5e8eb;border-radius:16px;padding:16px;margin-bottom:16px;font-size:13px;color:#333d4b;line-height:1.8">
+            <strong>아이폰(Safari)에서 홈 화면 추가 방법:</strong><br>
+            1. 사파리 하단 중앙의 <strong>[공유(네모에 화살표 ↑)]</strong> 버튼 터치<br>
+            2. 메뉴에서 <strong>[홈 화면에 추가]</strong> 선택
+          </div>
+        ` : `
+          <div style="background:#fff;border:1.5px solid #e5e8eb;border-radius:16px;padding:16px;margin-bottom:16px;font-size:13px;color:#333d4b;line-height:1.8">
+            <strong>안드로이드(크롬/삼성인터넷)에서 홈 화면 추가:</strong><br>
+            1. 브라우저 우측 상단 <strong>[더보기 (⋮)]</strong> 터치<br>
+            2. <strong>[홈 화면에 추가]</strong> 또는 <strong>[앱 설치]</strong> 선택
+          </div>
+        `}
+
+        <button class="submit-btn" style="background:#f2f4f6;color:#4e5968;margin-top:0;margin-bottom:10px" onclick="window.open('https://github.com/alpist12/moa/releases/latest','_blank')">
+          📦 안드로이드 전용 APK 파일 다운로드
+        </button>
+        <button class="submit-btn" style="background:#ffffff;border:1.5px solid #e5e8eb;color:#8b95a1;margin-top:0" onclick="closeSheet()">닫기</button>
+      </section>
+    </div>
+  `;
   document.body.style.overflow = 'hidden';
 }
 
-const CURRENT_VERSION = '1.1.0';
-let authUser = null;
-let latestUpdateInfo = null;
-
-// Service Worker & Notifications
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2').catch(() => {});
+function openSettings() {
+  const root = document.getElementById('dialogRoot');
+  root.innerHTML = `
+    <div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()">
+      <section class="sheet" role="dialog" aria-modal="true">
+        <div class="sheet-handle"></div>
+        <div class="sheet-top">
+          <h2>설정 및 정보</h2>
+          <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
+        </div>
+        <div style="margin:16px 0;background:#f2f4f6;border-radius:18px;padding:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong style="font-size:15px">MOA 앱 버전</strong>
+            <span style="color:#8b95a1;font-weight:700">v1.1.0 (토스형 모바일 앱)</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+          <button class="submit-btn" style="background:#f2f4f6;color:#333d4b;margin-top:0" onclick="triggerGoogleAuth()">
+            ☁️ Google 로그인 / 클라우드 동기화 관리
+          </button>
+          <button class="submit-btn" style="background:#f2f4f6;color:#333d4b;margin-top:0" onclick="openInstallSheet()">
+            📲 스마트폰 홈 화면에 바로가기 앱 추가
+          </button>
+          <button class="submit-btn" style="background:#f2f4f6;color:#333d4b;margin-top:0" onclick="requestNotif()">
+            🔔 매일 저녁 지출 리마인더 알림 켜기
+          </button>
+          <button class="submit-btn" style="background:#f2f4f6;color:#333d4b;margin-top:0" onclick="checkForUpdates(true)">
+            ⚡ 새 업데이트 확인하기
+          </button>
+          <button class="submit-btn" style="background:#f2f4f6;color:#333d4b;margin-top:0" onclick="window.open('https://github.com/alpist12/moa/releases','_blank')">
+            📱 최신 안드로이드 APK 다운로드
+          </button>
+        </div>
+        <button class="submit-btn" style="background:#fff;border:1.5px solid #f04452;color:#f04452;margin-top:0" onclick="if(confirm('데이터를 초기화할까요?')){state=clone(initial);store();closeSheet();go('home');toast('데이터를 초기화했어요')}">
+          데이터 초기화
+        </button>
+      </section>
+    </div>
+  `;
+  document.body.style.overflow = 'hidden';
 }
 
-function checkDailyReminder() {
-  try {
-    const now = new Date();
-    const today = now.toISOString().slice(0, 10);
-    const key = 'moa_remind_' + today;
-    if (now.getHours() >= 20 && !localStorage.getItem(key)) {
-      const hasToday = (state.transactions || []).some(t => t.date === today);
-      if (!hasToday) {
-        localStorage.setItem(key, '1');
-        sendNotification('오늘 쓴 용돈 기록하기 📝', '오늘 쓴 지출을 잊지 말고 기록해 보세요!');
-      }
-    }
-  } catch(e) {}
-}
-
-function sendNotification(title, body) {
-  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-  try {
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, body });
-    } else {
-      new Notification(title, { body, icon: './moa-icon.png' });
-    }
-  } catch(e) {}
-}
-
-async function requestNotif() {
-  if (typeof Notification === 'undefined') {
-    toast('이 브라우저/기기는 알림 기능을 지원하지 않아요.');
-    return;
-  }
-  const perm = await Notification.requestPermission();
-  if (perm === 'granted') {
-    toast('🔔 알림이 켜졌어요! 매일 저녁 리마인더와 업데이트를 보내드려요.');
-    sendNotification('MOA 알림 활성화', '매일 저녁 용돈 기록 알림을 보내드려요!');
-  } else {
-    toast('알림 권한이 허용되지 않았어요.');
-  }
-}
-
-// Google Auth Sync Integration
+/* Auth & Notifications & Update */
 function updateAuthUI(connected, name) {
   const dot = document.getElementById('authDot');
   const text = document.getElementById('authText');
-  const avatar = document.getElementById('userAvatar');
-  if (dot) dot.className = 'auth-dot' + (connected ? ' connected' : '');
-  if (text) text.textContent = connected ? '동기화 됨' : 'Google 로그인';
-  if (avatar) avatar.textContent = connected ? (name ? name.slice(0, 1).toUpperCase() : '✓') : '나';
+  if (dot) dot.className = 'dot' + (connected ? ' connected' : '');
+  if (text) text.textContent = connected ? (name ? name.slice(0,3) : '연결됨') : 'Google';
 }
 
 window.addEventListener('moa-drive-change', ev => {
   if (ev && ev.detail) {
     const { connected, name, message } = ev.detail;
-    authUser = connected ? (name || '사용자') : null;
     updateAuthUI(connected, name);
     if (message && message.includes('실패')) toast(message);
   }
@@ -300,11 +1463,11 @@ function triggerGoogleAuth() {
   if (window.moaDrive && window.moaDrive.connect) {
     window.moaDrive.connect();
   } else {
-    toast('Google 동기화 모듈을 불러오는 중이에요. 잠시 후 다시 눌러주세요.');
+    toast('Google 동기화 모듈을 불러오는 중이에요');
   }
 }
 
-// Auto sync on state change
+// Hook store to Google Drive auto save
 const origStore = store;
 store = function() {
   origStore();
@@ -313,48 +1476,50 @@ store = function() {
   }
 };
 
-// In-app Updater
 async function checkForUpdates(manual = false) {
   try {
     const res = await fetch('./version.json?t=' + Date.now());
-    if (!res.ok) throw new Error('업데이트 정보를 불러오지 못했어요.');
+    if (!res.ok) throw new Error('정보 조회 실패');
     const info = await res.json();
-    latestUpdateInfo = info;
-    const isNew = info.version && info.version !== CURRENT_VERSION;
+    const isNew = info.version && info.version !== '1.1.0';
     const badge = document.getElementById('updateDot');
-    if (badge) badge.style.display = isNew ? 'block' : 'none';
-
-    if (isNew) {
-      if (manual) openUpdateModal(info, true);
-      else sendNotification('MOA 새 업데이트 출시! 🚀', 'v' + info.version + ' 버전이 나왔어요. 탭하여 확인해 보세요!');
-    } else if (manual) {
-      openUpdateModal(info, false);
-      toast('🎉 현재 최신 버전(v' + CURRENT_VERSION + ')을 사용하고 있어요!');
+    if (badge) {
+      badge.style.display = isNew ? 'inline-block' : 'none';
+      if (isNew) badge.className = 'dot alert';
+    }
+    if (manual) {
+      if (isNew) {
+        if (confirm(`새로운 v${info.version} 버전이 나왔어요! 업데이트할까요?`)) {
+          window.open(info.apkUrl || info.downloadUrl, '_blank');
+        }
+      } else {
+        toast('🎉 현재 최신 버전을 사용하고 있어요!');
+      }
     }
   } catch(e) {
-    if (manual) toast('업데이트 확인 실패: ' + e.message);
+    if (manual) toast('업데이트 확인 실패');
   }
 }
 
-function openUpdateModal(info, hasUpdate) {
-  const root = document.getElementById('dialogRoot');
-  root.innerHTML = `<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="업데이트"><span class="sheet-handle"></span><div class="sheet-top"><h2>${hasUpdate ? '🚀 새 버전 업데이트' : '🎉 최신 버전 이용 중'}</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><div style="background:#f4f7fc;border-radius:15px;padding:16px;margin:20px 0 16px"><div style="display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:#1769f4;margin-bottom:6px"><span>현재 버전: v${CURRENT_VERSION}</span><span>최신 버전: v${info.version}</span></div><div class="sub-muted">배포일: ${info.releaseDate || '2026-10-31'}</div></div><div style="margin-bottom:24px"><div class="form-label">업데이트 변경사항</div><div style="background:#f8f9fb;border-radius:12px;padding:14px;font-size:12.5px;color:#4b5563;line-height:1.7;white-space:pre-wrap">${info.notes || '안정성 개선 및 버그 수정'}</div></div>${hasUpdate ? `<button class="submit-btn" style="margin-top:0;margin-bottom:9px" onclick="window.open('${info.apkUrl || info.downloadUrl}','_blank')">📱 최신 APK 다운로드 (안드로이드)</button><button class="btn-secondary" style="width:100%" onclick="location.reload(true)">🔄 웹앱 새로고침하여 즉시 적용</button>` : `<button class="submit-btn" style="margin-top:0" onclick="closeSheet()">확인</button>`}</section></div>`;
-  document.body.style.overflow = 'hidden';
+async function requestNotif() {
+  if (typeof Notification === 'undefined') {
+    toast('알림을 지원하지 않는 브라우저예요');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    toast('🔔 저녁 알림이 켜졌어요!');
+  } else {
+    toast('알림 권한이 허용되지 않았어요');
+  }
 }
 
-// Enhance openSettings
-const origOpenSettings = openSettings;
-openSettings = function() {
-  const root = document.getElementById('dialogRoot');
-  root.innerHTML = `<div class="sheet-backdrop" onclick="if(event.target===this)closeSheet()"><section class="sheet" role="dialog" aria-modal="true" aria-label="설정"><span class="sheet-handle"></span><div class="sheet-top"><h2>설정 및 정보</h2><button onclick="closeSheet()" aria-label="닫기">${ico('close')}</button></div><div style="margin:20px 0 16px;background:#f5f7fa;border-radius:15px;padding:16px"><div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:14px">MOA 앱 버전</strong><span class="sub-muted">v${CURRENT_VERSION}</span></div></div><div style="display:flex;flex-direction:column;gap:9px;margin-bottom:20px"><button class="btn-secondary" onclick="triggerGoogleAuth()">${authUser ? 'Google 계정 로그아웃 / 계정 변경' : 'Google 로그인으로 클라우드 동기화'}</button><button class="btn-secondary" onclick="openInstallSheet()">📲 스마트폰 홈 화면에 바로가기 앱 추가 (PWA)</button><button class="btn-secondary" onclick="requestNotif()">🔔 매일 저녁 지출 리마인더 알림 켜기</button><button class="btn-secondary" onclick="checkForUpdates(true)">⚡ 새 업데이트 확인하기</button><button class="btn-secondary" onclick="window.open('https://github.com/alpist12/moa/releases','_blank')">📱 최신 안드로이드 APK 다운로드 페이지</button></div><button class="btn-secondary" style="width:100%;color:#f15c5c" onclick="if(confirm('시연 데이터를 초기화할까요?')){state=clone(initial);store();closeSheet();go('home');toast('시연 데이터를 초기화했어요')}">시연 데이터 초기화</button></section></div>`;
-  document.body.style.overflow = 'hidden';
-};
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js?v=2').catch(()=>{});
+}
 
-setTimeout(() => {
-  checkForUpdates(false);
-  checkDailyReminder();
-}, 2000);
-
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});render();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+render();
 </script>
-</body></html>
+</body>
+</html>
