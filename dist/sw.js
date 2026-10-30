@@ -1,5 +1,5 @@
 // MOA Service Worker: PWA offline cache + in-app update + notifications
-const CACHE_NAME = 'moa-cache-v1';
+const CACHE_NAME = 'moa-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -23,17 +23,36 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Network-First for HTML/navigation and version.json, Cache-First for static assets
 self.addEventListener('fetch', event => {
-  // Network first for version.json and dynamic resources, fallback to cache
-  const url = new URL(event.request.url);
-  if (url.pathname.endsWith('version.json')) {
+  const req = event.request;
+  const url = new URL(req.url);
+
+  // Network-First for HTML navigation and version.json to always get the latest app
+  if (req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('version.json') || url.pathname.endsWith('/')) {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
+      fetch(req)
+        .then(res => {
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then(cached => cached || caches.match('./index.html')))
     );
     return;
   }
+
+  // Cache-first for other static assets
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request).catch(() => cached))
+    caches.match(req).then(cached => cached || fetch(req).then(res => {
+      if (res && res.status === 200) {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+      }
+      return res;
+    }).catch(() => cached))
   );
 });
 
