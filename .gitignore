@@ -1,0 +1,8 @@
+node_modules/
+android/.gradle/
+android/local.properties
+android/app/moa-release.jks
+android/app/moa-release-v1.jks
+android/app/moa-release-v2.jks
+android/app/build/
+moa-app.apk

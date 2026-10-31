@@ -4,10 +4,23 @@
   "description": "MOA · 내 용돈 관리 앱",
   "main": "dist/index.html",
   "scripts": {
+    "dev": "node scripts/dev.cjs",
     "build": "node scripts/build.cjs",
     "test": "node tests/drive-sync.test.cjs"
   },
-  "keywords": ["pwa", "allowance", "finance", "money-planner"],
+  "keywords": [
+    "pwa",
+    "allowance",
+    "finance",
+    "money-planner"
+  ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0"
+  }
 }

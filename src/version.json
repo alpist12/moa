@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0",
-  "versionCode": 110,
+  "version": "1.2.0",
+  "versionCode": 120,
   "releaseDate": "2026-10-31",
-  "notes": "• 데스크톱 및 모바일 전면 반응형 UI 개편\n• 인앱 새 업데이트 확인 & 릴리즈 다운로드 기능 추가\n• 가계부 리마인더 & 업데이트 푸시 알림 탑재\n• Google 클라우드 동기화 안정화",
+  "notes": "• 거래 검색 및 수정 기능\n• 엑셀 양식 다운로드와 CSV 일괄 업로드\n• 셀 방식 거래 일괄 입력\n• 설정에서 앱 업데이트 확인 및 직접 다운로드",
   "downloadUrl": "https://github.com/alpist12/moa/releases/latest",
   "apkUrl": "https://github.com/alpist12/moa/releases/latest/download/moa-app.apk"
 }
